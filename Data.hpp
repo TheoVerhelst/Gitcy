@@ -5,6 +5,12 @@
 
 class Function;
 
-typedef boost::variant<bool, int, float, std::string, boost::recursive_wrapper<Function>> Data;
+class Null
+{
+};
+
+std::ostream& operator<<(std::ostream& os, const Null& null);
+
+typedef boost::variant<Null, bool, int, float, std::string, boost::recursive_wrapper<Function>> Data;
 
 #endif // DATA_HPP

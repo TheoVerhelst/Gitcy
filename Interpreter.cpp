@@ -8,7 +8,6 @@
 
 const std::string Interpreter::identifier("[\\w+%=!/<>&*|-]+");
 const std::string Interpreter::number_literal("\\d+|\\d*\\.\\d*");
-const std::string Interpreter::boolean_literal("true|false");
 const std::string Interpreter::string_literal("\"([^\"]|\\\\\")*\"|'([^']|\\\\')*'");
 const std::string Interpreter::open_parenthesis_literal("(");
 const std::string Interpreter::close_parenthesis_literal(")");
@@ -16,37 +15,40 @@ const std::string Interpreter::parenthesis_literal("\\(|\\)");
 
 const std::regex Interpreter::identifier_regex(identifier);
 const std::regex Interpreter::number_literal_regex(number_literal);
-const std::regex Interpreter::boolean_literal_regex(boolean_literal);
 const std::regex Interpreter::string_literal_regex("("+string_literal+")");
-const std::regex Interpreter::token_regex("("+number_literal+"|"+string_literal+"|"+boolean_literal+"|"+identifier+"|"+parenthesis_literal+")\\s*");
-const std::regex Interpreter::value_regex(identifier+"|"+string_literal+"|"+number_literal+"|"+boolean_literal);
+const std::regex Interpreter::token_regex("("+number_literal+"|"+string_literal+"|"+identifier+"|"+parenthesis_literal+")\\s*");
+const std::regex Interpreter::value_regex(identifier+"|"+string_literal+"|"+number_literal);
 const std::regex Interpreter::space_regex("[[:space:]]*");
 
 Interpreter::Interpreter(const std::string& filename):
 	m_functions{*this},
 	m_filename(filename),
+	m_variables
+	{
 	#define DECLARE_ARGUMENT(scriptName, numberArguments, methodName) \
 		{scriptName, std::make_shared<Data>(Function(numberArguments, std::bind(&Functions::methodName, m_functions, std::placeholders::_1)))}
-	m_variables{
-			DECLARE_ARGUMENT("print", -1, print),
-			DECLARE_ARGUMENT("do", -1, do_),
-			DECLARE_ARGUMENT("define", -1, define),
-			DECLARE_ARGUMENT("<", 2, lowerThan),
-			DECLARE_ARGUMENT(">", 2, greaterThan),
-			DECLARE_ARGUMENT("<=", 2, lowerEqual),
-			DECLARE_ARGUMENT(">=", 2, greaterEqual),
-			DECLARE_ARGUMENT("==", 2, equal),
-			DECLARE_ARGUMENT("is", 2, equal),
-			DECLARE_ARGUMENT("!=", 2, notEqual),
-			DECLARE_ARGUMENT("and", 2, and_),
-			DECLARE_ARGUMENT("or", 2, or_),
-			DECLARE_ARGUMENT("+", 2, add),
-			DECLARE_ARGUMENT("-", 2, substract),
-			DECLARE_ARGUMENT("*", 2, multiply),
-			DECLARE_ARGUMENT("/", 2, divide),
-			DECLARE_ARGUMENT("%", 2, modulo),
-			DECLARE_ARGUMENT("!", 1, not_)
+		DECLARE_ARGUMENT("print", -1, print),
+		DECLARE_ARGUMENT("do", -1, do_),
+		DECLARE_ARGUMENT("define", -1, define),
+		DECLARE_ARGUMENT("<", 2, lowerThan),
+		DECLARE_ARGUMENT(">", 2, greaterThan),
+		DECLARE_ARGUMENT("<=", 2, lowerEqual),
+		DECLARE_ARGUMENT(">=", 2, greaterEqual),
+		DECLARE_ARGUMENT("==", 2, equal),
+		DECLARE_ARGUMENT("is", 2, equal),
+		DECLARE_ARGUMENT("!=", 2, notEqual),
+		DECLARE_ARGUMENT("and", 2, and_),
+		DECLARE_ARGUMENT("or", 2, or_),
+		DECLARE_ARGUMENT("+", 2, add),
+		DECLARE_ARGUMENT("-", 2, substract),
+		DECLARE_ARGUMENT("*", 2, multiply),
+		DECLARE_ARGUMENT("/", 2, divide),
+		DECLARE_ARGUMENT("%", 2, modulo),
+		DECLARE_ARGUMENT("!", 1, not_),
 	#undef DECLARE_ARGUMENT
+		{"true", std::make_shared<Data>(true)},
+		{"false", std::make_shared<Data>(false)},
+		{"null", std::make_shared<Data>(Null())}
 	}
 {
 	loadScript();
@@ -167,9 +169,6 @@ EvaluationNode Interpreter::parseToken(const std::string& token)
 		else
 			return Data(stoi(token));
 	}
-	//Boolean literal
-	else if(std::regex_match(token, boolean_literal_regex))
-		return Data(token == "true");
 	//String literal
 	else if(std::regex_match(token, string_literal_regex))
 	{
@@ -245,14 +244,14 @@ Data Interpreter::evaluateTree(const Tree<EvaluationNode>::Ptr& expression)
 		std::vector<Data> args;
 		for(size_t i{1}; i < expression->numberChildren(); ++i)
 			args.push_back(evaluateTree(expression->getChild(i)));
-		res = function.getPointer()(args);
+		res = function.getFunction()(args);
 	}
 
 	else if(node.type() == typeid(Data))
 		res = boost::get<Data>(node);
 	else if(node.type() == typeid(Identifier))
 	{
-		const Identifier identifier(boost::get<Identifier>(node));
+		const Identifier identifier{boost::get<Identifier>(node)};
 		auto it(m_variables.find(identifier));
 		if(it == m_variables.end())
 			throw ScriptError("Unknown variable: \"" + identifier + "\"");

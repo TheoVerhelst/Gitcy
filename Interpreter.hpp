@@ -32,7 +32,6 @@ class Interpreter
 		// Parsing
 		static const std::string identifier;
 		static const std::string number_literal;
-		static const std::string boolean_literal;
 		static const std::string string_literal;
 		static const std::string open_parenthesis_literal;
 		static const std::string close_parenthesis_literal;
@@ -40,7 +39,6 @@ class Interpreter
 
 		static const std::regex identifier_regex;
 		static const std::regex number_literal_regex;
-		static const std::regex boolean_literal_regex;
 		static const std::regex string_literal_regex;
 		static const std::regex token_regex;
 		static const std::regex value_regex;
@@ -68,11 +66,11 @@ void cast<std::string>(Data& var);
 template <typename T>
 void cast(Data& var)
 {
-	if(var.which() == 0)//var is a bool
+	if(var.which() == 1)//var is a bool
 		var = static_cast<T>(boost::get<bool>(var));
-	else if(var.which() == 1)//var is an int
+	else if(var.which() == 2)//var is an int
 		var = static_cast<T>(boost::get<int>(var));
-	else if(var.which() == 2)//var is a float
+	else if(var.which() == 3)//var is a float
 		var = static_cast<T>(boost::get<float>(var));
 	else if(typeid(T) == typeid(bool))//var is a string, convert it to bool
 		var = boost::get<std::string>(var).size() > 0;

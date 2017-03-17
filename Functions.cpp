@@ -15,12 +15,12 @@ Data Functions::print(const std::vector<Data>& args)
 	for(size_t i(0); i < args.size(); ++i)
 		std::cout << args[i] << " ";
 	std::cout << std::endl;
-	return 0;
+	return Null();
 }
 
-Data Functions::do_(const std::vector<Data>& args)
+Data Functions::do_(const std::vector<Data>& /* args */)
 {
-	return 0;
+	return Null();
 }
 
 Data Functions::define(const std::vector<Data>& args)

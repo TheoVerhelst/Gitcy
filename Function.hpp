@@ -12,7 +12,7 @@ class Function
 		/// Constructor.
 		Function(int numberOfParameters, std::function<Data(const std::vector<Data>&)> pointer);
 		int getNumberOfParameters() const;
-		const std::function<Data(const std::vector<Data>&)>& getPointer() const;
+		const std::function<Data(const std::vector<Data>&)>& getFunction() const;
 
 	private:
 		int _numberOfParameters;

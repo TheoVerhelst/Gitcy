@@ -11,7 +11,7 @@ int Function::getNumberOfParameters() const
 	return _numberOfParameters;
 }
 
-const std::function<Data(const std::vector<Data>&)>& Function::getPointer() const
+const std::function<Data(const std::vector<Data>&)>& Function::getFunction() const
 {
 	return _pointer;
 }
