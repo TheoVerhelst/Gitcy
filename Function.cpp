@@ -24,17 +24,10 @@ Data Function::operator()(const std::vector<Data>& arguments) const
 
 std::ostream& operator<<(std::ostream& os, const Function& function)
 {
-	std::vector<std::string> overloadsStrings;
-	for(auto& overload : function._overloads)
-		overloadsStrings.push_back(Utils::toString(overload));
-
-	return os << "<Function(" << Utils::join(" | ", overloadsStrings) << ")>";
+	return os << "<Function(" << Utils::join(" | ", function._overloads.begin(), function._overloads.end()) << ")>";
 }
 
 std::ostream& operator<<(std::ostream& os, const std::vector<Data>& values)
 {
-	std::vector<std::string> valuesTypesStrings;
-	for(auto& value : values)
-		valuesTypesStrings.push_back(Utils::toString(SignatureType(value.type())));
-	return os << Utils::join(", ", valuesTypesStrings);
+	return os << Utils::join(", ", values.begin(), values.end());
 }

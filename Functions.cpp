@@ -88,7 +88,6 @@ Functions::Functions(Interpreter& interpreter):
 
 Data Functions::_print(const std::vector<Data>& args)
 {
-	std::cout << std::boolalpha;
 	for(size_t i(0); i < args.size(); ++i)
 		std::cout << args[i] << " ";
 	std::cout << std::endl;

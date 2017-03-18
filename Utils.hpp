@@ -7,13 +7,30 @@
 
 namespace Utils
 {
-	std::string join(const std::string& middle, const std::vector<std::string>& strings);
+	template <typename InputIterator>
+	std::string join(const std::string& separator, InputIterator begin, InputIterator end);
+
 	template <typename T>
 	std::string toString(const T& object);
 }
 
 namespace Utils
 {
+
+	template <typename InputIterator>
+	std::string join(const std::string& separator, InputIterator begin, InputIterator end)
+	{
+		std::stringstream stream;
+		while(begin != end)
+		{
+			stream << *begin;
+			if(++begin != end)
+				stream << separator;
+
+		}
+		return stream.str();
+	}
+
 	template <typename T>
 	std::string toString(const T& object)
 	{

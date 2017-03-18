@@ -39,11 +39,7 @@ Data Overload::operator()(const std::vector<Data>& arguments) const
 
 std::ostream& operator<<(std::ostream& os, const Overload& signature)
 {
-	std::vector<std::string> typesStrings;
-	for(auto& type : signature._typeList)
-		typesStrings.push_back(Utils::toString(type));
-
-	os << Utils::join(", ", typesStrings);
+	os << Utils::join(", ", signature._typeList.begin(), signature._typeList.end());
 	if(signature._isVariadic)
 		os << ", ...";
 	return os;
