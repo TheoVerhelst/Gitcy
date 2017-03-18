@@ -1,6 +1,7 @@
 #ifndef DATA_HPP
 #define DATA_HPP
 
+#include <ostream>
 #include <boost/variant.hpp>
 
 class Function;

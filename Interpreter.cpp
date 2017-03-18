@@ -25,30 +25,27 @@ Interpreter::Interpreter(const std::string& filename):
 	m_filename(filename),
 	m_variables
 	{
-	#define DECLARE_ARGUMENT(scriptName, numberArguments, methodName) \
-		{scriptName, std::make_shared<Data>(Function(numberArguments, std::bind(&Functions::methodName, m_functions, std::placeholders::_1)))}
-		DECLARE_ARGUMENT("print", -1, print),
-		DECLARE_ARGUMENT("do", -1, do_),
-		DECLARE_ARGUMENT("define", -1, define),
-		DECLARE_ARGUMENT("<", 2, lowerThan),
-		DECLARE_ARGUMENT(">", 2, greaterThan),
-		DECLARE_ARGUMENT("<=", 2, lowerEqual),
-		DECLARE_ARGUMENT(">=", 2, greaterEqual),
-		DECLARE_ARGUMENT("==", 2, equal),
-		DECLARE_ARGUMENT("is", 2, equal),
-		DECLARE_ARGUMENT("!=", 2, notEqual),
-		DECLARE_ARGUMENT("and", 2, and_),
-		DECLARE_ARGUMENT("or", 2, or_),
-		DECLARE_ARGUMENT("+", 2, add),
-		DECLARE_ARGUMENT("-", 2, substract),
-		DECLARE_ARGUMENT("*", 2, multiply),
-		DECLARE_ARGUMENT("/", 2, divide),
-		DECLARE_ARGUMENT("%", 2, modulo),
-		DECLARE_ARGUMENT("!", 1, not_),
-	#undef DECLARE_ARGUMENT
-		{"true", std::make_shared<Data>(true)},
-		{"false", std::make_shared<Data>(false)},
-		{"null", std::make_shared<Data>(Null())}
+		{"print",  std::make_shared<Data>(m_functions.print)},
+		{"do",     std::make_shared<Data>(m_functions.do_)},
+		{"define", std::make_shared<Data>(m_functions.define)},
+		{"<",      std::make_shared<Data>(m_functions.lowerThan)},
+		{">",      std::make_shared<Data>(m_functions.greaterThan)},
+		{"<=",     std::make_shared<Data>(m_functions.lowerEqual)},
+		{">=",     std::make_shared<Data>(m_functions.greaterEqual)},
+		{"==",     std::make_shared<Data>(m_functions.equal)},
+		{"is",     std::make_shared<Data>(m_functions.equal)},
+		{"!=",     std::make_shared<Data>(m_functions.notEqual)},
+		{"and",    std::make_shared<Data>(m_functions.and_)},
+		{"or",     std::make_shared<Data>(m_functions.or_)},
+		{"+",      std::make_shared<Data>(m_functions.add)},
+		{"-",      std::make_shared<Data>(m_functions.substract)},
+		{"*",      std::make_shared<Data>(m_functions.multiply)},
+		{"/",      std::make_shared<Data>(m_functions.divide)},
+		{"%",      std::make_shared<Data>(m_functions.modulo)},
+		{"!",      std::make_shared<Data>(m_functions.not_)},
+		{"true",   std::make_shared<Data>(true)},
+		{"false",  std::make_shared<Data>(false)},
+		{"null",   std::make_shared<Data>(Null())}
 	}
 {
 	loadScript();
@@ -233,18 +230,10 @@ Data Interpreter::evaluateTree(const Tree<EvaluationNode>::Ptr& expression)
 			throw ScriptError("First value in a function call is not a function (got type \"" + std::string(functionValue.type().name()) + "\")");
 
 		const Function& function{boost::get<Function>(functionValue)};
-		// Check that we have the right number of parameters
-		if(function.getNumberOfParameters() > -1 and (expression->numberChildren() - 1) != static_cast<size_t>(function.getNumberOfParameters()))
-		{
-			throw ScriptError("wrong number of arguments" ", got "
-					+ std::to_string(expression->numberChildren()) + " arguments " +
-					"while expecting " + std::to_string(function.getNumberOfParameters()));
-		}
-
 		std::vector<Data> args;
 		for(size_t i{1}; i < expression->numberChildren(); ++i)
 			args.push_back(evaluateTree(expression->getChild(i)));
-		res = function.getFunction()(args);
+		res = function(args);
 	}
 
 	else if(node.type() == typeid(Data))

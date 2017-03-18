@@ -8,7 +8,6 @@
 #include <memory>
 #include "Tree.hpp"
 #include "EvaluationNode.hpp"
-#include "NodeEvaluator.hpp"
 #include "Functions.hpp"
 
 class Interpreter

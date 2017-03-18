@@ -3,22 +3,53 @@
 
 #include <ostream>
 #include <vector>
+#include <typeinfo>
+#include <typeindex>
+#include <string>
 #include <functional>
-#include "Interpreter.hpp"
+#include <experimental/optional>
+#include "Data.hpp"
+
+class SignatureType
+{
+	public:
+		SignatureType();
+		SignatureType(const std::type_info& type);
+		std::string getName() const;
+		bool matches(const Data& data) const;
+
+	private:
+		std::experimental::optional<std::type_index> _typeIndex;
+};
+
+class Signature
+{
+	public:
+		Signature(const std::vector<SignatureType>& typeList, bool isVariadic);
+		bool matches(const std::vector<Data>& arguments) const;
+		friend std::ostream& operator<<(std::ostream& os, const Signature& signature);
+
+	private:
+		std::vector<SignatureType> _typeList;
+		bool _isVariadic;
+};
+
+typedef std::function<Data(const std::vector<Data>&)> Functor;
 
 class Function
 {
 	public:
 		/// Constructor.
-		Function(int numberOfParameters, std::function<Data(const std::vector<Data>&)> pointer);
-		int getNumberOfParameters() const;
-		const std::function<Data(const std::vector<Data>&)>& getFunction() const;
+		Function(const std::vector<std::pair<Signature, Functor>>& overloads);
+		Data operator()(const std::vector<Data>& arguments) const;
+		friend std::ostream& operator<<(std::ostream& os, const Function& function);
 
 	private:
-		int _numberOfParameters;
-		std::function<Data(const std::vector<Data>&)> _pointer;
+		std::vector<std::pair<Signature, Functor>> _overloads;
 };
 
-std::ostream& operator<<(std::ostream& os, const Function& function);
+std::ostream& operator<<(std::ostream& os, const std::vector<Data>& values);
+
+std::string join(const std::string& middle, const std::vector<std::string>& strings);
 
 #endif // FUNCTION_HPP

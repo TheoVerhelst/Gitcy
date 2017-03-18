@@ -5,11 +5,87 @@
 #include "Functions.hpp"
 
 Functions::Functions(Interpreter& interpreter):
-	m_interpreter{interpreter}
+	#define BOUND(methodeName) std::bind(&Functions::methodeName, this, std::placeholders::_1)
+	print{Function({
+		{Signature({}, true), BOUND(_print)}
+	})},
+	do_{Function({
+		{Signature({}, true), BOUND(_do)}
+	})},
+	define{Function({
+		{Signature({SignatureType(typeid(std::string)), SignatureType()}, false), BOUND(_define)}
+	})},
+	lowerThan{Function({
+		{Signature({SignatureType(typeid(int)), SignatureType(typeid(int))}, false), BOUND(_lowerThanInt)},
+		{Signature({SignatureType(typeid(float)), SignatureType(typeid(float))}, false), BOUND(_lowerThanFloat)}
+	})},
+	greaterThan{Function({
+		{Signature({SignatureType(typeid(int)), SignatureType(typeid(int))}, false), BOUND(_greaterThanInt)},
+		{Signature({SignatureType(typeid(float)), SignatureType(typeid(float))}, false), BOUND(_greaterThanFloat)}
+	})},
+
+	lowerEqual{Function({
+		{Signature({SignatureType(typeid(int)), SignatureType(typeid(int))}, false), BOUND(_lowerEqualInt)},
+		{Signature({SignatureType(typeid(float)), SignatureType(typeid(float))}, false), BOUND(_lowerEqualFloat)}
+	})},
+
+	greaterEqual{Function({
+		{Signature({SignatureType(typeid(int)), SignatureType(typeid(int))}, false), BOUND(_greaterEqualInt)},
+		{Signature({SignatureType(typeid(float)), SignatureType(typeid(float))}, false), BOUND(_greaterEqualFloat)}
+	})},
+
+	equal{Function({
+		{Signature({SignatureType(typeid(int)), SignatureType(typeid(int))}, false), BOUND(_equalInt)},
+		{Signature({SignatureType(typeid(float)), SignatureType(typeid(float))}, false), BOUND(_equalFloat)},
+		{Signature({SignatureType(typeid(std::string)), SignatureType(typeid(std::string))}, false), BOUND(_equalString)}
+	})},
+
+	notEqual{Function({
+		{Signature({SignatureType(typeid(int)), SignatureType(typeid(int))}, false), BOUND(_notEqualInt)},
+		{Signature({SignatureType(typeid(float)), SignatureType(typeid(float))}, false), BOUND(_notEqualFloat)},
+		{Signature({SignatureType(typeid(std::string)), SignatureType(typeid(std::string))}, false), BOUND(_notEqualString)}
+	})},
+
+	and_{Function({
+		{Signature({SignatureType(typeid(bool)), SignatureType(typeid(bool))}, false), BOUND(_and)}
+	})},
+
+	or_{Function({
+		{Signature({SignatureType(typeid(bool)), SignatureType(typeid(bool))}, false), BOUND(_or)}
+	})},
+
+	add{Function({
+		{Signature({SignatureType(typeid(int)), SignatureType(typeid(int))}, false), BOUND(_addInt)},
+		{Signature({SignatureType(typeid(float)), SignatureType(typeid(float))}, false), BOUND(_addFloat)},
+		{Signature({SignatureType(typeid(std::string)), SignatureType(typeid(std::string))}, false), BOUND(_addString)}
+	})},
+
+	substract{Function({
+		{Signature({SignatureType(typeid(int)), SignatureType(typeid(int))}, false), BOUND(_substractInt)},
+		{Signature({SignatureType(typeid(float)), SignatureType(typeid(float))}, false), BOUND(_substractFloat)}
+	})},
+
+	multiply{Function({
+		{Signature({SignatureType(typeid(int)), SignatureType(typeid(int))}, false), BOUND(_multiplyInt)},
+		{Signature({SignatureType(typeid(float)), SignatureType(typeid(float))}, false), BOUND(_multiplyFloat)}
+	})},
+
+	divide{Function({
+		{Signature({SignatureType(typeid(int)), SignatureType(typeid(int))}, false), BOUND(_divideInt)},
+		{Signature({SignatureType(typeid(float)), SignatureType(typeid(float))}, false), BOUND(_divideFloat)}
+	})},
+
+	modulo{Function({
+		{Signature({SignatureType(typeid(int)), SignatureType(typeid(int))}, false), BOUND(_moduloInt)},
+		{Signature({SignatureType(typeid(float)), SignatureType(typeid(float))}, false), BOUND(_moduloFloat)}
+	})},
+	not_{Function({{Signature({SignatureType(typeid(bool))}, false), BOUND(_not)}})},
+	#undef BOUND
+	_interpreter{interpreter}
 {
 }
 
-Data Functions::print(const std::vector<Data>& args)
+Data Functions::_print(const std::vector<Data>& args)
 {
 	std::cout << std::boolalpha;
 	for(size_t i(0); i < args.size(); ++i)
@@ -18,218 +94,184 @@ Data Functions::print(const std::vector<Data>& args)
 	return Null();
 }
 
-Data Functions::do_(const std::vector<Data>& /* args */)
+Data Functions::_do(const std::vector<Data>& args)
 {
-	return Null();
+	if(args.empty())
+		return Null();
+	return args.back();
 }
 
-Data Functions::define(const std::vector<Data>& args)
+Data Functions::_define(const std::vector<Data>& args)
 {
-	Data name(args.at(0)), value(args.at(1));
-	if(name.type() != typeid(std::string))
-		throw std::runtime_error("first argument must be a string in define");
-	else
-		m_interpreter.m_variables.emplace(boost::get<std::string>(name), std::make_shared<Data>(value));
+	const Data value{args.at(1)};
+	_interpreter.m_variables.emplace(boost::get<std::string>(args.at(0)), std::make_shared<Data>(value));
 	return value;
 }
 
-Data Functions::lowerThan(const std::vector<Data>& args)
+Data Functions::_lowerThanInt(const std::vector<Data>& args)
 {
 	Data lhs(args[0]), rhs(args[1]);
-	if(lhs.type() != typeid(std::string) and rhs.type() != typeid(std::string))
-	{
-		if(lhs.type() != typeid(float) and rhs.type() != typeid(float))
-		{
-			cast<int>(lhs);
-			cast<int>(rhs);
-			return boost::get<int>(lhs) < boost::get<int>(rhs);
-		}
-		else
-		{
-			cast<float>(lhs);
-			cast<float>(rhs);
-			return boost::get<float>(lhs) < boost::get<float>(rhs);
-		}
-	}
-	else if(lhs.type() == typeid(std::string)
-			and rhs.type() == typeid(std::string))
-		return boost::get<std::string>(lhs).size()
-			< boost::get<std::string>(rhs).size();
-	else
-		throw std::runtime_error("invalid operands types for comparaison.");
+	return boost::get<int>(lhs) < boost::get<int>(rhs);
 }
 
-Data Functions::greaterThan(const std::vector<Data>& args)
-{
-	return lowerThan({args[1], args[0]});
-}
-
-Data Functions::lowerEqual(const std::vector<Data>& args)
-{
-	return not_({greaterThan(args)});
-}
-
-Data Functions::greaterEqual(const std::vector<Data>& args)
-{
-	return not_({lowerThan(args)});
-}
-
-Data Functions::equal(const std::vector<Data>& args)
+Data Functions::_lowerThanFloat(const std::vector<Data>& args)
 {
 	Data lhs(args[0]), rhs(args[1]);
-	//Both are string
-	if(lhs.type() == typeid(std::string) and rhs.type() == typeid(std::string))
-		return boost::get<std::string>(args[0]) == boost::get<std::string>(args[1]);
-	//One is string
-	else if(lhs.type() == typeid(std::string) or rhs.type() == typeid(std::string))
-		return false;
-	//Both are numeric
-	else
-		return and_({greaterEqual(args), lowerEqual(args)});
+	return boost::get<float>(lhs) < boost::get<float>(rhs);
 }
 
-Data Functions::notEqual(const std::vector<Data>& args)
+Data Functions::_greaterThanInt(const std::vector<Data>& args)
 {
-	return not_({equal(args)});
+	return _lowerThanInt({args[1], args[0]});
 }
 
-Data Functions::and_(const std::vector<Data>& args)
+Data Functions::_greaterThanFloat(const std::vector<Data>& args)
+{
+	return _lowerThanFloat({args[1], args[0]});
+}
+
+Data Functions::_lowerEqualInt(const std::vector<Data>& args)
+{
+	return _not({_greaterThanInt(args)});
+}
+
+Data Functions::_lowerEqualFloat(const std::vector<Data>& args)
+{
+	return _not({_greaterThanFloat(args)});
+}
+
+Data Functions::_greaterEqualInt(const std::vector<Data>& args)
+{
+	return _not({_lowerThanInt(args)});
+}
+
+Data Functions::_greaterEqualFloat(const std::vector<Data>& args)
+{
+	return _not({_lowerThanFloat(args)});
+}
+
+Data Functions::_equalInt(const std::vector<Data>& args)
 {
 	Data lhs(args[0]), rhs(args[1]);
-	cast<bool>(lhs);
-	cast<bool>(rhs);
+	return boost::get<int>(lhs) < boost::get<int>(rhs);
+}
+
+Data Functions::_equalFloat(const std::vector<Data>& args)
+{
+	Data lhs(args[0]), rhs(args[1]);
+	return boost::get<float>(lhs) < boost::get<float>(rhs);
+}
+
+Data Functions::_equalString(const std::vector<Data>& args)
+{
+	Data lhs(args[0]), rhs(args[1]);
+	return boost::get<std::string>(lhs) < boost::get<std::string>(rhs);
+}
+
+Data Functions::_notEqualInt(const std::vector<Data>& args)
+{
+	return _not({_equalInt(args)});
+}
+
+Data Functions::_notEqualFloat(const std::vector<Data>& args)
+{
+	return _not({_equalFloat(args)});
+}
+
+Data Functions::_notEqualString(const std::vector<Data>& args)
+{
+	return _not({_equalString(args)});
+}
+
+Data Functions::_and(const std::vector<Data>& args)
+{
+	Data lhs(args[0]), rhs(args[1]);
 	return boost::get<bool>(lhs) and boost::get<bool>(rhs);
 }
 
-Data Functions::or_(const std::vector<Data>& args)
+Data Functions::_or(const std::vector<Data>& args)
 {
 	Data lhs(args[0]), rhs(args[1]);
-	cast<bool>(lhs);
-	cast<bool>(rhs);
 	return boost::get<bool>(lhs) or boost::get<bool>(rhs);
 }
 
-Data Functions::add(const std::vector<Data>& args)
+Data Functions::_addInt(const std::vector<Data>& args)
 {
 	Data lhs(args[0]), rhs(args[1]);
-	if(lhs.type() == typeid(std::string) or rhs.type() == typeid(std::string))
-	{
-		cast<std::string>(lhs);
-		cast<std::string>(rhs);
-		return boost::get<std::string>(lhs) + boost::get<std::string>(rhs);
-	}
-	else if(lhs.type() == typeid(float) or rhs.type() == typeid(float))
-	{
-		cast<float>(lhs);
-		cast<float>(rhs);
-		return boost::get<float>(lhs) + boost::get<float>(rhs);
-	}
-	else if(lhs.type() == typeid(int) or rhs.type() == typeid(int))
-	{
-		cast<int>(lhs);
-		cast<int>(rhs);
-		return boost::get<int>(lhs) + boost::get<int>(rhs);
-	}
-	else
-		return static_cast<bool>(boost::get<bool>(lhs) + boost::get<bool>(rhs));
+	return boost::get<int>(lhs) + boost::get<int>(rhs);
 }
 
-Data Functions::substract(const std::vector<Data>& args)
+Data Functions::_addFloat(const std::vector<Data>& args)
 {
 	Data lhs(args[0]), rhs(args[1]);
-	if(lhs.type() == typeid(std::string) or rhs.type() == typeid(std::string))
-		throw std::runtime_error("String does not support substraction");
-	else if(lhs.type() == typeid(float) or rhs.type() == typeid(float))
-	{
-		cast<float>(lhs);
-		cast<float>(rhs);
-		return boost::get<float>(lhs) - boost::get<float>(rhs);
-	}
-	else if(lhs.type() == typeid(int) or rhs.type() == typeid(int))
-	{
-		cast<int>(lhs);
-		cast<int>(rhs);
-		return boost::get<int>(lhs) - boost::get<int>(rhs);
-	}
-	else
-		return static_cast<bool>(boost::get<bool>(lhs) + boost::get<bool>(rhs));
+	return boost::get<float>(lhs) + boost::get<float>(rhs);
 }
 
-Data Functions::multiply(const std::vector<Data>& args)
+Data Functions::_addString(const std::vector<Data>& args)
 {
 	Data lhs(args[0]), rhs(args[1]);
-	if(lhs.type() == typeid(std::string) or rhs.type() == typeid(std::string))
-		throw std::runtime_error("String does not support multiplication.");
-	else if(lhs.type() == typeid(float) or rhs.type() == typeid(float))
-	{
-		cast<float>(lhs);
-		cast<float>(rhs);
-		return boost::get<float>(lhs) * boost::get<float>(rhs);
-	}
-	else if(lhs.type() == typeid(int) or rhs.type() == typeid(int))
-	{
-		cast<int>(lhs);
-		cast<int>(rhs);
-		return boost::get<int>(lhs) * boost::get<int>(rhs);
-	}
-	else
-		return static_cast<bool>(boost::get<bool>(lhs) * boost::get<bool>(rhs));
+	return boost::get<std::string>(lhs) + boost::get<std::string>(rhs);
 }
 
-Data Functions::divide(const std::vector<Data>& args)
+Data Functions::_substractInt(const std::vector<Data>& args)
 {
 	Data lhs(args[0]), rhs(args[1]);
-	if(lhs.type() == typeid(std::string) or rhs.type() == typeid(std::string))
-		throw std::runtime_error("string does not support division.");
-	else if(lhs.type() == typeid(float) or rhs.type() == typeid(float))
-	{
-		cast<float>(lhs);
-		cast<float>(rhs);
-		if(boost::get<float>(rhs) == 0.f)
-			throw std::runtime_error("division by zero");
-		return boost::get<float>(lhs) / boost::get<float>(rhs);
-	}
-	else if(lhs.type() == typeid(int) or rhs.type() == typeid(int))
-	{
-		cast<int>(lhs);
-		cast<int>(rhs);
-		if(boost::get<int>(rhs) == 0)
-			throw std::runtime_error("division by zero");
-		return boost::get<int>(lhs) / boost::get<int>(rhs);
-	}
-	else
-		throw std::runtime_error("boolean does not support division.");
+	return boost::get<int>(lhs) - boost::get<int>(rhs);
 }
 
-Data Functions::modulo(const std::vector<Data>& args)
+Data Functions::_substractFloat(const std::vector<Data>& args)
 {
 	Data lhs(args[0]), rhs(args[1]);
-	if(lhs.type() == typeid(std::string) or rhs.type() == typeid(std::string))
-		throw std::runtime_error("string does not support modulo.");
-	else if(lhs.type() == typeid(float) or rhs.type() == typeid(float))
-	{
-		cast<float>(lhs);
-		cast<float>(rhs);
-		if(boost::get<float>(rhs) == 0.f)
-			throw std::runtime_error("modulo by zero");
-		return static_cast<float>(std::fmod(boost::get<float>(lhs), boost::get<float>(rhs)));
-	}
-	else if(lhs.type() == typeid(int) or rhs.type() == typeid(int))
-	{
-		cast<int>(lhs);
-		cast<int>(rhs);
-		if(boost::get<int>(rhs) == 0)
-			throw std::runtime_error("modulo by zero");
-		return boost::get<int>(lhs) % boost::get<int>(rhs);
-	}
-	else
-		throw std::runtime_error("boolean does not support modulo.");
+	return boost::get<float>(lhs) - boost::get<float>(rhs);
 }
 
-Data Functions::not_(const std::vector<Data>& args)
+Data Functions::_multiplyInt(const std::vector<Data>& args)
+{
+	Data lhs(args[0]), rhs(args[1]);
+	return boost::get<int>(lhs) * boost::get<int>(rhs);
+}
+
+Data Functions::_multiplyFloat(const std::vector<Data>& args)
+{
+	Data lhs(args[0]), rhs(args[1]);
+	return boost::get<float>(lhs) * boost::get<float>(rhs);
+}
+
+Data Functions::_divideInt(const std::vector<Data>& args)
+{
+	Data lhs(args[0]), rhs(args[1]);
+	if(boost::get<int>(rhs) == 0)
+		throw std::runtime_error("division by zero");
+	return boost::get<int>(lhs) / boost::get<int>(rhs);
+}
+
+Data Functions::_divideFloat(const std::vector<Data>& args)
+{
+	Data lhs(args[0]), rhs(args[1]);
+	if(boost::get<float>(rhs) == 0.f)
+		throw std::runtime_error("division by zero");
+	return boost::get<float>(lhs) / boost::get<float>(rhs);
+}
+
+Data Functions::_moduloInt(const std::vector<Data>& args)
+{
+	Data lhs(args[0]), rhs(args[1]);
+	if(boost::get<int>(rhs) == 0)
+		throw std::runtime_error("modulo by zero");
+	return boost::get<int>(lhs) % boost::get<int>(rhs);
+}
+
+Data Functions::_moduloFloat(const std::vector<Data>& args)
+{
+	Data lhs(args[0]), rhs(args[1]);
+	if(boost::get<float>(rhs) == 0.f)
+		throw std::runtime_error("modulo by zero");
+	return std::fmod(boost::get<float>(lhs), boost::get<float>(rhs));
+}
+
+Data Functions::_not(const std::vector<Data>& args)
 {
 	Data lhs(args[0]);
-	cast<bool>(lhs);
 	return not boost::get<bool>(lhs);
 }
 
