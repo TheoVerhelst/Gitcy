@@ -2,84 +2,85 @@
 #include <cmath>
 #include "Interpreter.hpp"
 #include "Function.hpp"
+#include "ScriptError.hpp"
 #include "Functions.hpp"
 
 Functions::Functions(Interpreter& interpreter):
 	#define BOUND(methodeName) std::bind(&Functions::methodeName, this, std::placeholders::_1)
-	print{Function({
-		{Signature({}, true), BOUND(_print)}
-	})},
-	do_{Function({
-		{Signature({}, true), BOUND(_do)}
-	})},
-	define{Function({
-		{Signature({SignatureType(typeid(std::string)), SignatureType()}, false), BOUND(_define)}
-	})},
-	lowerThan{Function({
-		{Signature({SignatureType(typeid(int)), SignatureType(typeid(int))}, false), BOUND(_lowerThanInt)},
-		{Signature({SignatureType(typeid(float)), SignatureType(typeid(float))}, false), BOUND(_lowerThanFloat)}
-	})},
-	greaterThan{Function({
-		{Signature({SignatureType(typeid(int)), SignatureType(typeid(int))}, false), BOUND(_greaterThanInt)},
-		{Signature({SignatureType(typeid(float)), SignatureType(typeid(float))}, false), BOUND(_greaterThanFloat)}
-	})},
+	print{{{
+		{{{}, true}, BOUND(_print)}
+	}}},
+	do_{{{
+		{{{}, true}, BOUND(_do)}
+	}}},
+	define{{{
+		{{{{typeid(std::string)}, {}}, false}, BOUND(_define)}
+	}}},
+	lowerThan{{{
+		{{{{typeid(int)}, {typeid(int)}}, false}, BOUND(_lowerThanInt)},
+		{{{{typeid(float)}, {typeid(float)}}, false}, BOUND(_lowerThanFloat)}
+	}}},
+	greaterThan{{{
+		{{{{typeid(int)}, {typeid(int)}}, false}, BOUND(_greaterThanInt)},
+		{{{{typeid(float)}, {typeid(float)}}, false}, BOUND(_greaterThanFloat)}
+	}}},
 
-	lowerEqual{Function({
-		{Signature({SignatureType(typeid(int)), SignatureType(typeid(int))}, false), BOUND(_lowerEqualInt)},
-		{Signature({SignatureType(typeid(float)), SignatureType(typeid(float))}, false), BOUND(_lowerEqualFloat)}
-	})},
+	lowerEqual{{{
+		{{{{typeid(int)}, {typeid(int)}}, false}, BOUND(_lowerEqualInt)},
+		{{{{typeid(float)}, {typeid(float)}}, false}, BOUND(_lowerEqualFloat)}
+	}}},
 
-	greaterEqual{Function({
-		{Signature({SignatureType(typeid(int)), SignatureType(typeid(int))}, false), BOUND(_greaterEqualInt)},
-		{Signature({SignatureType(typeid(float)), SignatureType(typeid(float))}, false), BOUND(_greaterEqualFloat)}
-	})},
+	greaterEqual{{{
+		{{{{typeid(int)}, {typeid(int)}}, false}, BOUND(_greaterEqualInt)},
+		{{{{typeid(float)}, {typeid(float)}}, false}, BOUND(_greaterEqualFloat)}
+	}}},
 
-	equal{Function({
-		{Signature({SignatureType(typeid(int)), SignatureType(typeid(int))}, false), BOUND(_equalInt)},
-		{Signature({SignatureType(typeid(float)), SignatureType(typeid(float))}, false), BOUND(_equalFloat)},
-		{Signature({SignatureType(typeid(std::string)), SignatureType(typeid(std::string))}, false), BOUND(_equalString)}
-	})},
+	equal{{{
+		{{{{typeid(int)}, {typeid(int)}}, false}, BOUND(_equalInt)},
+		{{{{typeid(float)}, {typeid(float)}}, false}, BOUND(_equalFloat)},
+		{{{{typeid(std::string)}, {typeid(std::string)}}, false}, BOUND(_equalString)}
+	}}},
 
-	notEqual{Function({
-		{Signature({SignatureType(typeid(int)), SignatureType(typeid(int))}, false), BOUND(_notEqualInt)},
-		{Signature({SignatureType(typeid(float)), SignatureType(typeid(float))}, false), BOUND(_notEqualFloat)},
-		{Signature({SignatureType(typeid(std::string)), SignatureType(typeid(std::string))}, false), BOUND(_notEqualString)}
-	})},
+	notEqual{{{
+		{{{{typeid(int)}, {typeid(int)}}, false}, BOUND(_notEqualInt)},
+		{{{{typeid(float)}, {typeid(float)}}, false}, BOUND(_notEqualFloat)},
+		{{{{typeid(std::string)}, {typeid(std::string)}}, false}, BOUND(_notEqualString)}
+	}}},
 
-	and_{Function({
-		{Signature({SignatureType(typeid(bool)), SignatureType(typeid(bool))}, false), BOUND(_and)}
-	})},
+	and_{{{
+		{{{{typeid(bool)}, {typeid(bool)}}, false}, BOUND(_and)}
+	}}},
 
-	or_{Function({
-		{Signature({SignatureType(typeid(bool)), SignatureType(typeid(bool))}, false), BOUND(_or)}
-	})},
+	or_{{{
+		{{{{typeid(bool)}, {typeid(bool)}}, false}, BOUND(_or)}
+	}}},
 
-	add{Function({
-		{Signature({SignatureType(typeid(int)), SignatureType(typeid(int))}, false), BOUND(_addInt)},
-		{Signature({SignatureType(typeid(float)), SignatureType(typeid(float))}, false), BOUND(_addFloat)},
-		{Signature({SignatureType(typeid(std::string)), SignatureType(typeid(std::string))}, false), BOUND(_addString)}
-	})},
+	add{{{
+		{{{{typeid(int)}, {typeid(int)}}, false}, BOUND(_addInt)},
+		{{{{typeid(float)}, {typeid(float)}}, false}, BOUND(_addFloat)},
+		{{{{typeid(std::string)}, {typeid(std::string)}}, false}, BOUND(_addString)}
+	}}},
 
-	substract{Function({
-		{Signature({SignatureType(typeid(int)), SignatureType(typeid(int))}, false), BOUND(_substractInt)},
-		{Signature({SignatureType(typeid(float)), SignatureType(typeid(float))}, false), BOUND(_substractFloat)}
-	})},
+	substract{{{
+		{{{{typeid(int)}, {typeid(int)}}, false}, BOUND(_substractInt)},
+		{{{{typeid(float)}, {typeid(float)}}, false}, BOUND(_substractFloat)}
+	}}},
 
-	multiply{Function({
-		{Signature({SignatureType(typeid(int)), SignatureType(typeid(int))}, false), BOUND(_multiplyInt)},
-		{Signature({SignatureType(typeid(float)), SignatureType(typeid(float))}, false), BOUND(_multiplyFloat)}
-	})},
+	multiply{{{
+		{{{{typeid(int)}, {typeid(int)}}, false}, BOUND(_multiplyInt)},
+		{{{{typeid(float)}, {typeid(float)}}, false}, BOUND(_multiplyFloat)}
+	}}},
 
-	divide{Function({
-		{Signature({SignatureType(typeid(int)), SignatureType(typeid(int))}, false), BOUND(_divideInt)},
-		{Signature({SignatureType(typeid(float)), SignatureType(typeid(float))}, false), BOUND(_divideFloat)}
-	})},
+	divide{{{
+		{{{{typeid(int)}, {typeid(int)}}, false}, BOUND(_divideInt)},
+		{{{{typeid(float)}, {typeid(float)}}, false}, BOUND(_divideFloat)}
+	}}},
 
-	modulo{Function({
-		{Signature({SignatureType(typeid(int)), SignatureType(typeid(int))}, false), BOUND(_moduloInt)},
-		{Signature({SignatureType(typeid(float)), SignatureType(typeid(float))}, false), BOUND(_moduloFloat)}
-	})},
-	not_{Function({{Signature({SignatureType(typeid(bool))}, false), BOUND(_not)}})},
+	modulo{{{
+		{{{{typeid(int)}, {typeid(int)}}, false}, BOUND(_moduloInt)},
+		{{{{typeid(float)}, {typeid(float)}}, false}, BOUND(_moduloFloat)}
+	}}},
+	not_{{{{{{{typeid(bool)}}, false}, BOUND(_not)}}}},
 	#undef BOUND
 	_interpreter{interpreter}
 {
@@ -104,7 +105,7 @@ Data Functions::_do(const std::vector<Data>& args)
 Data Functions::_define(const std::vector<Data>& args)
 {
 	const Data value{args.at(1)};
-	_interpreter.m_variables.emplace(boost::get<std::string>(args.at(0)), std::make_shared<Data>(value));
+	_interpreter._variables.emplace(boost::get<std::string>(args.at(0)), std::make_shared<Data>(value));
 	return value;
 }
 
@@ -241,7 +242,7 @@ Data Functions::_divideInt(const std::vector<Data>& args)
 {
 	Data lhs(args[0]), rhs(args[1]);
 	if(boost::get<int>(rhs) == 0)
-		throw std::runtime_error("division by zero");
+		throw ScriptError("division by zero");
 	return boost::get<int>(lhs) / boost::get<int>(rhs);
 }
 
@@ -249,7 +250,7 @@ Data Functions::_divideFloat(const std::vector<Data>& args)
 {
 	Data lhs(args[0]), rhs(args[1]);
 	if(boost::get<float>(rhs) == 0.f)
-		throw std::runtime_error("division by zero");
+		throw ScriptError("division by zero");
 	return boost::get<float>(lhs) / boost::get<float>(rhs);
 }
 
@@ -257,7 +258,7 @@ Data Functions::_moduloInt(const std::vector<Data>& args)
 {
 	Data lhs(args[0]), rhs(args[1]);
 	if(boost::get<int>(rhs) == 0)
-		throw std::runtime_error("modulo by zero");
+		throw ScriptError("modulo by zero");
 	return boost::get<int>(lhs) % boost::get<int>(rhs);
 }
 
@@ -265,7 +266,7 @@ Data Functions::_moduloFloat(const std::vector<Data>& args)
 {
 	Data lhs(args[0]), rhs(args[1]);
 	if(boost::get<float>(rhs) == 0.f)
-		throw std::runtime_error("modulo by zero");
+		throw ScriptError("modulo by zero");
 	return std::fmod(boost::get<float>(lhs), boost::get<float>(rhs));
 }
 

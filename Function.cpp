@@ -1,5 +1,16 @@
 #include <sstream>
+#include "ScriptError.hpp"
 #include "Function.hpp"
+
+
+const std::map<std::type_index, std::string> SignatureType::_typePrettyNames
+{
+	{typeid(int), "Integer"},
+	{typeid(float), "Real"},
+	{typeid(bool), "Boolean"},
+	{typeid(std::string), "String"},
+	{typeid(Function), "Function"}
+};
 
 SignatureType::SignatureType()
 {
@@ -13,7 +24,13 @@ SignatureType::SignatureType(const std::type_info& type):
 std::string SignatureType::getName() const
 {
 	if(_typeIndex)
-		return _typeIndex.value().name();
+	{
+		auto it(_typePrettyNames.find(_typeIndex.value()));
+		if(it != _typePrettyNames.end())
+			return it->second;
+		else
+			return _typeIndex.value().name();
+	}
 	else
 		return "<any type>";
 }
@@ -85,7 +102,7 @@ Data Function::operator()(const std::vector<Data>& arguments) const
 	errorMessage << "No overload found for given arguments." << std::endl;
 	errorMessage << "Got (" << arguments << ")" << std::endl;
 	errorMessage << "while calling " << *this;
-	throw std::runtime_error(errorMessage.str());
+	throw ScriptError(errorMessage.str());
 }
 
 std::ostream& operator<<(std::ostream& os, const Function& function)
@@ -104,7 +121,7 @@ std::ostream& operator<<(std::ostream& os, const std::vector<Data>& values)
 {
 	std::vector<std::string> valuesTypesStrings;
 	for(auto& value : values)
-		valuesTypesStrings.push_back(value.type().name());
+		valuesTypesStrings.push_back(SignatureType(value.type()).getName());
 	return os << join(", ", valuesTypesStrings);
 }
 

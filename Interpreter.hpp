@@ -22,10 +22,10 @@ class Interpreter
 		friend class Functions;
 
 		// Current script state
-		Functions m_functions;
-		const std::string m_filename;
-		std::map<std::string, std::shared_ptr<Data>> m_variables;
-		Tree<EvaluationNode>::Ptr m_evaluationTree;
+		Functions _functions;
+		const std::string _filename;
+		std::map<std::string, std::shared_ptr<Data>> _variables;
+		Tree<EvaluationNode>::Ptr _evaluationTree;
 
 
 		// Parsing

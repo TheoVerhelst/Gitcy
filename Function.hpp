@@ -7,6 +7,7 @@
 #include <typeindex>
 #include <string>
 #include <functional>
+#include <map>
 #include <experimental/optional>
 #include "Data.hpp"
 
@@ -20,6 +21,7 @@ class SignatureType
 
 	private:
 		std::experimental::optional<std::type_index> _typeIndex;
+		static const std::map<std::type_index, std::string> _typePrettyNames;
 };
 
 class Signature

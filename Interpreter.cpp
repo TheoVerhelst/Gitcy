@@ -21,28 +21,28 @@ const std::regex Interpreter::value_regex(identifier+"|"+string_literal+"|"+numb
 const std::regex Interpreter::space_regex("[[:space:]]*");
 
 Interpreter::Interpreter(const std::string& filename):
-	m_functions{*this},
-	m_filename(filename),
-	m_variables
+	_functions{*this},
+	_filename(filename),
+	_variables
 	{
-		{"print",  std::make_shared<Data>(m_functions.print)},
-		{"do",     std::make_shared<Data>(m_functions.do_)},
-		{"define", std::make_shared<Data>(m_functions.define)},
-		{"<",      std::make_shared<Data>(m_functions.lowerThan)},
-		{">",      std::make_shared<Data>(m_functions.greaterThan)},
-		{"<=",     std::make_shared<Data>(m_functions.lowerEqual)},
-		{">=",     std::make_shared<Data>(m_functions.greaterEqual)},
-		{"==",     std::make_shared<Data>(m_functions.equal)},
-		{"is",     std::make_shared<Data>(m_functions.equal)},
-		{"!=",     std::make_shared<Data>(m_functions.notEqual)},
-		{"and",    std::make_shared<Data>(m_functions.and_)},
-		{"or",     std::make_shared<Data>(m_functions.or_)},
-		{"+",      std::make_shared<Data>(m_functions.add)},
-		{"-",      std::make_shared<Data>(m_functions.substract)},
-		{"*",      std::make_shared<Data>(m_functions.multiply)},
-		{"/",      std::make_shared<Data>(m_functions.divide)},
-		{"%",      std::make_shared<Data>(m_functions.modulo)},
-		{"!",      std::make_shared<Data>(m_functions.not_)},
+		{"print",  std::make_shared<Data>(_functions.print)},
+		{"do",     std::make_shared<Data>(_functions.do_)},
+		{"define", std::make_shared<Data>(_functions.define)},
+		{"<",      std::make_shared<Data>(_functions.lowerThan)},
+		{">",      std::make_shared<Data>(_functions.greaterThan)},
+		{"<=",     std::make_shared<Data>(_functions.lowerEqual)},
+		{">=",     std::make_shared<Data>(_functions.greaterEqual)},
+		{"==",     std::make_shared<Data>(_functions.equal)},
+		{"is",     std::make_shared<Data>(_functions.equal)},
+		{"!=",     std::make_shared<Data>(_functions.notEqual)},
+		{"and",    std::make_shared<Data>(_functions.and_)},
+		{"or",     std::make_shared<Data>(_functions.or_)},
+		{"+",      std::make_shared<Data>(_functions.add)},
+		{"-",      std::make_shared<Data>(_functions.substract)},
+		{"*",      std::make_shared<Data>(_functions.multiply)},
+		{"/",      std::make_shared<Data>(_functions.divide)},
+		{"%",      std::make_shared<Data>(_functions.modulo)},
+		{"!",      std::make_shared<Data>(_functions.not_)},
 		{"true",   std::make_shared<Data>(true)},
 		{"false",  std::make_shared<Data>(false)},
 		{"null",   std::make_shared<Data>(Null())}
@@ -53,17 +53,17 @@ Interpreter::Interpreter(const std::string& filename):
 
 void Interpreter::loadScript()
 {
-	std::ifstream stream(m_filename);
+	std::ifstream stream(_filename);
 	std::string fileContent((std::istreambuf_iterator<char>(stream)), (std::istreambuf_iterator<char>()));
 
 	auto tokens(tokenize(fileContent));
 	discardSpaces(tokens);
-	m_evaluationTree = constructTree(tokens);
+	_evaluationTree = constructTree(tokens);
 }
 
 void Interpreter::interpret()
 {
-	evaluateTree(m_evaluationTree);
+	evaluateTree(_evaluationTree);
 }
 
 Interpreter::VecStr Interpreter::tokenize(std::string code)
@@ -241,8 +241,8 @@ Data Interpreter::evaluateTree(const Tree<EvaluationNode>::Ptr& expression)
 	else if(node.type() == typeid(Identifier))
 	{
 		const Identifier identifier{boost::get<Identifier>(node)};
-		auto it(m_variables.find(identifier));
-		if(it == m_variables.end())
+		auto it(_variables.find(identifier));
+		if(it == _variables.end())
 			throw ScriptError("Unknown variable: \"" + identifier + "\"");
 		res = *(it->second);
 	}

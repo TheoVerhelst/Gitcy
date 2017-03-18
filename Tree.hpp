@@ -30,10 +30,10 @@ class Tree
 				const std::vector<Ptr>& children=std::vector<Ptr>());
 		void setParent(Ptr newParent);
 
-		std::vector<Ptr> m_children;
-		Ptr m_parent;
-		Ptr m_self;
-		T m_data;
+		std::vector<Ptr> _children;
+		Ptr _parent;
+		Ptr _self;
+		T _data;
 };
 
 #include "Tree.impl"
