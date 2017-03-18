@@ -13,8 +13,9 @@ class SignatureType
 	public:
 		SignatureType();
 		SignatureType(const std::type_info& type);
-		std::string getName() const;
 		bool matches(const Data& data) const;
+
+		friend std::ostream& operator<<(std::ostream& os, const SignatureType& signatureType);
 
 	private:
 		std::experimental::optional<std::type_index> _typeIndex;

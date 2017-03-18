@@ -41,7 +41,7 @@ std::ostream& operator<<(std::ostream& os, const Overload& signature)
 {
 	std::vector<std::string> typesStrings;
 	for(auto& type : signature._typeList)
-		typesStrings.push_back(type.getName());
+		typesStrings.push_back(Utils::toString(type));
 
 	os << Utils::join(", ", typesStrings);
 	if(signature._isVariadic)

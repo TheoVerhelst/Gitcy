@@ -17,22 +17,17 @@ Data Function::operator()(const std::vector<Data>& arguments) const
 
 	}
 
-	std::stringstream errorMessage;
-	errorMessage << "No overload found for given arguments." << std::endl;
-	errorMessage << "Got (" << arguments << ")" << std::endl;
-	errorMessage << "while calling " << *this;
-	throw ScriptError(errorMessage.str());
+	throw ScriptError("No overload found for given arguments:\n"
+			"Got      (" + Utils::toString(arguments) + ") while calling\n" +
+			 Utils::toString(*this));
 }
 
 std::ostream& operator<<(std::ostream& os, const Function& function)
 {
 	std::vector<std::string> overloadsStrings;
 	for(auto& overload : function._overloads)
-	{
-		std::stringstream sstream;
-		sstream << overload;
-		overloadsStrings.push_back(sstream.str());
-	}
+		overloadsStrings.push_back(Utils::toString(overload));
+
 	return os << "<Function(" << Utils::join(" | ", overloadsStrings) << ")>";
 }
 
@@ -40,6 +35,6 @@ std::ostream& operator<<(std::ostream& os, const std::vector<Data>& values)
 {
 	std::vector<std::string> valuesTypesStrings;
 	for(auto& value : values)
-		valuesTypesStrings.push_back(SignatureType(value.type()).getName());
+		valuesTypesStrings.push_back(Utils::toString(SignatureType(value.type())));
 	return os << Utils::join(", ", valuesTypesStrings);
 }

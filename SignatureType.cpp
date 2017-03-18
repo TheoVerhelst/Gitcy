@@ -19,18 +19,18 @@ SignatureType::SignatureType(const std::type_info& type):
 {
 }
 
-std::string SignatureType::getName() const
+std::ostream& operator<<(std::ostream& os, const SignatureType& signatureType)
 {
-	if(_typeIndex)
+	if(signatureType._typeIndex)
 	{
-		auto it(_typePrettyNames.find(_typeIndex.value()));
-		if(it != _typePrettyNames.end())
-			return it->second;
+		auto it(SignatureType::_typePrettyNames.find(signatureType._typeIndex.value()));
+		if(it != SignatureType::_typePrettyNames.end())
+			return os << it->second;
 		else
-			return _typeIndex.value().name();
+			return os << signatureType._typeIndex.value().name();
 	}
 	else
-		return "<any type>";
+		return os << "<any type>";
 }
 
 bool SignatureType::matches(const Data& data) const
