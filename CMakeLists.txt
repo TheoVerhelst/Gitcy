@@ -11,7 +11,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -Wall -Wextra -pedantic -peda
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 
-set(SOURCE_FILES Data.cpp Function.cpp main.cpp Functions.cpp Interpreter.cpp)
+set(SOURCE_FILES Data.cpp Function.cpp Functions.cpp Interpreter.cpp Overload.cpp SignatureType.cpp Utils.cpp main.cpp)
 
 #Create the main executable
 add_executable(${EXECUTABLE_NAME} ${SOURCE_FILES})
