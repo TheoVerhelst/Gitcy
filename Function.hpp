@@ -24,30 +24,36 @@ class SignatureType
 		static const std::map<std::type_index, std::string> _typePrettyNames;
 };
 
-class Signature
+typedef std::function<Data(const std::vector<Data>&)> Functor;
+
+class Overload
 {
 	public:
-		Signature(const std::vector<SignatureType>& typeList, bool isVariadic);
+		Overload(const std::vector<SignatureType>& typeList, bool isVariadic, const Functor& functor);
 		bool matches(const std::vector<Data>& arguments) const;
-		friend std::ostream& operator<<(std::ostream& os, const Signature& signature);
+		/// \precondition matches(arguments)
+		Data operator()(const std::vector<Data>& arguments) const;
+
+		friend std::ostream& operator<<(std::ostream& os, const Overload& signature);
 
 	private:
 		std::vector<SignatureType> _typeList;
 		bool _isVariadic;
+		Functor _functor;
 };
 
-typedef std::function<Data(const std::vector<Data>&)> Functor;
 
 class Function
 {
 	public:
 		/// Constructor.
-		Function(const std::vector<std::pair<Signature, Functor>>& overloads);
+		Function(const std::vector<Overload>& overloads);
 		Data operator()(const std::vector<Data>& arguments) const;
+
 		friend std::ostream& operator<<(std::ostream& os, const Function& function);
 
 	private:
-		std::vector<std::pair<Signature, Functor>> _overloads;
+		std::vector<Overload> _overloads;
 };
 
 std::ostream& operator<<(std::ostream& os, const std::vector<Data>& values);

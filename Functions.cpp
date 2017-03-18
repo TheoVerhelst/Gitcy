@@ -5,80 +5,82 @@
 
 Functions::Functions(Interpreter& interpreter):
 	#define BOUND(methodeName) std::bind(&Functions::methodeName, this, std::placeholders::_1)
-	print{{{
-		{{{}, true}, BOUND(_print)}
-	}}},
-	do_{{{
-		{{{}, true}, BOUND(_do)}
-	}}},
-	define{{{
-		{{{{typeid(std::string)}, {}}, false}, BOUND(_define)}
-	}}},
-	lowerThan{{{
-		{{{{typeid(int)}, {typeid(int)}}, false}, BOUND(_lowerThan<int>)},
-		{{{{typeid(float)}, {typeid(float)}}, false}, BOUND(_lowerThan<float>)}
-	}}},
-	greaterThan{{{
-		{{{{typeid(int)}, {typeid(int)}}, false}, BOUND(_greaterThan<int>)},
-		{{{{typeid(float)}, {typeid(float)}}, false}, BOUND(_greaterThan<float>)}
-	}}},
+	print{{
+		{{}, true, BOUND(_print)}
+	}},
+	do_{{
+		{{}, true, BOUND(_do)}
+	}},
+	define{{
+		{{{typeid(std::string)}, {}}, false, BOUND(_define)}
+	}},
+	lowerThan{{
+		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_lowerThan<int>)},
+		{{{typeid(float)}, {typeid(float)}}, false, BOUND(_lowerThan<float>)}
+	}},
+	greaterThan{{
+		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_greaterThan<int>)},
+		{{{typeid(float)}, {typeid(float)}}, false, BOUND(_greaterThan<float>)}
+	}},
 
-	lowerEqual{{{
-		{{{{typeid(int)}, {typeid(int)}}, false}, BOUND(_lowerEqual<int>)},
-		{{{{typeid(float)}, {typeid(float)}}, false}, BOUND(_lowerEqual<float>)}
-	}}},
+	lowerEqual{{
+		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_lowerEqual<int>)},
+		{{{typeid(float)}, {typeid(float)}}, false, BOUND(_lowerEqual<float>)}
+	}},
 
-	greaterEqual{{{
-		{{{{typeid(int)}, {typeid(int)}}, false}, BOUND(_greaterEqual<int>)},
-		{{{{typeid(float)}, {typeid(float)}}, false}, BOUND(_greaterEqual<float>)}
-	}}},
+	greaterEqual{{
+		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_greaterEqual<int>)},
+		{{{typeid(float)}, {typeid(float)}}, false, BOUND(_greaterEqual<float>)}
+	}},
 
-	equal{{{
-		{{{{typeid(int)}, {typeid(int)}}, false}, BOUND(_equal<int>)},
-		{{{{typeid(float)}, {typeid(float)}}, false}, BOUND(_equal<float>)},
-		{{{{typeid(std::string)}, {typeid(std::string)}}, false}, BOUND(_equal<std::string>)}
-	}}},
+	equal{{
+		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_equal<int>)},
+		{{{typeid(float)}, {typeid(float)}}, false, BOUND(_equal<float>)},
+		{{{typeid(std::string)}, {typeid(std::string)}}, false, BOUND(_equal<std::string>)}
+	}},
 
-	notEqual{{{
-		{{{{typeid(int)}, {typeid(int)}}, false}, BOUND(_notEqual<int>)},
-		{{{{typeid(float)}, {typeid(float)}}, false}, BOUND(_notEqual<float>)},
-		{{{{typeid(std::string)}, {typeid(std::string)}}, false}, BOUND(_notEqual<std::string>)}
-	}}},
+	notEqual{{
+		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_notEqual<int>)},
+		{{{typeid(float)}, {typeid(float)}}, false, BOUND(_notEqual<float>)},
+		{{{typeid(std::string)}, {typeid(std::string)}}, false, BOUND(_notEqual<std::string>)}
+	}},
 
-	and_{{{
-		{{{{typeid(bool)}, {typeid(bool)}}, false}, BOUND(_and)}
-	}}},
+	and_{{
+		{{{typeid(bool)}, {typeid(bool)}}, false, BOUND(_and)}
+	}},
 
-	or_{{{
-		{{{{typeid(bool)}, {typeid(bool)}}, false}, BOUND(_or)}
-	}}},
+	or_{{
+		{{{typeid(bool)}, {typeid(bool)}}, false, BOUND(_or)}
+	}},
 
-	add{{{
-		{{{{typeid(int)}, {typeid(int)}}, false}, BOUND(_add<int>)},
-		{{{{typeid(float)}, {typeid(float)}}, false}, BOUND(_add<float>)},
-		{{{{typeid(std::string)}, {typeid(std::string)}}, false}, BOUND(_add<std::string>)}
-	}}},
+	add{{
+		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_add<int>)},
+		{{{typeid(float)}, {typeid(float)}}, false, BOUND(_add<float>)},
+		{{{typeid(std::string)}, {typeid(std::string)}}, false, BOUND(_add<std::string>)}
+	}},
 
-	substract{{{
-		{{{{typeid(int)}, {typeid(int)}}, false}, BOUND(_substract<int>)},
-		{{{{typeid(float)}, {typeid(float)}}, false}, BOUND(_substract<float>)}
-	}}},
+	substract{{
+		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_substract<int>)},
+		{{{typeid(float)}, {typeid(float)}}, false, BOUND(_substract<float>)}
+	}},
 
-	multiply{{{
-		{{{{typeid(int)}, {typeid(int)}}, false}, BOUND(_multiply<int>)},
-		{{{{typeid(float)}, {typeid(float)}}, false}, BOUND(_multiply<float>)}
-	}}},
+	multiply{{
+		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_multiply<int>)},
+		{{{typeid(float)}, {typeid(float)}}, false, BOUND(_multiply<float>)}
+	}},
 
-	divide{{{
-		{{{{typeid(int)}, {typeid(int)}}, false}, BOUND(_divide<int>)},
-		{{{{typeid(float)}, {typeid(float)}}, false}, BOUND(_divide<float>)}
-	}}},
+	divide{{
+		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_divide<int>)},
+		{{{typeid(float)}, {typeid(float)}}, false, BOUND(_divide<float>)}
+	}},
 
-	modulo{{{
-		{{{{typeid(int)}, {typeid(int)}}, false}, BOUND(_modulo)},
-		{{{{typeid(float)}, {typeid(float)}}, false}, BOUND(_fmod)}
-	}}},
-	not_{{{{{{{typeid(bool)}}, false}, BOUND(_not)}}}},
+	modulo{{
+		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_modulo)},
+		{{{typeid(float)}, {typeid(float)}}, false, BOUND(_fmod)}
+	}},
+	not_{{
+		{{{typeid(bool)}}, false, BOUND(_not)}
+	}},
 	#undef BOUND
 	_interpreter{interpreter}
 {

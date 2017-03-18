@@ -43,13 +43,14 @@ bool SignatureType::matches(const Data& data) const
 		return true;
 }
 
-Signature::Signature(const std::vector<SignatureType>& typeList, bool isVariadic):
+Overload::Overload(const std::vector<SignatureType>& typeList, bool isVariadic, const Functor& functor):
 	_typeList{typeList},
-	_isVariadic{isVariadic}
+	_isVariadic{isVariadic},
+	_functor{functor}
 {
 }
 
-bool Signature::matches(const std::vector<Data>& arguments) const
+bool Overload::matches(const std::vector<Data>& arguments) const
 {
 	if(arguments.size() < _typeList.size() or (not _isVariadic and arguments.size() != _typeList.size()))
 		return false;
@@ -72,7 +73,12 @@ bool Signature::matches(const std::vector<Data>& arguments) const
 	return match;
 }
 
-std::ostream& operator<<(std::ostream& os, const Signature& signature)
+Data Overload::operator()(const std::vector<Data>& arguments) const
+{
+	return _functor(arguments);
+}
+
+std::ostream& operator<<(std::ostream& os, const Overload& signature)
 {
 	std::vector<std::string> typesStrings;
 	for(auto& type : signature._typeList)
@@ -84,7 +90,7 @@ std::ostream& operator<<(std::ostream& os, const Signature& signature)
 	return os;
 }
 
-Function::Function(const std::vector<std::pair<Signature, Functor>>& overloads):
+Function::Function(const std::vector<Overload>& overloads):
 	_overloads{overloads}
 {
 }
@@ -93,8 +99,8 @@ Data Function::operator()(const std::vector<Data>& arguments) const
 {
 	for(auto& overload : _overloads)
 	{
-		if(overload.first.matches(arguments))
-			return overload.second(arguments);
+		if(overload.matches(arguments))
+			return overload(arguments);
 
 	}
 
@@ -111,7 +117,7 @@ std::ostream& operator<<(std::ostream& os, const Function& function)
 	for(auto& overload : function._overloads)
 	{
 		std::stringstream sstream;
-		sstream << overload.first;
+		sstream << overload;
 		overloadsStrings.push_back(sstream.str());
 	}
 	return os << "<Function(" << join(" | ", overloadsStrings) << ")>";
