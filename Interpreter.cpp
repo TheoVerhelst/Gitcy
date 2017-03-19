@@ -9,17 +9,19 @@
 
 const std::string Interpreter::real_literal("\\d*\\.\\d*");
 const std::string Interpreter::integer_literal("\\d+");
-const std::string Interpreter::string_literal("\"([^\"]|\\\\\")*\"|'([^']|\\\\')*'");
+const std::string Interpreter::string_literal("\"(?:[^\"]|\\\\\")*\"|'(?:[^']|\\\\')*'");
 const std::string Interpreter::identifier("[\\w+%=!/<>&*|-]+");
 const std::string Interpreter::open_parenthesis_literal("(");
 const std::string Interpreter::close_parenthesis_literal(")");
 const std::string Interpreter::parenthesis_literal("\\(|\\)");
 
-const std::regex Interpreter::identifier_regex(identifier);
 const std::regex Interpreter::real_literal_regex(real_literal);
 const std::regex Interpreter::integer_literal_regex(integer_literal);
 const std::regex Interpreter::string_literal_regex(string_literal);
+const std::regex Interpreter::identifier_regex(identifier);
 const std::regex Interpreter::token_regex("("+real_literal+"|"+integer_literal+"|"+string_literal+"|"+identifier+"|"+parenthesis_literal+")[[:space:]]*");
+const std::map<char, char> Interpreter::escapedCharacters
+		{{'a', '\a'}, {'b', '\b'}, {'f', '\f'}, {'n', '\n'}, {'r', '\r'}, {'t', '\t'}, {'v', '\v'}};
 
 Interpreter::Interpreter(const std::string& filename):
 	_functions{*this},
@@ -56,8 +58,7 @@ void Interpreter::loadScript()
 {
 	std::ifstream stream{_filename};
 	const std::string fileContent{std::istreambuf_iterator<char>(stream), std::istreambuf_iterator<char>()};
-	const VecStr tokens{tokenize(fileContent)};
-	_evaluationTree = constructTree(tokens);
+	_evaluationTree = constructTree(tokenize(fileContent));
 }
 
 void Interpreter::interpret()
@@ -130,42 +131,21 @@ EvaluationNode Interpreter::parseToken(const std::string& token)
 	// String literal
 	else if(std::regex_match(token, string_literal_regex))
 	{
-		std::string res(token.begin() + 1, token.end() - 1);
-		//Parse string and replace escaped characters
-		for(size_t i{0}; i < res.size(); ++i)
+		std::string res;
+		for(auto it(token.begin() + 1); it != token.end() - 1; ++it)
 		{
-			if(res[i] == '\\')
+			if(*it == '\\')
 			{
-				const char escaped{res[i+1]};
-				res.erase(i, 2);
-				switch(escaped)
-				{
-					case 'a':
-						res.insert(i, 1, '\a');
-						break;
-					case 'b':
-						res.insert(i, 1, '\b');
-						break;
-					case 'f':
-						res.insert(i, 1, '\f');
-						break;
-					case 'n':
-						res.insert(i, 1, '\n');
-						break;
-					case 'r':
-						res.insert(i, 1, '\r');
-						break;
-					case 't':
-						res.insert(i, 1, '\t');
-						break;
-					case 'v':
-						res.insert(i, 1, '\v');
-						break;
-					default:
-						res.insert(i, 1, escaped);
-						break;
-				}
+				char nextChar{*std::next(it)};
+				auto replaceIt(escapedCharacters.find(nextChar));
+				if(replaceIt != escapedCharacters.end())
+					res += replaceIt->second;
+				else
+					res += nextChar;
+				++it;
 			}
+			else
+				res += *it;
 		}
 		return Data(res);
 	}
@@ -215,9 +195,9 @@ Interpreter::VecStr::const_iterator Interpreter::findClosingParenthesis(Interpre
 	int depth{0};
 	for(;from != to; ++from)
 	{
-		if(*from == "(")
+		if(*from == open_parenthesis_literal)
 			++depth;
-		else if(*from == ")")
+		else if(*from == close_parenthesis_literal)
 			--depth;
 		if(depth == 0)
 			break;

@@ -29,21 +29,20 @@ class Interpreter
 
 
 		// Parsing
-		static const std::string integer_literal;
 		static const std::string real_literal;
+		static const std::string integer_literal;
 		static const std::string number_literal;
 		static const std::string string_literal;
 		static const std::string identifier;
 		static const std::string open_parenthesis_literal;
 		static const std::string close_parenthesis_literal;
 		static const std::string parenthesis_literal;
-
-		static const std::regex integer_literal_regex;
 		static const std::regex real_literal_regex;
+		static const std::regex integer_literal_regex;
 		static const std::regex string_literal_regex;
 		static const std::regex identifier_regex;
 		static const std::regex token_regex;
-		static const std::regex space_regex;
+		static const std::map<char, char> escapedCharacters;
 
 		// Methods
 		void loadScript();
