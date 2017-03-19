@@ -21,6 +21,7 @@ namespace Utils
 	std::string join(const std::string& separator, InputIterator begin, InputIterator end)
 	{
 		std::stringstream stream;
+		stream << std::boolalpha;
 		while(begin != end)
 		{
 			stream << *begin;
@@ -35,7 +36,7 @@ namespace Utils
 	std::string toString(const T& object)
 	{
 		std::stringstream stream;
-		stream << object;
+		stream << std::boolalpha << object;
 		return stream.str();
 	}
 }

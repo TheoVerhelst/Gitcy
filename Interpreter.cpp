@@ -5,20 +5,21 @@
 #include "Interpreter.hpp"
 #include "Function.hpp"
 #include "ScriptError.hpp"
+#include "Utils.hpp"
 
-const std::string Interpreter::identifier("[\\w+%=!/<>&*|-]+");
-const std::string Interpreter::number_literal("\\d+|\\d*\\.\\d*");
+const std::string Interpreter::real_literal("\\d*\\.\\d*");
+const std::string Interpreter::integer_literal("\\d+");
 const std::string Interpreter::string_literal("\"([^\"]|\\\\\")*\"|'([^']|\\\\')*'");
+const std::string Interpreter::identifier("[\\w+%=!/<>&*|-]+");
 const std::string Interpreter::open_parenthesis_literal("(");
 const std::string Interpreter::close_parenthesis_literal(")");
 const std::string Interpreter::parenthesis_literal("\\(|\\)");
 
 const std::regex Interpreter::identifier_regex(identifier);
-const std::regex Interpreter::number_literal_regex(number_literal);
-const std::regex Interpreter::string_literal_regex("("+string_literal+")");
-const std::regex Interpreter::token_regex("("+number_literal+"|"+string_literal+"|"+identifier+"|"+parenthesis_literal+")\\s*");
-const std::regex Interpreter::value_regex(identifier+"|"+string_literal+"|"+number_literal);
-const std::regex Interpreter::space_regex("[[:space:]]*");
+const std::regex Interpreter::real_literal_regex(real_literal);
+const std::regex Interpreter::integer_literal_regex(integer_literal);
+const std::regex Interpreter::string_literal_regex(string_literal);
+const std::regex Interpreter::token_regex("("+real_literal+"|"+integer_literal+"|"+string_literal+"|"+identifier+"|"+parenthesis_literal+")[[:space:]]*");
 
 Interpreter::Interpreter(const std::string& filename):
 	_functions{*this},
@@ -53,11 +54,9 @@ Interpreter::Interpreter(const std::string& filename):
 
 void Interpreter::loadScript()
 {
-	std::ifstream stream(_filename);
-	std::string fileContent((std::istreambuf_iterator<char>(stream)), (std::istreambuf_iterator<char>()));
-
-	auto tokens(tokenize(fileContent));
-	discardSpaces(tokens);
+	std::ifstream stream{_filename};
+	const std::string fileContent{std::istreambuf_iterator<char>(stream), std::istreambuf_iterator<char>()};
+	const VecStr tokens{tokenize(fileContent)};
 	_evaluationTree = constructTree(tokens);
 }
 
@@ -68,59 +67,23 @@ void Interpreter::interpret()
 
 Interpreter::VecStr Interpreter::tokenize(std::string code)
 {
-	VecStr first, second, err;
-	std::smatch m;
+	VecStr tokens, errorTokens;
 
-	// First tokenization, match string literal
-	// This step must be done before everything else because
-	// words in string must not be matched.
-	while(regex_search(code, m, string_literal_regex))
-	{
-		if(m.prefix().str() != "")
-			first.push_back(m.prefix().str());
-		first.push_back(m[1].str());
-		code = m.suffix().str();
-	}
-	first.push_back(code);
+	std::copy(std::sregex_token_iterator(code.begin(), code.end(), token_regex, 1),
+			std::sregex_token_iterator(),
+			std::back_inserter(tokens));
+	std::copy_if(std::sregex_token_iterator(code.begin(), code.end(), token_regex, -1),
+			std::sregex_token_iterator(),
+			std::back_inserter(errorTokens),
+			[](const std::string& dismatch)
+			{
+				return not dismatch.empty();
+			});
 
-	// Second tokenization of every submatch
-	for(auto& tok : first)
-	{
-		copy(std::sregex_token_iterator(tok.begin(), tok.end(), token_regex, 1),
-	    	 std::sregex_token_iterator(),
-			 std::back_inserter(second));
-		copy(std::sregex_token_iterator(tok.begin(), tok.end(), token_regex, -1),
-	    	 std::sregex_token_iterator(),
-			 std::back_inserter(err));
-	}
+	if(not errorTokens.empty())
+		throw ScriptError("Unrecognized tokens while parsing: `" + Utils::join("`, `", errorTokens.begin(), errorTokens.end()) + "`");
 
-	// Strip spaces from errors
-	for(long int i{0}; i < static_cast<long int>(err.size()); ++i)
-	{
-		if(std::regex_match(err[i], space_regex))
-		{
-			err.erase(err.begin()+i);
-			i--;
-		}
-	}
-
-	if(not err.empty())
-	{
-		std::string errorMessage("Unrecognized tokens while parsing:");
-		for(auto& tok : err)
-			errorMessage += " " + tok;
-		throw ScriptError(errorMessage);
-	}
-	return second;
-}
-
-void Interpreter::discardSpaces(Interpreter::VecStr& tokens)
-{
-    tokens.erase(std::remove_if(tokens.begin(), tokens.end(),
-		[](const std::string& token)
-		{
-			return std::all_of(token.begin(), token.end(), [](char c){return std::isspace(c);});
-		}), tokens.end());
+	return tokens;
 }
 
 Tree<EvaluationNode>::Ptr Interpreter::constructTree(const Interpreter::VecStr& tokens)
@@ -158,18 +121,16 @@ std::pair<Interpreter::VecStr::const_iterator, Tree<EvaluationNode>::Ptr> Interp
 
 EvaluationNode Interpreter::parseToken(const std::string& token)
 {
-	//Number literal
-	if(std::regex_match(token, number_literal_regex))
-	{
-		if(token.find(".") != std::string::npos)
-			return Data(stof(token));
-		else
-			return Data(stoi(token));
-	}
-	//String literal
+	// Real literal
+	if(std::regex_match(token, real_literal_regex))
+		return Data(stof(token));
+	// Integer literal
+	else if(std::regex_match(token, integer_literal_regex))
+		return Data(stoi(token));
+	// String literal
 	else if(std::regex_match(token, string_literal_regex))
 	{
-		std::string res(token.begin()+1, token.end()-1);
+		std::string res(token.begin() + 1, token.end() - 1);
 		//Parse string and replace escaped characters
 		for(size_t i{0}; i < res.size(); ++i)
 		{
@@ -208,7 +169,7 @@ EvaluationNode Interpreter::parseToken(const std::string& token)
 		}
 		return Data(res);
 	}
-	//Variable
+	// Identifier
 	else if(std::regex_match(token, identifier_regex))
 		return Identifier(token);
 	else
@@ -235,7 +196,6 @@ Data Interpreter::evaluateTree(const Tree<EvaluationNode>::Ptr& expression)
 			args.push_back(evaluateTree(expression->getChild(i)));
 		res = function(args);
 	}
-
 	else if(node.type() == typeid(Data))
 		res = boost::get<Data>(node);
 	else if(node.type() == typeid(Identifier))
@@ -263,16 +223,5 @@ Interpreter::VecStr::const_iterator Interpreter::findClosingParenthesis(Interpre
 			break;
 	}
 	return from;
-}
-
-template <>
-void cast<std::string>(Data& var)
-{
-	if(var.which() == 1)//Convert int to string
-		var = std::to_string(boost::get<int>(var));
-	else if(var.which() == 0)//Convert bool to string
-		var = boost::get<bool>(var) ? "true" : "false";
-	else if(var.which() == 2)//Convert float to string
-		var = std::to_string(boost::get<float>(var));
 }
 
