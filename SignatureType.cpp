@@ -1,4 +1,5 @@
 #include "Function.hpp"
+#include "Utils.hpp"
 #include "SignatureType.hpp"
 
 const std::map<std::type_index, std::string> SignatureType::_typePrettyNames
@@ -17,6 +18,8 @@ SignatureType::SignatureType()
 SignatureType::SignatureType(const std::type_info& type):
 	_typeIndex{type}
 {
+	if(not Utils::RuntimeContains<Data::types>(type).value())
+		throw std::invalid_argument("`type` argument not one of Data::types in SignatureType constructor.");
 }
 
 std::ostream& operator<<(std::ostream& os, const SignatureType& signatureType)
