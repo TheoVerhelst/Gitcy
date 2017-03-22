@@ -10,6 +10,7 @@
 #include "EvaluationNode.hpp"
 #include "Functions.hpp"
 
+/// Main class. Reads a file given its filename and interprets it.
 class Interpreter
 {
 	public:
