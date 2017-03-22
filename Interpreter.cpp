@@ -199,6 +199,7 @@ Interpreter::VecStr::const_iterator Interpreter::findClosingParenthesis(Interpre
 			++depth;
 		else if(*from == close_parenthesis_literal)
 			--depth;
+		// TODO change to <=
 		if(depth == 0)
 			break;
 	}

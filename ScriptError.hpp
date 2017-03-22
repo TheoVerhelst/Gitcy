@@ -3,6 +3,7 @@
 
 #include <stdexcept>
 
+/// \TODO make ScriptError.cpp, checks whether we really need to redefine these methods.
 class ScriptError: public std::runtime_error
 {
 	public:
