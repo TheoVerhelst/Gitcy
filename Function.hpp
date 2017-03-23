@@ -8,10 +8,10 @@
 #include "Overload.hpp"
 
 /// Class for functions defined in C++ but usable in scripts. These functions
-/// have a limited number of overload, each overload can be variadic. So we
-/// cannot call any function with any arguments, some restrictions are applied.
-/// When a function is called, the functions search the first overload that
-/// matches the arguments. \TODO We don't use yet real overload resolution,
+/// have a limited number of overload, each overload can be variadic. We cannot
+/// call any function with any arguments, some restrictions are applied. When a
+/// function is called, the functions search the first overload that matches the
+/// arguments. \TODO We don't use yet real overload resolution,
 /// although more than one overload could match a given list of arguments.
 /// \see Overload
 class Function
