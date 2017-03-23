@@ -3,9 +3,9 @@
 
 #include <vector>
 #include <cmath>
-#include "Data.hpp"
-#include "ScriptError.hpp"
-#include "Function.hpp"
+#include <Data.hpp>
+#include <ScriptError.hpp>
+#include <Function.hpp>
 
 // Forward declarations
 class Interpreter;

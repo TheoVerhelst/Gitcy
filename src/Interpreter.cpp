@@ -2,10 +2,10 @@
 #include <fstream>
 #include <iostream>
 
-#include "Interpreter.hpp"
-#include "Function.hpp"
-#include "ScriptError.hpp"
-#include "Utils.hpp"
+#include <Interpreter.hpp>
+#include <Function.hpp>
+#include <ScriptError.hpp>
+#include <Utils.hpp>
 
 const std::string Interpreter::real_literal("\\d*\\.\\d*");
 const std::string Interpreter::integer_literal("\\d+");

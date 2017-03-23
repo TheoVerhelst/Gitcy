@@ -1,7 +1,7 @@
 #include <sstream>
-#include "Utils.hpp"
-#include "ScriptError.hpp"
-#include "Function.hpp"
+#include <Utils.hpp>
+#include <ScriptError.hpp>
+#include <Function.hpp>
 
 Function::Function(const std::vector<Overload>& overloads):
 	_overloads{overloads}

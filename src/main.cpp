@@ -1,6 +1,6 @@
 #include <iostream>
-#include "Interpreter.hpp"
-#include "ScriptError.hpp"
+#include <Interpreter.hpp>
+#include <ScriptError.hpp>
 
 int main(int /* argc */, char** argv)
 {

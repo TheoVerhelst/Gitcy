@@ -1,4 +1,4 @@
-#include "Data.hpp"
+#include <Data.hpp>
 
 std::ostream& operator<<(std::ostream& os, const Null& /* null */)
 {

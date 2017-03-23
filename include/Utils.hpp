@@ -61,7 +61,6 @@ namespace Utils
 			/// in the template type sequence, false otherwhise.
 			bool value() const;
 
-		private:
 			/// Call operator used internally in the boost::mpl::for_loop.
 			/// Sets to true _found if the type T is the same as the one given
 			/// to the constructor.
@@ -73,6 +72,7 @@ namespace Utils
 			template <typename T>
 			void operator()(boost::type<T>);
 
+		private:
 			/// Indicates whether the type given to the constructor is present
 			/// in the template type sequence.
 			std::shared_ptr<bool> _found;
@@ -80,12 +80,10 @@ namespace Utils
 			/// The type to search for, stored as a runtime type info.
 			const std::type_index& _typeIndex;
 	};
-
 }
 
 namespace Utils
 {
-
 	template <typename InputIterator>
 	std::string join(const std::string& separator, InputIterator begin, InputIterator end)
 	{
@@ -133,7 +131,6 @@ namespace Utils
 		if(not *_found)
 			*_found = std::type_index(typeid(T)) == _typeIndex;
 	}
-
 }
 
 #endif // UTILS_HPP

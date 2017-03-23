@@ -1,7 +1,7 @@
 #include <iostream>
-#include "Interpreter.hpp"
-#include "Function.hpp"
-#include "Functions.hpp"
+#include <Interpreter.hpp>
+#include <Function.hpp>
+#include <Functions.hpp>
 
 Functions::Functions(Interpreter& interpreter):
 	#define BOUND(methodeName) std::bind(&Functions::methodeName, this, std::placeholders::_1)

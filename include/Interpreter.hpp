@@ -6,9 +6,9 @@
 #include <map>
 #include <regex>
 #include <memory>
-#include "Tree.hpp"
-#include "EvaluationNode.hpp"
-#include "Functions.hpp"
+#include <Tree.hpp>
+#include <EvaluationNode.hpp>
+#include <Functions.hpp>
 
 /// Main class. Reads a file given its filename and interprets it.
 class Interpreter

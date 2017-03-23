@@ -4,7 +4,7 @@
 #include <string>
 #include <boost/blank.hpp>
 #include <boost/variant.hpp>
-#include "Data.hpp"
+#include <Data.hpp>
 
 /// Represents an identifier in the evaluation tree of the interpreter. In
 /// facts, we only need to store the name of the identifier.

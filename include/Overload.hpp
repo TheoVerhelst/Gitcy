@@ -4,8 +4,8 @@
 #include <functional>
 #include <ostream>
 #include <vector>
-#include "Data.hpp"
-#include "SignatureType.hpp"
+#include <Data.hpp>
+#include <SignatureType.hpp>
 
 /// Conveniency typedef for a functor.
 typedef std::function<Data(const std::vector<Data>&)> Functor;
