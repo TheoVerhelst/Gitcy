@@ -50,8 +50,7 @@ class Overload
 		/// \param os The stream to output to.
 		/// \param signature The overload to output.
 		/// \returns os.
-		/// \TODO rename signature to overload.
-		friend std::ostream& operator<<(std::ostream& os, const Overload& signature);
+		friend std::ostream& operator<<(std::ostream& os, const Overload& overload);
 
 	private:
 		/// The list of types accepted by this overload.

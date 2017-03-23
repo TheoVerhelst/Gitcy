@@ -37,10 +37,10 @@ Data Overload::operator()(const std::vector<Data>& arguments) const
 	return _functor(arguments);
 }
 
-std::ostream& operator<<(std::ostream& os, const Overload& signature)
+std::ostream& operator<<(std::ostream& os, const Overload& overload)
 {
-	os << Utils::join(", ", signature._typeList.begin(), signature._typeList.end());
-	if(signature._isVariadic)
+	os << Utils::join(", ", overload._typeList.begin(), overload._typeList.end());
+	if(overload._isVariadic)
 		os << ", ...";
 	return os;
 }
