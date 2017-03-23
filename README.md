@@ -4,10 +4,9 @@
 ```
 (define expand-acronym
 	(function (acronym)
-		(for (word (apply expand-letter acronym))
-			(if (is-acronym word)
+		(if (= acronym "Gitcy")
+			(for (word "Gitcy Isn't Turing Complete Yet")
 				(expand-acronym word)
-				word
 			)
 		)
 	)
