@@ -7,19 +7,19 @@
 #include <ScriptError.hpp>
 #include <Utils.hpp>
 
-const std::string Interpreter::real_literal("\\d*\\.\\d*");
-const std::string Interpreter::integer_literal("\\d+");
-const std::string Interpreter::string_literal("\"(?:[^\"]|\\\\\")*\"|'(?:[^']|\\\\')*'");
+const std::string Interpreter::realLiteral("\\d*\\.\\d*");
+const std::string Interpreter::integerLiteral("\\d+");
+const std::string Interpreter::stringLiteral("\"(?:[^\"]|\\\\\")*\"|'(?:[^']|\\\\')*'");
 const std::string Interpreter::identifier("[\\w+%=!/<>&*|-]+");
-const std::string Interpreter::open_parenthesis_literal("(");
-const std::string Interpreter::close_parenthesis_literal(")");
-const std::string Interpreter::parenthesis_literal("\\(|\\)");
+const std::string Interpreter::openingParenthesisLiteral("(");
+const std::string Interpreter::closingParenthesisLiteral(")");
+const std::string Interpreter::parenthesisLiteral("\\(|\\)");
 
-const std::regex Interpreter::real_literal_regex(real_literal);
-const std::regex Interpreter::integer_literal_regex(integer_literal);
-const std::regex Interpreter::string_literal_regex(string_literal);
-const std::regex Interpreter::identifier_regex(identifier);
-const std::regex Interpreter::token_regex("("+real_literal+"|"+integer_literal+"|"+string_literal+"|"+identifier+"|"+parenthesis_literal+")[[:space:]]*");
+const std::regex Interpreter::realLiteralRegex(realLiteral);
+const std::regex Interpreter::integerLiteralRegex(integerLiteral);
+const std::regex Interpreter::stringLiteralRegex(stringLiteral);
+const std::regex Interpreter::identifierRegex(identifier);
+const std::regex Interpreter::tokenRegex("("+realLiteral+"|"+integerLiteral+"|"+stringLiteral+"|"+identifier+"|"+parenthesisLiteral+")[[:space:]]*");
 const std::map<char, char> Interpreter::escapedCharacters
 		{{'a', '\a'}, {'b', '\b'}, {'f', '\f'}, {'n', '\n'}, {'r', '\r'}, {'t', '\t'}, {'v', '\v'}};
 
@@ -70,10 +70,10 @@ Interpreter::TokenVector Interpreter::tokenize(std::string code)
 {
 	TokenVector tokens, errorTokens;
 
-	std::copy(std::sregex_token_iterator(code.begin(), code.end(), token_regex, 1),
+	std::copy(std::sregex_token_iterator(code.begin(), code.end(), tokenRegex, 1),
 			std::sregex_token_iterator(),
 			std::back_inserter(tokens));
-	std::copy_if(std::sregex_token_iterator(code.begin(), code.end(), token_regex, -1),
+	std::copy_if(std::sregex_token_iterator(code.begin(), code.end(), tokenRegex, -1),
 			std::sregex_token_iterator(),
 			std::back_inserter(errorTokens),
 			[](const std::string& dismatch)
@@ -97,7 +97,7 @@ std::pair<Interpreter::TokenIterator, Tree<EvaluationNode>::Ptr> Interpreter::pa
 	std::pair<TokenIterator, Tree<EvaluationNode>::Ptr> res{from, nullptr};
 
 	// If we construct a function call expression
-	if(*from == open_parenthesis_literal)
+	if(*from == openingParenthesisLiteral)
 	{
 		// Check that there is a closing parenthesis
 		const auto closingParenthesis(findClosingParenthesis(from, to));
@@ -123,13 +123,13 @@ std::pair<Interpreter::TokenIterator, Tree<EvaluationNode>::Ptr> Interpreter::pa
 EvaluationNode Interpreter::parseToken(const std::string& token)
 {
 	// Real literal
-	if(std::regex_match(token, real_literal_regex))
+	if(std::regex_match(token, realLiteralRegex))
 		return Data(stof(token));
 	// Integer literal
-	else if(std::regex_match(token, integer_literal_regex))
+	else if(std::regex_match(token, integerLiteralRegex))
 		return Data(stoi(token));
 	// String literal
-	else if(std::regex_match(token, string_literal_regex))
+	else if(std::regex_match(token, stringLiteralRegex))
 	{
 		std::string res;
 		for(auto it(token.begin() + 1); it != token.end() - 1; ++it)
@@ -150,7 +150,7 @@ EvaluationNode Interpreter::parseToken(const std::string& token)
 		return Data(res);
 	}
 	// Identifier
-	else if(std::regex_match(token, identifier_regex))
+	else if(std::regex_match(token, identifierRegex))
 		return Identifier(token);
 	else
 		throw ScriptError("Unrecognized token: \"" + token + "\"");
@@ -195,9 +195,9 @@ Interpreter::TokenIterator Interpreter::findClosingParenthesis(Interpreter::Toke
 	int depth{0};
 	for(;from != to; ++from)
 	{
-		if(*from == open_parenthesis_literal)
+		if(*from == openingParenthesisLiteral)
 			++depth;
-		else if(*from == close_parenthesis_literal)
+		else if(*from == closingParenthesisLiteral)
 			--depth;
 		// TODO change to <=
 		if(depth == 0)

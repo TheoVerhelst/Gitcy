@@ -44,19 +44,19 @@ class Interpreter
 
 
 		// Parsing
-		static const std::string real_literal;              ///< Regex string of a real number literal.
-		static const std::string integer_literal;           ///< Regex string of an integer number literal.
-		static const std::string number_literal;            ///< Regex string of a number literal.
-		static const std::string string_literal;            ///< Regex string of a string literal.
+		static const std::string realLiteral;               ///< Regex string of a real number literal.
+		static const std::string integerLiteral;            ///< Regex string of an integer number literal.
+		static const std::string numberLiteral;             ///< Regex string of a number literal.
+		static const std::string stringLiteral;             ///< Regex string of a string literal.
 		static const std::string identifier;                ///< Regex string of an identifier.
-		static const std::string open_parenthesis_literal;  ///< Regex string of an opening parenthesis. \TODO rename opening_parenthesis
-		static const std::string close_parenthesis_literal; ///< Regex string of a closing parenthesis.
-		static const std::string parenthesis_literal;       ///< Regex string of a parenthesis.
-		static const std::regex real_literal_regex;         ///< Regex object of a real number literal.
-		static const std::regex integer_literal_regex;      ///< Regex object of an integer number literal.
-		static const std::regex string_literal_regex;       ///< Regex object of a string literal.
-		static const std::regex identifier_regex;           ///< Regex object of an identifier.
-		static const std::regex token_regex;                ///< Regex object of a token.
+		static const std::string openingParenthesisLiteral; ///< Regex string of an opening parenthesis.
+		static const std::string closingParenthesisLiteral; ///< Regex string of a closing parenthesis.
+		static const std::string parenthesisLiteral;        ///< Regex string of a parenthesis.
+		static const std::regex realLiteralRegex;           ///< Regex object of a real number literal.
+		static const std::regex integerLiteralRegex;        ///< Regex object of an integer number literal.
+		static const std::regex stringLiteralRegex;         ///< Regex object of a string literal.
+		static const std::regex identifierRegex;            ///< Regex object of an identifier.
+		static const std::regex tokenRegex;                 ///< Regex object of a token.
 
 		/// Map of characters to escape in string literals, when they are
 		/// preceded by an antislash `\`. For example, the character 'n' is
@@ -69,7 +69,7 @@ class Interpreter
 		void loadScript();
 
 		/// Convert a string of code to a list of tokens as defined by the regex
-		/// token_regex.
+		/// tokenRegex.
 		/// \param code The code to tokenize.
 		/// \returns The list of tokens.
 		static TokenVector tokenize(std::string code);
