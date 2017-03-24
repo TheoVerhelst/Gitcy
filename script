@@ -7,4 +7,5 @@
 	(print (and true true true))
 	(print (or true false false))
 	(print (or false false false))
+	(print (+ "a" "b"))
 )

@@ -190,7 +190,7 @@ template <typename T>
 Data Functions::_add(const std::vector<Data>& args) const
 {
 	const std::vector<T> convertedArguments{convert<T>(args)};
-	return std::accumulate(convertedArguments.begin(), convertedArguments.end(), static_cast<T>(0));
+	return std::accumulate(convertedArguments.begin(), convertedArguments.end(), T());
 }
 
 template <typename T>
