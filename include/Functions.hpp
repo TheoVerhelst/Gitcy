@@ -29,7 +29,7 @@ class Functions
 		const Function print;        ///< Prints the arguments to stdout.
 		const Function do_;          ///< Just evaluates its arguments, and returns the last.
 		const Function define;       ///< Binds a value to a name.
-		const Function lowerThan;    ///< Checks if first argument is lower than second. \TODO make it variadic.
+		const Function lowerThan;    ///< Checks if first argument is lower than second.
 		const Function greaterThan;  ///< Checks if first argument is greater than second.
 		const Function lowerEqual;   ///< Checks if first argument is lower of equal to the second.
 		const Function greaterEqual; ///< Checks if first argument is greater or equal to the second.

@@ -10,9 +10,14 @@
 /// Class for functions defined in C++ but usable in scripts. These functions
 /// have a limited number of overload, each overload can be variadic. We cannot
 /// call any function with any arguments, some restrictions are applied. When a
-/// function is called, the functions search the first overload that matches the
-/// arguments. \TODO We don't use yet real overload resolution,
-/// although more than one overload could match a given list of arguments.
+/// function is called, the functions search the best overload that matches the
+/// arguments, according to the following rules:
+/// * If there is exactly one matching non-variadic overload, then this one is
+/// chosen.
+/// * Else, if there is exactly one matching variadic overload, then this one is
+/// chose.
+/// * Else, a ScriptError is raised, explaining the error.
+///
 /// \see Overload
 class Function
 {

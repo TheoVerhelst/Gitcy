@@ -37,6 +37,11 @@ Data Overload::operator()(const std::vector<Data>& arguments) const
 	return _functor(arguments);
 }
 
+bool Overload::isVariadic() const
+{
+	return _isVariadic;
+}
+
 std::ostream& operator<<(std::ostream& os, const Overload& overload)
 {
 	os << Utils::join(", ", overload._typeList.begin(), overload._typeList.end());

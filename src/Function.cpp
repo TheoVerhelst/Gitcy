@@ -12,16 +12,42 @@ Function::Function(const std::vector<Overload>& overloads):
 
 Data Function::operator()(const std::vector<Data>& arguments) const
 {
-	// Find the first overload that matches the arguments
-	auto it(std::find_if(_overloads.begin(), _overloads.end(),
-			std::bind(&Overload::matches, std::placeholders::_1, arguments)));
-	// If a match has been found
-	if(it != _overloads.end())
-		return (*it)(arguments);
-	else
-		throw ScriptError("No overload found for given arguments:\n"
-				"Got      (" + Utils::toString(arguments) + ") while calling\n" +
-				 Utils::toString(*this));
+	// Find the overloads that matches the arguments, and split them according to their variadicity (variadicness ?)
+	std::vector<Overload> variadicCandidates, nonVariadicCandidates;
+	for(auto& overload : _overloads)
+	{
+		if(overload.matches(arguments))
+		{
+			if(overload.isVariadic())
+				variadicCandidates.push_back(overload);
+			else
+				nonVariadicCandidates.push_back(overload);
+		}
+	}
+	for(auto& candidateSet : {std::ref(nonVariadicCandidates), std::ref(variadicCandidates)})
+	{
+		if(candidateSet.get().size() > 0)
+		{
+			if(candidateSet.get().size() > 1)
+			{
+				throw ScriptError("Ambiguous overload resolution for given arguments:\n"
+						"Got:\n"
+						"\t(" + Utils::toString(arguments) + ")\n"
+						"Candidate overloads:\n"
+						"\t(" +  Utils::join(")\n\t(", candidateSet.get().begin(), candidateSet.get().end()) + ")\n");
+			}
+			else
+				return candidateSet.get().front()(arguments);
+		}
+	}
+
+	throw ScriptError("No overload found for given arguments:\n"
+			"Got:\n"
+			"\t(" + Utils::toString(arguments) + ")\n"
+			"Overloads:\n"
+			"\t(" + Utils::join(")\n\t(", _overloads.begin(), _overloads.end()) + ")\n");
+
+
 }
 
 std::ostream& operator<<(std::ostream& os, const Function& function)

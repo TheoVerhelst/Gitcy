@@ -52,6 +52,10 @@ class Overload
 		/// \returns os.
 		friend std::ostream& operator<<(std::ostream& os, const Overload& overload);
 
+		/// Returns whether this overload is variadic.
+		/// \returns True if this overload is variadic, false otherwise.
+		bool isVariadic() const;
+
 	private:
 		/// The list of types accepted by this overload.
 		std::vector<SignatureType> _typeList;
