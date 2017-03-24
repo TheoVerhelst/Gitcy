@@ -95,7 +95,6 @@ class Interpreter
 		/// Parses a token, and returns the corresponding evaluation node.
 		/// \param token The token to parse.
 		/// \returns The corresponding evaluation node.
-		/// \TODO make this function return FunctionCall().
 		static EvaluationNode parseToken(const std::string& token);
 
 		/// Evaluates an evaluation tree, by calling recursively the functions

@@ -94,30 +94,29 @@ Tree<EvaluationNode>::Ptr Interpreter::constructTree(const Interpreter::TokenVec
 
 std::pair<Interpreter::TokenIterator, Tree<EvaluationNode>::Ptr> Interpreter::parseExpression(Interpreter::TokenIterator from, Interpreter::TokenIterator to)
 {
-	std::pair<TokenIterator, Tree<EvaluationNode>::Ptr> res{from, nullptr};
+	TokenIterator pastIterator{from};
+	Tree<EvaluationNode>::Ptr evaluationTree{Tree<EvaluationNode>::create(parseToken(*from))};
 
 	// If we construct a function call expression
-	if(*from == openingParenthesisLiteral)
+	if(evaluationTree->getValue().type() == typeid(FunctionCall))
 	{
 		// Check that there is a closing parenthesis
 		const auto closingParenthesis(findClosingParenthesis(from, to));
 		if(closingParenthesis == to)
 			throw ScriptError("No closing parenthesis has been found");
 
-		res.first = closingParenthesis;
-		res.second = Tree<EvaluationNode>::create(FunctionCall());
+		pastIterator = closingParenthesis;
 
+		// Add childs by evaluating following tokens
 		for(auto it(from + 1); it != closingParenthesis; ++it)
 		{
 			auto result(parseExpression(it, to));
 			it = result.first;
-			res.second->addChild(result.second);
+			evaluationTree->addChild(result.second);
 		}
 	}
-	else
-		res.second = Tree<EvaluationNode>::create(parseToken(*from));
 
-	return res;
+	return {pastIterator, evaluationTree};
 }
 
 EvaluationNode Interpreter::parseToken(const std::string& token)
@@ -152,6 +151,9 @@ EvaluationNode Interpreter::parseToken(const std::string& token)
 	// Identifier
 	else if(std::regex_match(token, identifierRegex))
 		return Identifier(token);
+	// Function call
+	else if(token == openingParenthesisLiteral)
+		return FunctionCall();
 	else
 		throw ScriptError("Unrecognized token: \"" + token + "\"");
 }
