@@ -88,7 +88,7 @@ Functions::Functions(Interpreter& interpreter):
 {
 }
 
-Data Functions::_print(const std::vector<Data>& args)
+Data Functions::_print(const std::vector<Data>& args) const
 {
 	std::cout << std::boolalpha;
 	for(size_t i(0); i < args.size(); ++i)
@@ -97,7 +97,7 @@ Data Functions::_print(const std::vector<Data>& args)
 	return Null();
 }
 
-Data Functions::_do(const std::vector<Data>& args)
+Data Functions::_do(const std::vector<Data>& args) const
 {
 	if(args.empty())
 		return Null();
@@ -111,19 +111,19 @@ Data Functions::_define(const std::vector<Data>& args)
 	return value;
 }
 
-Data Functions::_and(const std::vector<Data>& args)
+Data Functions::_and(const std::vector<Data>& args) const
 {
 	Data lhs(args[0]), rhs(args[1]);
 	return boost::get<bool>(lhs) and boost::get<bool>(rhs);
 }
 
-Data Functions::_or(const std::vector<Data>& args)
+Data Functions::_or(const std::vector<Data>& args) const
 {
 	Data lhs(args[0]), rhs(args[1]);
 	return boost::get<bool>(lhs) or boost::get<bool>(rhs);
 }
 
-Data Functions::_modulo(const std::vector<Data>& args)
+Data Functions::_modulo(const std::vector<Data>& args) const
 {
 	Data lhs(args[0]), rhs(args[1]);
 	if(boost::get<int>(rhs) == static_cast<int>(0))
@@ -131,7 +131,7 @@ Data Functions::_modulo(const std::vector<Data>& args)
 	return boost::get<int>(lhs) % boost::get<int>(rhs);
 }
 
-Data Functions::_fmod(const std::vector<Data>& args)
+Data Functions::_fmod(const std::vector<Data>& args) const
 {
 	Data lhs(args[0]), rhs(args[1]);
 	if(boost::get<double>(rhs) == 0.)
@@ -139,7 +139,7 @@ Data Functions::_fmod(const std::vector<Data>& args)
 	return std::fmod(boost::get<double>(lhs), boost::get<double>(rhs));
 }
 
-Data Functions::_not(const std::vector<Data>& args)
+Data Functions::_not(const std::vector<Data>& args) const
 {
 	Data lhs(args[0]);
 	return not boost::get<bool>(lhs);

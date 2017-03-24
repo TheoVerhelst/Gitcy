@@ -20,8 +20,7 @@ class Functions
 		/// Constructor.
 		/// \param interpreter A reference to the interpreter. We use this
 		/// because any functions may modify the interpreter state (such as
-		/// variables). \TODO make some of the method const, in order to
-		/// guarantee functional purity.
+		/// variables).
 		Functions(Interpreter& interpreter);
 
 		const Function print;        ///< Prints the arguments to stdout.
@@ -45,11 +44,11 @@ class Functions
 	private:
 		/// Implements print.
 		/// \param args The argument list.
-		Data _print(const std::vector<Data>& args);
+		Data _print(const std::vector<Data>& args) const;
 
 		/// Implements do.
 		/// \param args The argument list.
-		Data _do(const std::vector<Data>& args);
+		Data _do(const std::vector<Data>& args) const;
 
 		/// Implements define.
 		/// \param args The argument list.
@@ -59,81 +58,81 @@ class Functions
 		/// \param args The argument list.
 		/// \tparam T Either int or double.
 		template <typename T>
-		Data _lowerThan(const std::vector<Data>& args);
+		Data _lowerThan(const std::vector<Data>& args) const;
 
 		/// Implements greaterThan.
 		/// \param args The argument list.
 		/// \tparam T Either int or double.
 		template <typename T>
-		Data _greaterThan(const std::vector<Data>& args);
+		Data _greaterThan(const std::vector<Data>& args) const;
 
 		/// Implements lowerEqual.
 		/// \param args The argument list.
 		/// \tparam T Either int or double.
 		template <typename T>
-		Data _lowerEqual(const std::vector<Data>& args);
+		Data _lowerEqual(const std::vector<Data>& args) const;
 
 		/// Implements greaterEqual.
 		/// \param args The argument list.
 		/// \tparam T Either int or double.
 		template <typename T>
-		Data _greaterEqual(const std::vector<Data>& args);
+		Data _greaterEqual(const std::vector<Data>& args) const;
 
 		/// Implements equal.
 		/// \param args The argument list.
 		/// \tparam T Either int, double, std::string or bool.
 		template <typename T>
-		Data _equal(const std::vector<Data>& args);
+		Data _equal(const std::vector<Data>& args) const;
 
 		/// Implements notEqual.
 		/// \param args The argument list.
 		/// \tparam T Either int, double, std::string or bool.
 		template <typename T>
-		Data _notEqual(const std::vector<Data>& args);
+		Data _notEqual(const std::vector<Data>& args) const;
 
 		/// Implements and.
 		/// \param args The argument list.
-		Data _and(const std::vector<Data>& args);
+		Data _and(const std::vector<Data>& args) const;
 
 		/// Implements or.
 		/// \param args The argument list.
-		Data _or(const std::vector<Data>& args);
+		Data _or(const std::vector<Data>& args) const;
 
 		/// Implements add.
 		/// \param args The argument list.
 		/// \tparam T Either int, double or string.
 		template <typename T>
-		Data _add(const std::vector<Data>& args);
+		Data _add(const std::vector<Data>& args) const;
 
 		/// Implements substract.
 		/// \param args The argument list.
 		/// \tparam T Either int or double.
 		template <typename T>
-		Data _substract(const std::vector<Data>& args);
+		Data _substract(const std::vector<Data>& args) const;
 
 		/// Implements multiply.
 		/// \param args The argument list.
 		/// \tparam T Either int or double.
 		template <typename T>
-		Data _multiply(const std::vector<Data>& args);
+		Data _multiply(const std::vector<Data>& args) const;
 
 		/// Implements divide.
 		/// \param args The argument list.
 		/// \tparam T Either int or double.
 		template <typename T>
-		Data _divide(const std::vector<Data>& args);
+		Data _divide(const std::vector<Data>& args) const;
 
 		/// Implements modulo for integers.
 		/// \param args The argument list.
-		Data _modulo(const std::vector<Data>& args);
+		Data _modulo(const std::vector<Data>& args) const;
 
 		/// Implements modulo for double.
 		/// \param args The argument list.
-		Data _fmod(const std::vector<Data>& args);
+		Data _fmod(const std::vector<Data>& args) const;
 
 		/// Implements not.
 		/// \param args The argument list.
-		Data _not(const std::vector<Data>& args);
+		Data _not(const std::vector<Data>& args) const;
 
 		/// A reference to the interpreter, allows functions to have
 		/// side-effects.
@@ -141,66 +140,66 @@ class Functions
 };
 
 template <typename T>
-Data Functions::_lowerThan(const std::vector<Data>& args)
+Data Functions::_lowerThan(const std::vector<Data>& args) const
 {
 	Data lhs(args[0]), rhs(args[1]);
 	return boost::get<T>(lhs) < boost::get<T>(rhs);
 }
 
 template <typename T>
-Data Functions::_greaterThan(const std::vector<Data>& args)
+Data Functions::_greaterThan(const std::vector<Data>& args) const
 {
 	return _lowerThan<T>({args[1], args[0]});
 }
 
 template <typename T>
-Data Functions::_lowerEqual(const std::vector<Data>& args)
+Data Functions::_lowerEqual(const std::vector<Data>& args) const
 {
 	return _not({_greaterThan<T>(args)});
 }
 
 template <typename T>
-Data Functions::_greaterEqual(const std::vector<Data>& args)
+Data Functions::_greaterEqual(const std::vector<Data>& args) const
 {
 	return _not({_lowerThan<T>(args)});
 }
 
 template <typename T>
-Data Functions::_equal(const std::vector<Data>& args)
+Data Functions::_equal(const std::vector<Data>& args) const
 {
 	Data lhs(args[0]), rhs(args[1]);
 	return boost::get<T>(lhs) < boost::get<T>(rhs);
 }
 
 template <typename T>
-Data Functions::_notEqual(const std::vector<Data>& args)
+Data Functions::_notEqual(const std::vector<Data>& args) const
 {
 	return _not({_equal<T>(args)});
 }
 
 template <typename T>
-Data Functions::_add(const std::vector<Data>& args)
+Data Functions::_add(const std::vector<Data>& args) const
 {
 	Data lhs(args[0]), rhs(args[1]);
 	return boost::get<T>(lhs) + boost::get<T>(rhs);
 }
 
 template <typename T>
-Data Functions::_substract(const std::vector<Data>& args)
+Data Functions::_substract(const std::vector<Data>& args) const
 {
 	Data lhs(args[0]), rhs(args[1]);
 	return boost::get<T>(lhs) - boost::get<T>(rhs);
 }
 
 template <typename T>
-Data Functions::_multiply(const std::vector<Data>& args)
+Data Functions::_multiply(const std::vector<Data>& args) const
 {
 	Data lhs(args[0]), rhs(args[1]);
 	return boost::get<T>(lhs) * boost::get<T>(rhs);
 }
 
 template <typename T>
-Data Functions::_divide(const std::vector<Data>& args)
+Data Functions::_divide(const std::vector<Data>& args) const
 {
 	Data lhs(args[0]), rhs(args[1]);
 	if(boost::get<T>(rhs) == static_cast<T>(0))
