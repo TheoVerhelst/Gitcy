@@ -16,32 +16,32 @@ Functions::Functions(Interpreter& interpreter):
 	}},
 	lowerThan{{
 		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_lowerThan<int>)},
-		{{{typeid(float)}, {typeid(float)}}, false, BOUND(_lowerThan<float>)}
+		{{{typeid(double)}, {typeid(double)}}, false, BOUND(_lowerThan<double>)}
 	}},
 	greaterThan{{
 		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_greaterThan<int>)},
-		{{{typeid(float)}, {typeid(float)}}, false, BOUND(_greaterThan<float>)}
+		{{{typeid(double)}, {typeid(double)}}, false, BOUND(_greaterThan<double>)}
 	}},
 
 	lowerEqual{{
 		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_lowerEqual<int>)},
-		{{{typeid(float)}, {typeid(float)}}, false, BOUND(_lowerEqual<float>)}
+		{{{typeid(double)}, {typeid(double)}}, false, BOUND(_lowerEqual<double>)}
 	}},
 
 	greaterEqual{{
 		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_greaterEqual<int>)},
-		{{{typeid(float)}, {typeid(float)}}, false, BOUND(_greaterEqual<float>)}
+		{{{typeid(double)}, {typeid(double)}}, false, BOUND(_greaterEqual<double>)}
 	}},
 
 	equal{{
 		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_equal<int>)},
-		{{{typeid(float)}, {typeid(float)}}, false, BOUND(_equal<float>)},
+		{{{typeid(double)}, {typeid(double)}}, false, BOUND(_equal<double>)},
 		{{{typeid(std::string)}, {typeid(std::string)}}, false, BOUND(_equal<std::string>)}
 	}},
 
 	notEqual{{
 		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_notEqual<int>)},
-		{{{typeid(float)}, {typeid(float)}}, false, BOUND(_notEqual<float>)},
+		{{{typeid(double)}, {typeid(double)}}, false, BOUND(_notEqual<double>)},
 		{{{typeid(std::string)}, {typeid(std::string)}}, false, BOUND(_notEqual<std::string>)}
 	}},
 
@@ -55,28 +55,28 @@ Functions::Functions(Interpreter& interpreter):
 
 	add{{
 		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_add<int>)},
-		{{{typeid(float)}, {typeid(float)}}, false, BOUND(_add<float>)},
+		{{{typeid(double)}, {typeid(double)}}, false, BOUND(_add<double>)},
 		{{{typeid(std::string)}, {typeid(std::string)}}, false, BOUND(_add<std::string>)}
 	}},
 
 	substract{{
 		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_substract<int>)},
-		{{{typeid(float)}, {typeid(float)}}, false, BOUND(_substract<float>)}
+		{{{typeid(double)}, {typeid(double)}}, false, BOUND(_substract<double>)}
 	}},
 
 	multiply{{
 		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_multiply<int>)},
-		{{{typeid(float)}, {typeid(float)}}, false, BOUND(_multiply<float>)}
+		{{{typeid(double)}, {typeid(double)}}, false, BOUND(_multiply<double>)}
 	}},
 
 	divide{{
 		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_divide<int>)},
-		{{{typeid(float)}, {typeid(float)}}, false, BOUND(_divide<float>)}
+		{{{typeid(double)}, {typeid(double)}}, false, BOUND(_divide<double>)}
 	}},
 
 	modulo{{
 		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_modulo)},
-		{{{typeid(float)}, {typeid(float)}}, false, BOUND(_fmod)}
+		{{{typeid(double)}, {typeid(double)}}, false, BOUND(_fmod)}
 	}},
 	not_{{
 		{{{typeid(bool)}}, false, BOUND(_not)}
@@ -132,9 +132,9 @@ Data Functions::_modulo(const std::vector<Data>& args)
 Data Functions::_fmod(const std::vector<Data>& args)
 {
 	Data lhs(args[0]), rhs(args[1]);
-	if(boost::get<float>(rhs) == 0.f)
+	if(boost::get<double>(rhs) == 0.)
 		throw ScriptError("modulo by zero");
-	return std::fmod(boost::get<float>(lhs), boost::get<float>(rhs));
+	return std::fmod(boost::get<double>(lhs), boost::get<double>(rhs));
 }
 
 Data Functions::_not(const std::vector<Data>& args)

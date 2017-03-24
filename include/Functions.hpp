@@ -57,37 +57,37 @@ class Functions
 
 		/// Implements lowerThan.
 		/// \param args The argument list.
-		/// \tparam T Either int or float
+		/// \tparam T Either int or double
 		template <typename T>
 		Data _lowerThan(const std::vector<Data>& args);
 
 		/// Implements greaterThan.
 		/// \param args The argument list.
-		/// \tparam T Either int or float
+		/// \tparam T Either int or double
 		template <typename T>
 		Data _greaterThan(const std::vector<Data>& args);
 
 		/// Implements lowerEqual.
 		/// \param args The argument list.
-		/// \tparam T Either int or float
+		/// \tparam T Either int or double
 		template <typename T>
 		Data _lowerEqual(const std::vector<Data>& args);
 
 		/// Implements greaterEqual.
 		/// \param args The argument list.
-		/// \tparam T Either int or float
+		/// \tparam T Either int or double
 		template <typename T>
 		Data _greaterEqual(const std::vector<Data>& args);
 
 		/// Implements equal.
 		/// \param args The argument list.
-		/// \tparam T Either int, float, std::string or \TODO bool
+		/// \tparam T Either int, double, std::string or \TODO bool
 		template <typename T>
 		Data _equal(const std::vector<Data>& args);
 
 		/// Implements notEqual.
 		/// \param args The argument list.
-		/// \tparam T Either int, float, std::string or \TODO bool
+		/// \tparam T Either int, double, std::string or \TODO bool
 		template <typename T>
 		Data _notEqual(const std::vector<Data>& args);
 
@@ -101,25 +101,25 @@ class Functions
 
 		/// Implements add.
 		/// \param args The argument list.
-		/// \tparam T Either int, float or string.
+		/// \tparam T Either int, double or string.
 		template <typename T>
 		Data _add(const std::vector<Data>& args);
 
 		/// Implements substract.
 		/// \param args The argument list.
-		/// \tparam T Either int or float.
+		/// \tparam T Either int or double.
 		template <typename T>
 		Data _substract(const std::vector<Data>& args);
 
 		/// Implements multiply.
 		/// \param args The argument list.
-		/// \tparam T Either int or float.
+		/// \tparam T Either int or double.
 		template <typename T>
 		Data _multiply(const std::vector<Data>& args);
 
 		/// Implements divide.
 		/// \param args The argument list.
-		/// \tparam T Either int or float.
+		/// \tparam T Either int or double.
 		template <typename T>
 		Data _divide(const std::vector<Data>& args);
 
@@ -127,7 +127,7 @@ class Functions
 		/// \param args The argument list.
 		Data _modulo(const std::vector<Data>& args);
 
-		/// Implements modulo for float.
+		/// Implements modulo for double.
 		/// \param args The argument list.
 		Data _fmod(const std::vector<Data>& args);
 

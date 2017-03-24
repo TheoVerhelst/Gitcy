@@ -5,7 +5,7 @@
 const std::map<std::type_index, std::string> SignatureType::_typePrettyNames
 {
 	{typeid(int), "Integer"},
-	{typeid(float), "Real"},
+	{typeid(double), "Real"},
 	{typeid(bool), "Boolean"},
 	{typeid(std::string), "String"},
 	{typeid(Function), "Function"}

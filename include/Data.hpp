@@ -22,7 +22,6 @@ std::ostream& operator<<(std::ostream& os, const Null& null);
 /// The type used in C++ to represent any value in script. It is more safe than
 /// a pointer to void, as boost::variant enfore type and has compile-time and
 /// runtime checks.
-/// \TODO change float to double
-typedef boost::variant<Null, bool, int, float, std::string, boost::recursive_wrapper<Function>> Data;
+typedef boost::variant<Null, bool, int, double, std::string, boost::recursive_wrapper<Function>> Data;
 
 #endif // DATA_HPP
