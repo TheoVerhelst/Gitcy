@@ -196,8 +196,13 @@ Data Functions::_add(const std::vector<Data>& args) const
 template <typename T>
 Data Functions::_substract(const std::vector<Data>& args) const
 {
-	const std::vector<T> convertedArguments{convert<T>(args)};
-	return std::accumulate(std::next(convertedArguments.begin()), convertedArguments.end(), convertedArguments.front(), std::minus<T>());
+	if(args.size() == 1)
+		return -boost::get<T>(args.front());
+	else
+	{
+		const std::vector<T> convertedArguments{convert<T>(args)};
+		return std::accumulate(std::next(convertedArguments.begin()), convertedArguments.end(), convertedArguments.front(), std::minus<T>());
+	}
 }
 
 template <typename T>

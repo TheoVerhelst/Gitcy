@@ -48,27 +48,28 @@ Functions::Functions(Interpreter& interpreter):
 	}},
 
 	and_{{
-		{{{typeid(bool)}, {typeid(bool)}}, true, BOUND(_and)}
+		// \TODO allow one argument (also for or)
+		{{{typeid(bool)}}, true, BOUND(_and)}
 	}},
 
 	or_{{
-		{{{typeid(bool)}, {typeid(bool)}}, true, BOUND(_or)}
+		{{{typeid(bool)}}, true, BOUND(_or)}
 	}},
 
 	add{{
-		{{{typeid(int)}, {typeid(int)}}, true, BOUND(_add<int>)},
-		{{{typeid(double)}, {typeid(double)}}, true, BOUND(_add<double>)},
-		{{{typeid(std::string)}, {typeid(std::string)}}, true, BOUND(_add<std::string>)}
+		{{{typeid(int)}}, true, BOUND(_add<int>)},
+		{{{typeid(double)}}, true, BOUND(_add<double>)},
+		{{{typeid(std::string)}}, true, BOUND(_add<std::string>)}
 	}},
 
 	substract{{
-		{{{typeid(int)}, {typeid(int)}}, true, BOUND(_substract<int>)},
-		{{{typeid(double)}, {typeid(double)}}, true, BOUND(_substract<double>)}
+		{{{typeid(int)}}, true, BOUND(_substract<int>)},
+		{{{typeid(double)}}, true, BOUND(_substract<double>)}
 	}},
 
 	multiply{{
-		{{{typeid(int)}, {typeid(int)}}, true, BOUND(_multiply<int>)},
-		{{{typeid(double)}, {typeid(double)}}, true, BOUND(_multiply<double>)}
+		{{{typeid(int)}}, true, BOUND(_multiply<int>)},
+		{{{typeid(double)}}, true, BOUND(_multiply<double>)}
 	}},
 
 	divide{{
