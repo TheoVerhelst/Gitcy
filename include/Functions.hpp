@@ -4,6 +4,7 @@
 #include <vector>
 #include <cmath>
 #include <algorithm>
+#include <numeric>
 #include <functional>
 #include <Data.hpp>
 #include <ScriptError.hpp>
@@ -188,31 +189,32 @@ Data Functions::_notEqual(const std::vector<Data>& args) const
 template <typename T>
 Data Functions::_add(const std::vector<Data>& args) const
 {
-	Data lhs(args[0]), rhs(args[1]);
-	return boost::get<T>(lhs) + boost::get<T>(rhs);
+	std::vector<T> convertedArguments{convert<T>(args)};
+	return std::accumulate(convertedArguments.begin(), convertedArguments.end(), static_cast<T>(0));
 }
 
 template <typename T>
 Data Functions::_substract(const std::vector<Data>& args) const
 {
-	Data lhs(args[0]), rhs(args[1]);
-	return boost::get<T>(lhs) - boost::get<T>(rhs);
+	std::vector<T> convertedArguments{convert<T>(args)};
+	return std::accumulate(std::next(convertedArguments.begin()), convertedArguments.end(), convertedArguments.front(), std::minus<T>());
 }
 
 template <typename T>
 Data Functions::_multiply(const std::vector<Data>& args) const
 {
-	Data lhs(args[0]), rhs(args[1]);
-	return boost::get<T>(lhs) * boost::get<T>(rhs);
+	std::vector<T> convertedArguments{convert<T>(args)};
+	return std::accumulate(convertedArguments.begin(), convertedArguments.end(), static_cast<T>(1), std::multiplies<T>());
 }
 
 template <typename T>
 Data Functions::_divide(const std::vector<Data>& args) const
 {
-	Data lhs(args[0]), rhs(args[1]);
-	if(boost::get<T>(rhs) == static_cast<T>(0))
+	std::vector<T> convertedArguments{convert<T>(args)};
+	// If there is a zero in the values [begin + 1, end)
+	if(std::find(std::next(convertedArguments.begin()), convertedArguments.end(), static_cast<T>(0)) != convertedArguments.end())
 		throw ScriptError("division by zero");
-	return boost::get<T>(lhs) / boost::get<T>(rhs);
+	return std::accumulate(std::next(convertedArguments.begin()), convertedArguments.end(), convertedArguments.front(), std::divides<T>());
 }
 
 template <typename T>

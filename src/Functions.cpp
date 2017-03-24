@@ -56,24 +56,24 @@ Functions::Functions(Interpreter& interpreter):
 	}},
 
 	add{{
-		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_add<int>)},
-		{{{typeid(double)}, {typeid(double)}}, false, BOUND(_add<double>)},
-		{{{typeid(std::string)}, {typeid(std::string)}}, false, BOUND(_add<std::string>)}
+		{{{typeid(int)}, {typeid(int)}}, true, BOUND(_add<int>)},
+		{{{typeid(double)}, {typeid(double)}}, true, BOUND(_add<double>)},
+		{{{typeid(std::string)}, {typeid(std::string)}}, true, BOUND(_add<std::string>)}
 	}},
 
 	substract{{
-		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_substract<int>)},
-		{{{typeid(double)}, {typeid(double)}}, false, BOUND(_substract<double>)}
+		{{{typeid(int)}, {typeid(int)}}, true, BOUND(_substract<int>)},
+		{{{typeid(double)}, {typeid(double)}}, true, BOUND(_substract<double>)}
 	}},
 
 	multiply{{
-		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_multiply<int>)},
-		{{{typeid(double)}, {typeid(double)}}, false, BOUND(_multiply<double>)}
+		{{{typeid(int)}, {typeid(int)}}, true, BOUND(_multiply<int>)},
+		{{{typeid(double)}, {typeid(double)}}, true, BOUND(_multiply<double>)}
 	}},
 
 	divide{{
-		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_divide<int>)},
-		{{{typeid(double)}, {typeid(double)}}, false, BOUND(_divide<double>)}
+		{{{typeid(int)}, {typeid(int)}}, true, BOUND(_divide<int>)},
+		{{{typeid(double)}, {typeid(double)}}, true, BOUND(_divide<double>)}
 	}},
 
 	modulo{{
