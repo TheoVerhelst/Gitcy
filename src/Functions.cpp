@@ -36,13 +36,15 @@ Functions::Functions(Interpreter& interpreter):
 	equal{{
 		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_equal<int>)},
 		{{{typeid(double)}, {typeid(double)}}, false, BOUND(_equal<double>)},
-		{{{typeid(std::string)}, {typeid(std::string)}}, false, BOUND(_equal<std::string>)}
+		{{{typeid(std::string)}, {typeid(std::string)}}, false, BOUND(_equal<std::string>)},
+		{{{typeid(bool)}, {typeid(bool)}}, false, BOUND(_equal<bool>)}
 	}},
 
 	notEqual{{
 		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_notEqual<int>)},
 		{{{typeid(double)}, {typeid(double)}}, false, BOUND(_notEqual<double>)},
-		{{{typeid(std::string)}, {typeid(std::string)}}, false, BOUND(_notEqual<std::string>)}
+		{{{typeid(std::string)}, {typeid(std::string)}}, false, BOUND(_notEqual<std::string>)},
+		{{{typeid(bool)}, {typeid(bool)}}, false, BOUND(_notEqual<bool>)}
 	}},
 
 	and_{{

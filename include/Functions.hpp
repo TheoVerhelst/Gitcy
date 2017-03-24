@@ -57,37 +57,37 @@ class Functions
 
 		/// Implements lowerThan.
 		/// \param args The argument list.
-		/// \tparam T Either int or double
+		/// \tparam T Either int or double.
 		template <typename T>
 		Data _lowerThan(const std::vector<Data>& args);
 
 		/// Implements greaterThan.
 		/// \param args The argument list.
-		/// \tparam T Either int or double
+		/// \tparam T Either int or double.
 		template <typename T>
 		Data _greaterThan(const std::vector<Data>& args);
 
 		/// Implements lowerEqual.
 		/// \param args The argument list.
-		/// \tparam T Either int or double
+		/// \tparam T Either int or double.
 		template <typename T>
 		Data _lowerEqual(const std::vector<Data>& args);
 
 		/// Implements greaterEqual.
 		/// \param args The argument list.
-		/// \tparam T Either int or double
+		/// \tparam T Either int or double.
 		template <typename T>
 		Data _greaterEqual(const std::vector<Data>& args);
 
 		/// Implements equal.
 		/// \param args The argument list.
-		/// \tparam T Either int, double, std::string or \TODO bool
+		/// \tparam T Either int, double, std::string or bool.
 		template <typename T>
 		Data _equal(const std::vector<Data>& args);
 
 		/// Implements notEqual.
 		/// \param args The argument list.
-		/// \tparam T Either int, double, std::string or \TODO bool
+		/// \tparam T Either int, double, std::string or bool.
 		template <typename T>
 		Data _notEqual(const std::vector<Data>& args);
 

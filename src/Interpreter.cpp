@@ -66,9 +66,9 @@ void Interpreter::interpret()
 	evaluateTree(_evaluationTree);
 }
 
-Interpreter::VecStr Interpreter::tokenize(std::string code)
+Interpreter::TokenVector Interpreter::tokenize(std::string code)
 {
-	VecStr tokens, errorTokens;
+	TokenVector tokens, errorTokens;
 
 	std::copy(std::sregex_token_iterator(code.begin(), code.end(), token_regex, 1),
 			std::sregex_token_iterator(),
@@ -87,14 +87,14 @@ Interpreter::VecStr Interpreter::tokenize(std::string code)
 	return tokens;
 }
 
-Tree<EvaluationNode>::Ptr Interpreter::constructTree(const Interpreter::VecStr& tokens)
+Tree<EvaluationNode>::Ptr Interpreter::constructTree(const Interpreter::TokenVector& tokens)
 {
 	return parseExpression(tokens.begin(), tokens.end()).second;
 }
 
-std::pair<Interpreter::VecStr::const_iterator, Tree<EvaluationNode>::Ptr> Interpreter::parseExpression(Interpreter::VecStr::const_iterator from, Interpreter::VecStr::const_iterator to)
+std::pair<Interpreter::TokenIterator, Tree<EvaluationNode>::Ptr> Interpreter::parseExpression(Interpreter::TokenIterator from, Interpreter::TokenIterator to)
 {
-	std::pair<VecStr::const_iterator, Tree<EvaluationNode>::Ptr> res{from, nullptr};
+	std::pair<TokenIterator, Tree<EvaluationNode>::Ptr> res{from, nullptr};
 
 	// If we construct a function call expression
 	if(*from == open_parenthesis_literal)
@@ -190,7 +190,7 @@ Data Interpreter::evaluateTree(const Tree<EvaluationNode>::Ptr& expression)
 	return res;
 }
 
-Interpreter::VecStr::const_iterator Interpreter::findClosingParenthesis(Interpreter::VecStr::const_iterator from, Interpreter::VecStr::const_iterator to)
+Interpreter::TokenIterator Interpreter::findClosingParenthesis(Interpreter::TokenIterator from, Interpreter::TokenIterator to)
 {
 	int depth{0};
 	for(;from != to; ++from)

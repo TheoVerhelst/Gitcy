@@ -23,8 +23,8 @@ class Interpreter
 
 	private:
 		/// We use vector of strings in alot of places in this class.
-		/// \TODO rename TokenVector
-		typedef std::vector<std::string> VecStr;
+		typedef std::vector<std::string> TokenVector;
+		typedef TokenVector::const_iterator TokenIterator;
 
 		friend class Functions;
 
@@ -72,12 +72,12 @@ class Interpreter
 		/// token_regex.
 		/// \param code The code to tokenize.
 		/// \returns The list of tokens.
-		static VecStr tokenize(std::string code);
+		static TokenVector tokenize(std::string code);
 
 		/// Makes an evaluation tree out of a list of tokens.
 		/// \param tokens The list of token to use.
 		/// \returns A tree of evaluation node corresponding to the code.
-		static Tree<EvaluationNode>::Ptr constructTree(const VecStr& tokens);
+		static Tree<EvaluationNode>::Ptr constructTree(const TokenVector& tokens);
 
 		/// Given two iterators of a token vector, makes a tree out of the
 		/// expression starting at the first iterator. The second iterator has
@@ -90,7 +90,7 @@ class Interpreter
 		/// \returns A pair where \a first is an iterator pointing to the first
 		/// token that is not part of the constructed expression, and \a second
 		/// is the constructed tree.
-		static std::pair<VecStr::const_iterator, Tree<EvaluationNode>::Ptr> parseExpression(VecStr::const_iterator from, VecStr::const_iterator to);
+		static std::pair<TokenIterator, Tree<EvaluationNode>::Ptr> parseExpression(TokenIterator from, TokenIterator to);
 
 		/// Parses a token, and returns the corresponding evaluation node.
 		/// \param token The token to parse.
@@ -113,7 +113,7 @@ class Interpreter
 		/// parenthesis. If \a from points to another token, then returns \a
 		/// from. Else, if there is not matching closing parenthesis, returns \a
 		/// to.
-		static VecStr::const_iterator findClosingParenthesis(VecStr::const_iterator from, VecStr::const_iterator to);
+		static TokenIterator findClosingParenthesis(TokenIterator from, TokenIterator to);
 };
 
 #endif
