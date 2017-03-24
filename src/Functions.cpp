@@ -12,77 +12,76 @@ Functions::Functions(Interpreter& interpreter):
 		{{}, true, BOUND(_do)}
 	}},
 	define{{
-		{{{typeid(std::string)}, {}}, false, BOUND(_define)}
+		{{SignatureType::create<std::string>(), SignatureType::create()}, false, BOUND(_define)}
 	}},
 	lowerThan{{
-		{{{typeid(int)}, {typeid(int)}}, true, BOUND(_lowerThan<int>)},
-		{{{typeid(double)}, {typeid(double)}}, true, BOUND(_lowerThan<double>)}
+		{{SignatureType::create<int>(), SignatureType::create<int>()}, true, BOUND(_lowerThan<int>)},
+		{{SignatureType::create<double>(), SignatureType::create<double>()}, true, BOUND(_lowerThan<double>)}
 	}},
 	greaterThan{{
-		{{{typeid(int)}, {typeid(int)}}, true, BOUND(_greaterThan<int>)},
-		{{{typeid(double)}, {typeid(double)}}, true, BOUND(_greaterThan<double>)}
+		{{SignatureType::create<int>(), SignatureType::create<int>()}, true, BOUND(_greaterThan<int>)},
+		{{SignatureType::create<double>(), SignatureType::create<double>()}, true, BOUND(_greaterThan<double>)}
 	}},
 
 	lowerEqual{{
-		{{{typeid(int)}, {typeid(int)}}, true, BOUND(_lowerEqual<int>)},
-		{{{typeid(double)}, {typeid(double)}}, true, BOUND(_lowerEqual<double>)}
+		{{SignatureType::create<int>(), SignatureType::create<int>()}, true, BOUND(_lowerEqual<int>)},
+		{{SignatureType::create<double>(), SignatureType::create<double>()}, true, BOUND(_lowerEqual<double>)}
 	}},
 
 	greaterEqual{{
-		{{{typeid(int)}, {typeid(int)}}, true, BOUND(_greaterEqual<int>)},
-		{{{typeid(double)}, {typeid(double)}}, true, BOUND(_greaterEqual<double>)}
+		{{SignatureType::create<int>(), SignatureType::create<int>()}, true, BOUND(_greaterEqual<int>)},
+		{{SignatureType::create<double>(), SignatureType::create<double>()}, true, BOUND(_greaterEqual<double>)}
 	}},
 
 	equal{{
-		{{{typeid(int)}, {typeid(int)}}, true, BOUND(_equal<int>)},
-		{{{typeid(double)}, {typeid(double)}}, true, BOUND(_equal<double>)},
-		{{{typeid(std::string)}, {typeid(std::string)}}, true, BOUND(_equal<std::string>)},
-		{{{typeid(bool)}, {typeid(bool)}}, true, BOUND(_equal<bool>)}
+		{{SignatureType::create<int>(), SignatureType::create<int>()}, true, BOUND(_equal<int>)},
+		{{SignatureType::create<double>(), SignatureType::create<double>()}, true, BOUND(_equal<double>)},
+		{{SignatureType::create<std::string>(), SignatureType::create<std::string>()}, true, BOUND(_equal<std::string>)},
+		{{SignatureType::create<bool>(), SignatureType::create<bool>()}, true, BOUND(_equal<bool>)}
 	}},
 
 	notEqual{{
-		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_notEqual<int>)},
-		{{{typeid(double)}, {typeid(double)}}, false, BOUND(_notEqual<double>)},
-		{{{typeid(std::string)}, {typeid(std::string)}}, false, BOUND(_notEqual<std::string>)},
-		{{{typeid(bool)}, {typeid(bool)}}, false, BOUND(_notEqual<bool>)}
+		{{SignatureType::create<int>(), SignatureType::create<int>()}, false, BOUND(_notEqual<int>)},
+		{{SignatureType::create<double>(), SignatureType::create<double>()}, false, BOUND(_notEqual<double>)},
+		{{SignatureType::create<std::string>(), SignatureType::create<std::string>()}, false, BOUND(_notEqual<std::string>)},
+		{{SignatureType::create<bool>(), SignatureType::create<bool>()}, false, BOUND(_notEqual<bool>)}
 	}},
 
 	and_{{
-		// \TODO allow one argument (also for or)
-		{{{typeid(bool)}}, true, BOUND(_and)}
+		{{SignatureType::create<bool>()}, true, BOUND(_and)}
 	}},
 
 	or_{{
-		{{{typeid(bool)}}, true, BOUND(_or)}
+		{{SignatureType::create<bool>()}, true, BOUND(_or)}
 	}},
 
 	add{{
-		{{{typeid(int)}}, true, BOUND(_add<int>)},
-		{{{typeid(double)}}, true, BOUND(_add<double>)},
-		{{{typeid(std::string)}}, true, BOUND(_add<std::string>)}
+		{{SignatureType::create<int>()}, true, BOUND(_add<int>)},
+		{{SignatureType::create<double>()}, true, BOUND(_add<double>)},
+		{{SignatureType::create<std::string>()}, true, BOUND(_add<std::string>)}
 	}},
 
 	substract{{
-		{{{typeid(int)}}, true, BOUND(_substract<int>)},
-		{{{typeid(double)}}, true, BOUND(_substract<double>)}
+		{{SignatureType::create<int>()}, true, BOUND(_substract<int>)},
+		{{SignatureType::create<double>()}, true, BOUND(_substract<double>)}
 	}},
 
 	multiply{{
-		{{{typeid(int)}}, true, BOUND(_multiply<int>)},
-		{{{typeid(double)}}, true, BOUND(_multiply<double>)}
+		{{SignatureType::create<int>()}, true, BOUND(_multiply<int>)},
+		{{SignatureType::create<double>()}, true, BOUND(_multiply<double>)}
 	}},
 
 	divide{{
-		{{{typeid(int)}, {typeid(int)}}, true, BOUND(_divide<int>)},
-		{{{typeid(double)}, {typeid(double)}}, true, BOUND(_divide<double>)}
+		{{SignatureType::create<int>(), SignatureType::create<int>()}, true, BOUND(_divide<int>)},
+		{{SignatureType::create<double>(), SignatureType::create<double>()}, true, BOUND(_divide<double>)}
 	}},
 
 	modulo{{
-		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_modulo)},
-		{{{typeid(double)}, {typeid(double)}}, false, BOUND(_fmod)}
+		{{SignatureType::create<int>(), SignatureType::create<int>()}, false, BOUND(_modulo)},
+		{{SignatureType::create<double>(), SignatureType::create<double>()}, false, BOUND(_fmod)}
 	}},
 	not_{{
-		{{{typeid(bool)}}, false, BOUND(_not)}
+		{{SignatureType::create<bool>()}, false, BOUND(_not)}
 	}},
 	#undef BOUND
 	_interpreter{interpreter}

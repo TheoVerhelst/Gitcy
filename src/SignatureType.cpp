@@ -11,33 +11,18 @@ const std::map<std::type_index, std::string> SignatureType::_typePrettyNames
 	{typeid(Function), "Function"}
 };
 
-SignatureType::SignatureType()
-{
-}
-
-SignatureType::SignatureType(const std::type_info& type):
-	_typeIndex{type}
-{
-	if(not Utils::RuntimeContains<Data::types>(type).value())
-		throw std::invalid_argument("`type` argument not one of Data::types in SignatureType constructor.");
-}
-
 std::ostream& operator<<(std::ostream& os, const SignatureType& signatureType)
 {
+	// If _typeIndex contains something
 	if(signatureType._typeIndex)
-	{
-		auto it(SignatureType::_typePrettyNames.find(signatureType._typeIndex.value()));
-		if(it != SignatureType::_typePrettyNames.end())
-			return os << it->second;
-		else
-			return os << signatureType._typeIndex.value().name();
-	}
+		return os << SignatureType::_typePrettyNames.at(signatureType._typeIndex.value());
 	else
 		return os << "<any type>";
 }
 
 bool SignatureType::matches(const Data& data) const
 {
+	// If _typeIndex contains something
 	if(_typeIndex)
 		return std::type_index(data.type()) == _typeIndex.value();
 	else

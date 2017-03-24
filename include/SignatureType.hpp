@@ -6,6 +6,7 @@
 #include <typeinfo>
 #include <typeindex>
 #include <experimental/optional>
+#include <boost/mpl/contains.hpp>
 #include <Data.hpp>
 
 /// A parameter type in an overload. If it is default-constructed, then that
@@ -19,13 +20,13 @@
 class SignatureType
 {
 	public:
-		/// Default constructor. The resulting object matches any argument.
-		SignatureType();
-
-		/// Constructor. The resulting object matches only the given type.
-		/// \param type The type to match.
-		/// \TODO write template <typename T> static SignatureType SignatureType::create();
-		SignatureType(const std::type_info& type);
+		/// Creates a SignatureType object representing the specified type.
+		/// This function is used instead of the constructor because we cannot
+		/// write a template constructor without argument.
+		/// \tparam If given, either void (for no type restriction) or one of Data::types.
+		/// \returns An object matching the given type \a T.
+		template <typename T = void>
+		static SignatureType create();
 
 		/// Checks whether the given argument matches this object.
 		/// \param data The argument to compare.
@@ -41,6 +42,10 @@ class SignatureType
 		friend std::ostream& operator<<(std::ostream& os, const SignatureType& signatureType);
 
 	private:
+		/// Default constructor. The public construction is done by the \a
+		/// create method.
+		SignatureType() = default;
+
 		/// The type to match, if any. We use the optional class in the case we
 		/// match any type.
 		std::experimental::optional<std::type_index> _typeIndex;
@@ -48,5 +53,17 @@ class SignatureType
 		/// Map of pretty names for types to display in the output operator.
 		static const std::map<std::type_index, std::string> _typePrettyNames;
 };
+
+template <typename T>
+SignatureType SignatureType::create()
+{
+	// Assert that T is either void or one of Data::types
+	static_assert(std::disjunction<std::is_void<T>, boost::mpl::contains<Data::types, T>>::value, "type T  must be one of Data::types.");
+
+	SignatureType res;
+	if(not std::is_void<T>::value)
+		res._typeIndex = std::type_index(typeid(T));
+	return res;
+}
 
 #endif // SIGNATURE_TYPE_HPP
