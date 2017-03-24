@@ -199,8 +199,7 @@ Interpreter::TokenIterator Interpreter::findClosingParenthesis(Interpreter::Toke
 			++depth;
 		else if(*from == closingParenthesisLiteral)
 			--depth;
-		// TODO change to <=
-		if(depth == 0)
+		if(depth <= 0)
 			break;
 	}
 	return from;
