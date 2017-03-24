@@ -3,4 +3,8 @@
 	(print (- 1 2 3))
 	(print (* 3 4 2))
 	(print (/ 4 2 2))
+	(print (and true true false))
+	(print (and true true true))
+	(print (or true false false))
+	(print (or false false false))
 )

@@ -48,11 +48,11 @@ Functions::Functions(Interpreter& interpreter):
 	}},
 
 	and_{{
-		{{{typeid(bool)}, {typeid(bool)}}, false, BOUND(_and)}
+		{{{typeid(bool)}, {typeid(bool)}}, true, BOUND(_and)}
 	}},
 
 	or_{{
-		{{{typeid(bool)}, {typeid(bool)}}, false, BOUND(_or)}
+		{{{typeid(bool)}, {typeid(bool)}}, true, BOUND(_or)}
 	}},
 
 	add{{
@@ -113,14 +113,14 @@ Data Functions::_define(const std::vector<Data>& args)
 
 Data Functions::_and(const std::vector<Data>& args) const
 {
-	Data lhs(args[0]), rhs(args[1]);
-	return boost::get<bool>(lhs) and boost::get<bool>(rhs);
+	const std::vector<bool> convertedArguments{convert<bool>(args)};
+	return std::find(convertedArguments.begin(), convertedArguments.end(), false) == convertedArguments.end();
 }
 
 Data Functions::_or(const std::vector<Data>& args) const
 {
-	Data lhs(args[0]), rhs(args[1]);
-	return boost::get<bool>(lhs) or boost::get<bool>(rhs);
+	const std::vector<bool> convertedArguments{convert<bool>(args)};
+	return std::find(convertedArguments.begin(), convertedArguments.end(), true) != convertedArguments.end();
 }
 
 Data Functions::_modulo(const std::vector<Data>& args) const

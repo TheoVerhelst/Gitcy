@@ -148,35 +148,35 @@ class Functions
 template <typename T>
 Data Functions::_lowerThan(const std::vector<Data>& args) const
 {
-	std::vector<T> convertedArguments{convert<T>(args)};
+	const std::vector<T> convertedArguments{convert<T>(args)};
 	return std::adjacent_find(convertedArguments.begin(), convertedArguments.end(), std::greater_equal<T>()) == convertedArguments.end();
 }
 
 template <typename T>
 Data Functions::_greaterThan(const std::vector<Data>& args) const
 {
-	std::vector<T> convertedArguments{convert<T>(args)};
+	const std::vector<T> convertedArguments{convert<T>(args)};
 	return std::adjacent_find(convertedArguments.begin(), convertedArguments.end(), std::less_equal<T>()) == convertedArguments.end();
 }
 
 template <typename T>
 Data Functions::_lowerEqual(const std::vector<Data>& args) const
 {
-	std::vector<T> convertedArguments{convert<T>(args)};
+	const std::vector<T> convertedArguments{convert<T>(args)};
 	return std::adjacent_find(convertedArguments.begin(), convertedArguments.end(), std::greater<T>()) == convertedArguments.end();
 }
 
 template <typename T>
 Data Functions::_greaterEqual(const std::vector<Data>& args) const
 {
-	std::vector<T> convertedArguments{convert<T>(args)};
+	const std::vector<T> convertedArguments{convert<T>(args)};
 	return std::adjacent_find(convertedArguments.begin(), convertedArguments.end(), std::less<T>()) == convertedArguments.end();
 }
 
 template <typename T>
 Data Functions::_equal(const std::vector<Data>& args) const
 {
-	std::vector<T> convertedArguments{convert<T>(args)};
+	const std::vector<T> convertedArguments{convert<T>(args)};
 	return std::adjacent_find(convertedArguments.begin(), convertedArguments.end(), std::not_equal_to<T>()) == convertedArguments.end();
 }
 
@@ -189,28 +189,28 @@ Data Functions::_notEqual(const std::vector<Data>& args) const
 template <typename T>
 Data Functions::_add(const std::vector<Data>& args) const
 {
-	std::vector<T> convertedArguments{convert<T>(args)};
+	const std::vector<T> convertedArguments{convert<T>(args)};
 	return std::accumulate(convertedArguments.begin(), convertedArguments.end(), static_cast<T>(0));
 }
 
 template <typename T>
 Data Functions::_substract(const std::vector<Data>& args) const
 {
-	std::vector<T> convertedArguments{convert<T>(args)};
+	const std::vector<T> convertedArguments{convert<T>(args)};
 	return std::accumulate(std::next(convertedArguments.begin()), convertedArguments.end(), convertedArguments.front(), std::minus<T>());
 }
 
 template <typename T>
 Data Functions::_multiply(const std::vector<Data>& args) const
 {
-	std::vector<T> convertedArguments{convert<T>(args)};
+	const std::vector<T> convertedArguments{convert<T>(args)};
 	return std::accumulate(convertedArguments.begin(), convertedArguments.end(), static_cast<T>(1), std::multiplies<T>());
 }
 
 template <typename T>
 Data Functions::_divide(const std::vector<Data>& args) const
 {
-	std::vector<T> convertedArguments{convert<T>(args)};
+	const std::vector<T> convertedArguments{convert<T>(args)};
 	// If there is a zero in the values [begin + 1, end)
 	if(std::find(std::next(convertedArguments.begin()), convertedArguments.end(), static_cast<T>(0)) != convertedArguments.end())
 		throw ScriptError("division by zero");
