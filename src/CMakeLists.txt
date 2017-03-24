@@ -5,6 +5,7 @@ set(SOURCE_FILES
 	Interpreter.cpp
 	Overload.cpp
 	SignatureType.cpp
+	ScriptError.cpp
 	main.cpp
 	)
 
