@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <cmath>
+#include <algorithm>
+#include <functional>
 #include <Data.hpp>
 #include <ScriptError.hpp>
 #include <Function.hpp>
@@ -134,6 +136,9 @@ class Functions
 		/// \param args The argument list.
 		Data _not(const std::vector<Data>& args) const;
 
+		template <typename T>
+		static std::vector<T> convert(const std::vector<Data>& args);
+
 		/// A reference to the interpreter, allows functions to have
 		/// side-effects.
 		Interpreter& _interpreter;
@@ -142,33 +147,36 @@ class Functions
 template <typename T>
 Data Functions::_lowerThan(const std::vector<Data>& args) const
 {
-	Data lhs(args[0]), rhs(args[1]);
-	return boost::get<T>(lhs) < boost::get<T>(rhs);
+	std::vector<T> convertedArguments{convert<T>(args)};
+	return std::adjacent_find(convertedArguments.begin(), convertedArguments.end(), std::greater_equal<T>()) == convertedArguments.end();
 }
 
 template <typename T>
 Data Functions::_greaterThan(const std::vector<Data>& args) const
 {
-	return _lowerThan<T>({args[1], args[0]});
+	std::vector<T> convertedArguments{convert<T>(args)};
+	return std::adjacent_find(convertedArguments.begin(), convertedArguments.end(), std::less_equal<T>()) == convertedArguments.end();
 }
 
 template <typename T>
 Data Functions::_lowerEqual(const std::vector<Data>& args) const
 {
-	return _not({_greaterThan<T>(args)});
+	std::vector<T> convertedArguments{convert<T>(args)};
+	return std::adjacent_find(convertedArguments.begin(), convertedArguments.end(), std::greater<T>()) == convertedArguments.end();
 }
 
 template <typename T>
 Data Functions::_greaterEqual(const std::vector<Data>& args) const
 {
-	return _not({_lowerThan<T>(args)});
+	std::vector<T> convertedArguments{convert<T>(args)};
+	return std::adjacent_find(convertedArguments.begin(), convertedArguments.end(), std::less<T>()) == convertedArguments.end();
 }
 
 template <typename T>
 Data Functions::_equal(const std::vector<Data>& args) const
 {
-	Data lhs(args[0]), rhs(args[1]);
-	return boost::get<T>(lhs) < boost::get<T>(rhs);
+	std::vector<T> convertedArguments{convert<T>(args)};
+	return std::adjacent_find(convertedArguments.begin(), convertedArguments.end(), std::not_equal_to<T>()) == convertedArguments.end();
 }
 
 template <typename T>
@@ -205,6 +213,18 @@ Data Functions::_divide(const std::vector<Data>& args) const
 	if(boost::get<T>(rhs) == static_cast<T>(0))
 		throw ScriptError("division by zero");
 	return boost::get<T>(lhs) / boost::get<T>(rhs);
+}
+
+template <typename T>
+std::vector<T> Functions::convert(const std::vector<Data>& args)
+{
+	std::vector<T> convertedArguments;
+	std::transform(args.begin(), args.end(), std::back_inserter(convertedArguments),
+			[](const Data& argument)
+			{
+				return boost::get<T>(argument);
+			});
+	return convertedArguments;
 }
 
 #endif

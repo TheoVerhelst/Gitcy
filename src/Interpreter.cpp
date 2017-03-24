@@ -35,7 +35,7 @@ Interpreter::Interpreter(const std::string& filename):
 		{">",      std::make_shared<Data>(_functions.greaterThan)},
 		{"<=",     std::make_shared<Data>(_functions.lowerEqual)},
 		{">=",     std::make_shared<Data>(_functions.greaterEqual)},
-		{"==",     std::make_shared<Data>(_functions.equal)},
+		{"=",      std::make_shared<Data>(_functions.equal)},
 		{"is",     std::make_shared<Data>(_functions.equal)},
 		{"!=",     std::make_shared<Data>(_functions.notEqual)},
 		{"and",    std::make_shared<Data>(_functions.and_)},

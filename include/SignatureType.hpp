@@ -24,6 +24,7 @@ class SignatureType
 
 		/// Constructor. The resulting object matches only the given type.
 		/// \param type The type to match.
+		/// \TODO write template <typename T> static SignatureType SignatureType::create();
 		SignatureType(const std::type_info& type);
 
 		/// Checks whether the given argument matches this object.

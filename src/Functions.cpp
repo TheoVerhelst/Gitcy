@@ -15,29 +15,29 @@ Functions::Functions(Interpreter& interpreter):
 		{{{typeid(std::string)}, {}}, false, BOUND(_define)}
 	}},
 	lowerThan{{
-		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_lowerThan<int>)},
-		{{{typeid(double)}, {typeid(double)}}, false, BOUND(_lowerThan<double>)}
+		{{{typeid(int)}, {typeid(int)}}, true, BOUND(_lowerThan<int>)},
+		{{{typeid(double)}, {typeid(double)}}, true, BOUND(_lowerThan<double>)}
 	}},
 	greaterThan{{
-		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_greaterThan<int>)},
-		{{{typeid(double)}, {typeid(double)}}, false, BOUND(_greaterThan<double>)}
+		{{{typeid(int)}, {typeid(int)}}, true, BOUND(_greaterThan<int>)},
+		{{{typeid(double)}, {typeid(double)}}, true, BOUND(_greaterThan<double>)}
 	}},
 
 	lowerEqual{{
-		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_lowerEqual<int>)},
-		{{{typeid(double)}, {typeid(double)}}, false, BOUND(_lowerEqual<double>)}
+		{{{typeid(int)}, {typeid(int)}}, true, BOUND(_lowerEqual<int>)},
+		{{{typeid(double)}, {typeid(double)}}, true, BOUND(_lowerEqual<double>)}
 	}},
 
 	greaterEqual{{
-		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_greaterEqual<int>)},
-		{{{typeid(double)}, {typeid(double)}}, false, BOUND(_greaterEqual<double>)}
+		{{{typeid(int)}, {typeid(int)}}, true, BOUND(_greaterEqual<int>)},
+		{{{typeid(double)}, {typeid(double)}}, true, BOUND(_greaterEqual<double>)}
 	}},
 
 	equal{{
-		{{{typeid(int)}, {typeid(int)}}, false, BOUND(_equal<int>)},
-		{{{typeid(double)}, {typeid(double)}}, false, BOUND(_equal<double>)},
-		{{{typeid(std::string)}, {typeid(std::string)}}, false, BOUND(_equal<std::string>)},
-		{{{typeid(bool)}, {typeid(bool)}}, false, BOUND(_equal<bool>)}
+		{{{typeid(int)}, {typeid(int)}}, true, BOUND(_equal<int>)},
+		{{{typeid(double)}, {typeid(double)}}, true, BOUND(_equal<double>)},
+		{{{typeid(std::string)}, {typeid(std::string)}}, true, BOUND(_equal<std::string>)},
+		{{{typeid(bool)}, {typeid(bool)}}, true, BOUND(_equal<bool>)}
 	}},
 
 	notEqual{{
