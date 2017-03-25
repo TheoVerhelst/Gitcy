@@ -28,8 +28,6 @@ class Interpreter
 
 		friend class Functions;
 
-		// Current script state
-
 		/// All the functions that can be called in the scripts. \see Functions
 		Functions _functions;
 

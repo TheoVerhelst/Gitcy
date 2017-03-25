@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
-project(Functional)
+project(Gitcy)
 
-set(EXECUTABLE_NAME "Functional")
+set(EXECUTABLE_NAME "Gitcy")
 
 #Set the include directory of the project
 include_directories("${CMAKE_SOURCE_DIR}/include")
