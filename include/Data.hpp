@@ -20,18 +20,7 @@ class Data
 	public:
 		/// Constructor.
 		template <typename T, typename = std::enable_if_t<std::negation<std::is_same<std::decay_t<T>, Data>>::value>>
-		Data(const T& value);
-
-		/// Constructor.
-		template <typename T, typename = std::enable_if_t<std::negation<std::is_same<std::decay_t<T>, Data>>::value>>
-		Data(T&& value);
-
-		Data(const Data& other) = default;
-
-		Data(Data&& other) = default;
-
-		template <typename T>
-		T& get();
+		Data(T value);
 
 		template <typename T>
 		const T& get() const;
@@ -39,7 +28,7 @@ class Data
 		template <typename T>
 		bool holdsType() const;
 
-		const std::type_info& getType() const;
+		bool holdsType(const std::type_index& typeIndex) const;
 
 		template <typename T>
 		static constexpr bool canHoldType();
@@ -65,21 +54,9 @@ class Data
 };
 
 template <typename T, typename>
-Data::Data(const T& value):
-	_variant{value}
-{
-}
-
-template <typename T, typename>
-Data::Data(T&& value):
+Data::Data(T value):
 	_variant{std::forward<T>(value)}
 {
-}
-
-template <typename T>
-T& Data::get()
-{
-	return boost::get<T>(_variant);
 }
 
 template <typename T>

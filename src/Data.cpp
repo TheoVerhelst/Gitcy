@@ -10,9 +10,9 @@ const std::map<std::type_index, std::string> Data::_typePrettyNames
 	{typeid(Function), "Function"}
 };
 
-const std::type_info& Data::getType() const
+bool Data::holdsType(const std::type_index& typeIndex) const
 {
-	return _variant.type();
+	return typeIndex == std::type_index(_variant.type());
 }
 
 std::string Data::getTypeName() const
