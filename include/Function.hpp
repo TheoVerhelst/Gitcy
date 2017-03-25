@@ -43,7 +43,4 @@ class Function
 		std::vector<Overload> _overloads;
 };
 
-/// Helper output operator overload, used to output a list of values.
-std::ostream& operator<<(std::ostream& os, const std::vector<Data>& values);
-
 #endif // FUNCTION_HPP

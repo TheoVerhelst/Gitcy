@@ -10,6 +10,9 @@ class Tree
 {
 	public:
 		typedef std::shared_ptr<Tree<T>> Ptr;
+		typedef typename std::vector<Ptr>::iterator Iterator;
+		typedef typename std::vector<Ptr>::const_iterator ConstIterator;
+
 		static Ptr create(const T& value,
 				const std::vector<Ptr>& children=std::vector<Ptr>());
 		const T& getValue() const;
@@ -18,16 +21,13 @@ class Tree
 		size_t numberChildren() const;
 		bool hasChildren() const;
 		void addChild(Ptr child);
-		void setChild(size_t n, Ptr newChild);
-		void removeChild(size_t n);
-		const Ptr getChild(size_t n) const;
-		Ptr getChild(size_t n);
-		void resolveChildren(Ptr self);
-		const Ptr getParent() const;
+		Iterator begin();
+		ConstIterator begin() const;
+		Iterator end();
+		ConstIterator end() const;
 
 	private:
-		Tree(const T& value,
-				const std::vector<Ptr>& children=std::vector<Ptr>());
+		Tree(const T& value, const std::vector<Ptr>& children=std::vector<Ptr>());
 		void setParent(Ptr newParent);
 
 		std::vector<Ptr> _children;
@@ -37,8 +37,7 @@ class Tree
 };
 
 template <typename T>
-typename Tree<T>::Ptr Tree<T>::create(const T& value,
-		const std::vector<Tree<T>::Ptr>& children)
+typename Tree<T>::Ptr Tree<T>::create(const T& value, const std::vector<Tree<T>::Ptr>& children)
 {
 	Ptr res{new Tree<T>(value, children)};
 	res->_self = res;
@@ -46,10 +45,9 @@ typename Tree<T>::Ptr Tree<T>::create(const T& value,
 }
 
 template <typename T>
-Tree<T>::Tree(const T& value,
-		const std::vector<Tree<T>::Ptr>& children):
-	_children(children),
-	_data(value)
+Tree<T>::Tree(const T& value, const std::vector<Tree<T>::Ptr>& children):
+	_children{children},
+	_data{value}
 {
 }
 
@@ -91,42 +89,33 @@ void Tree<T>::addChild(Tree<T>::Ptr child)
 }
 
 template <typename T>
-void Tree<T>::setChild(size_t n, Tree<T>::Ptr newChild)
+typename Tree<T>::Iterator Tree<T>::begin()
 {
-	_children[n]->setParent(nullptr);
-	newChild->setParent(_self);
-	_children[n] = newChild;
+	return _children.begin();
 }
 
 template <typename T>
-void Tree<T>::removeChild(size_t n)
+typename Tree<T>::ConstIterator Tree<T>::begin() const
 {
-	_children[n]->setParent(nullptr);
-	_children.erase(_children.begin() + n);
+	return _children.begin();
 }
 
 template <typename T>
-const typename Tree<T>::Ptr Tree<T>::getChild(size_t n) const
+typename Tree<T>::Iterator Tree<T>::end()
 {
-	return _children[n];
+	return _children.end();
 }
 
 template <typename T>
-typename Tree<T>::Ptr Tree<T>::getChild(size_t n)
+typename Tree<T>::ConstIterator Tree<T>::end() const
 {
-	return _children[n];
+	return _children.end();
 }
 
 template <typename T>
 void Tree<T>::setParent(Tree<T>::Ptr newParent)
 {
 	_parent = newParent;
-}
-
-template <typename T>
-const typename Tree<T>::Ptr Tree<T>::getParent() const
-{
-	return _parent;
 }
 
 #endif

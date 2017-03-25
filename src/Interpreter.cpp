@@ -160,36 +160,37 @@ EvaluationNode Interpreter::parseToken(const std::string& token)
 
 Data Interpreter::evaluateTree(const Tree<EvaluationNode>::Ptr& expression)
 {
-	Data res;
 	const EvaluationNode node{expression->getValue()};
 	if(node.type() == typeid(FunctionCall))
 	{
-		if(expression->numberChildren() == 0)
-			return false;
+		if(not expression->hasChildren())
+			throw ScriptError("Function call whithout function to call");
 
-		const Data& functionValue{evaluateTree(expression->getChild(0))};
+		// Evaluate the first child, it is the function to call
+		const Data& functionData{evaluateTree(*expression->begin())};
 		// Check that the first child is a function
-		if(functionValue.type() != typeid(Function))
-			throw ScriptError("First value in a function call is not a function (got type \"" + std::string(functionValue.type().name()) + "\")");
+		if(not functionData.holdsType<Function>())
+			throw ScriptError("Function call on non-function expression (got type \"" + functionData.getTypeName() + "\")");
 
-		const Function& function{boost::get<Function>(functionValue)};
+		const Function& function{functionData.get<Function>()};
 		std::vector<Data> args;
-		for(size_t i{1}; i < expression->numberChildren(); ++i)
-			args.push_back(evaluateTree(expression->getChild(i)));
-		res = function(args);
+		// Loop over the children from the second child to the last one
+		for(auto it(std::next(expression->begin())); it != expression->end(); ++it)
+			args.push_back(evaluateTree(*it));
+
+		return function(args);
 	}
 	else if(node.type() == typeid(Data))
-		res = boost::get<Data>(node);
-	else if(node.type() == typeid(Identifier))
+		return boost::get<Data>(node);
+	else // Identifier
 	{
 		const Identifier identifier{boost::get<Identifier>(node)};
 		auto it(_variables.find(identifier));
 		if(it == _variables.end())
 			throw ScriptError("Unknown variable: \"" + identifier + "\"");
-		res = *(it->second);
-	}
 
-	return res;
+		return *(it->second);
+	}
 }
 
 Interpreter::TokenIterator Interpreter::findClosingParenthesis(Interpreter::TokenIterator from, Interpreter::TokenIterator to)

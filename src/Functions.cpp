@@ -107,7 +107,7 @@ Data Functions::_do(const std::vector<Data>& args) const
 Data Functions::_define(const std::vector<Data>& args)
 {
 	const Data value{args.at(1)};
-	_interpreter._variables.emplace(boost::get<std::string>(args.at(0)), std::make_shared<Data>(value));
+	_interpreter._variables.emplace(args.at(0).get<std::string>(), std::make_shared<Data>(value));
 	return value;
 }
 
@@ -126,22 +126,22 @@ Data Functions::_or(const std::vector<Data>& args) const
 Data Functions::_modulo(const std::vector<Data>& args) const
 {
 	Data lhs(args[0]), rhs(args[1]);
-	if(boost::get<int>(rhs) == static_cast<int>(0))
+	if(rhs.get<int>() == 0)
 		throw ScriptError("modulo by zero");
-	return boost::get<int>(lhs) % boost::get<int>(rhs);
+	return lhs.get<int>() % rhs.get<int>();
 }
 
 Data Functions::_fmod(const std::vector<Data>& args) const
 {
 	Data lhs(args[0]), rhs(args[1]);
-	if(boost::get<double>(rhs) == 0.)
+	if(rhs.get<double>() == 0.)
 		throw ScriptError("modulo by zero");
-	return std::fmod(boost::get<double>(lhs), boost::get<double>(rhs));
+	return std::fmod(lhs.get<double>(), rhs.get<double>());
 }
 
 Data Functions::_not(const std::vector<Data>& args) const
 {
 	Data lhs(args[0]);
-	return not boost::get<bool>(lhs);
+	return not lhs.get<bool>();
 }
 

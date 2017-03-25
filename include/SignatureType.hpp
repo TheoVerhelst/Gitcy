@@ -1,12 +1,10 @@
 #ifndef SIGNATURE_TYPE_HPP
 #define SIGNATURE_TYPE_HPP
 
-#include <string>
-#include <map>
 #include <typeinfo>
 #include <typeindex>
+#include <ostream>
 #include <experimental/optional>
-#include <boost/mpl/contains.hpp>
 #include <Data.hpp>
 
 /// A parameter type in an overload. If it is default-constructed, then that
@@ -22,7 +20,7 @@ class SignatureType
 	public:
 		/// Creates a SignatureType object representing the specified type.
 		/// This function is used instead of the constructor because we cannot
-		/// write a template constructor without argument.
+		/// write a template constructor with an empty parameter list.
 		/// \tparam If given, either void (for no type restriction) or one of Data::types.
 		/// \returns An object matching the given type \a T.
 		template <typename T = void>
@@ -49,16 +47,13 @@ class SignatureType
 		/// The type to match, if any. We use the optional class in the case we
 		/// match any type.
 		std::experimental::optional<std::type_index> _typeIndex;
-
-		/// Map of pretty names for types to display in the output operator.
-		static const std::map<std::type_index, std::string> _typePrettyNames;
 };
 
 template <typename T>
 SignatureType SignatureType::create()
 {
-	// Assert that T is either void or one of Data::types
-	static_assert(std::disjunction<std::is_void<T>, boost::mpl::contains<Data::types, T>>::value, "type T  must be one of Data::types.");
+	// Assert that T is either void or one that Data can contain
+	static_assert(std::disjunction<std::is_void<T>, std::bool_constant<Data::canHoldType<T>()>>::value, "type T  must be one of Data::types.");
 
 	SignatureType res;
 	if(not std::is_void<T>::value)

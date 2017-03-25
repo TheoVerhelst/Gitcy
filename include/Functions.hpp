@@ -197,7 +197,7 @@ template <typename T>
 Data Functions::_substract(const std::vector<Data>& args) const
 {
 	if(args.size() == 1)
-		return -boost::get<T>(args.front());
+		return -args.front().get<T>();
 	else
 	{
 		const std::vector<T> convertedArguments{convert<T>(args)};
@@ -227,9 +227,9 @@ std::vector<T> Functions::convert(const std::vector<Data>& args)
 {
 	std::vector<T> convertedArguments;
 	std::transform(args.begin(), args.end(), std::back_inserter(convertedArguments),
-			[](const Data& argument)
+			[](const Data& data)
 			{
-				return boost::get<T>(argument);
+				return data.get<T>();
 			});
 	return convertedArguments;
 }

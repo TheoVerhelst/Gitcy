@@ -32,7 +32,7 @@ Data Function::operator()(const std::vector<Data>& arguments) const
 			{
 				throw ScriptError("Ambiguous overload resolution for given arguments:\n"
 						"Got:\n"
-						"\t(" + Utils::toString(arguments) + ")\n"
+						"\t(" + Utils::join(", ", arguments.begin(), arguments.end()) + ")\n"
 						"Candidate overloads:\n"
 						"\t(" +  Utils::join(")\n\t(", candidateSet.get().begin(), candidateSet.get().end()) + ")\n");
 			}
@@ -43,7 +43,7 @@ Data Function::operator()(const std::vector<Data>& arguments) const
 
 	throw ScriptError("No overload found for given arguments:\n"
 			"Got:\n"
-			"\t(" + Utils::toString(arguments) + ")\n"
+			"\t(" + Utils::join(", ", arguments.begin(), arguments.end()) + ")\n"
 			"Overloads:\n"
 			"\t(" + Utils::join(")\n\t(", _overloads.begin(), _overloads.end()) + ")\n");
 
@@ -53,9 +53,4 @@ Data Function::operator()(const std::vector<Data>& arguments) const
 std::ostream& operator<<(std::ostream& os, const Function& function)
 {
 	return os << "<Function(" << Utils::join(" | ", function._overloads.begin(), function._overloads.end()) << ")>";
-}
-
-std::ostream& operator<<(std::ostream& os, const std::vector<Data>& values)
-{
-	return os << Utils::join(", ", values.begin(), values.end());
 }

@@ -3,6 +3,7 @@ set(SOURCE_FILES
 	Function.cpp
 	Functions.cpp
 	Interpreter.cpp
+	Null.cpp
 	Overload.cpp
 	SignatureType.cpp
 	ScriptError.cpp
