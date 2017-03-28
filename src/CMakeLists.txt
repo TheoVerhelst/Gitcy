@@ -1,4 +1,6 @@
-set(SOURCE_FILES
+# Make a library with all the project sources
+# This is useful for building the tests
+add_library(GITCY
 	Data.cpp
 	Function.cpp
 	Functions.cpp
@@ -7,11 +9,10 @@ set(SOURCE_FILES
 	Overload.cpp
 	SignatureType.cpp
 	ScriptError.cpp
-	main.cpp
 	)
 
-#Create the main executable
-add_executable(${EXECUTABLE_NAME} ${SOURCE_FILES})
+# Create the main executable
+add_executable(${EXECUTABLE_NAME} main.cpp)
 
-#Link external librairies
-target_link_libraries(${EXECUTABLE_NAME} ${EXTERNAL_LIBRARIES})
+# Link to our binaries
+target_link_libraries(${EXECUTABLE_NAME} GITCY)

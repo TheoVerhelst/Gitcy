@@ -3,6 +3,17 @@ project(Gitcy)
 
 set(EXECUTABLE_NAME "Gitcy")
 
+#Define a macro that helps defining an option
+macro(set_option var default type docstring)
+    if(NOT DEFINED ${var})
+        set(${var} ${default})
+    endif()
+    set(${var} ${${var}} CACHE ${type} ${docstring} FORCE)
+endmacro()
+
+#Add an option to build the tests
+set_option(BUILD_TESTS FALSE BOOL "TRUE to build the tests")
+
 #Set the include directory of the project
 include_directories("${CMAKE_SOURCE_DIR}/include")
 
@@ -15,4 +26,9 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 add_subdirectory(src)
+
+#Build the tests if requested
+if(BUILD_TESTS)
+	add_subdirectory(test)
+endif()
 
