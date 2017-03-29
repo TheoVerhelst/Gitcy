@@ -6,12 +6,11 @@
 #include <algorithm>
 #include <numeric>
 #include <functional>
-#include <Data.hpp>
-#include <ScriptError.hpp>
 #include <Function.hpp>
 
 // Forward declarations
 class Interpreter;
+class Data;
 
 /// Holds all functions that are written in C++ but callable in scripts.
 /// These functions are public const variables, and are initialized in the
@@ -144,6 +143,9 @@ class Functions
 		/// side-effects.
 		Interpreter& _interpreter;
 };
+
+#include <Data.hpp>
+#include <ScriptError.hpp>
 
 template <typename T>
 Data Functions::_lowerThan(const std::vector<Data>& args) const

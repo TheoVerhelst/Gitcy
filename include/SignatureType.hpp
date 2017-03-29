@@ -5,7 +5,9 @@
 #include <typeindex>
 #include <ostream>
 #include <experimental/optional>
-#include <Data.hpp>
+
+// Forward declaration
+class Data;
 
 /// A parameter type in an overload. If it is default-constructed, then that
 /// represents no restriction on the parameter type. If the second constructor
@@ -48,6 +50,8 @@ class SignatureType
 		/// match any type.
 		std::experimental::optional<std::type_index> _typeIndex;
 };
+
+#include <Data.hpp>
 
 template <typename T>
 SignatureType SignatureType::create()

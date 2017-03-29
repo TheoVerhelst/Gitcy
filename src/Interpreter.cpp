@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <fstream>
 #include <iostream>
-
+#include <EvaluationNode.hpp>
 #include <Interpreter.hpp>
 #include <Function.hpp>
 #include <ScriptError.hpp>

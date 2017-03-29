@@ -4,8 +4,10 @@
 #include <ostream>
 #include <vector>
 #include <string>
-#include <Data.hpp>
 #include <Overload.hpp>
+
+// Forward declaration
+class Data;
 
 /// Class for functions defined in C++ but usable in scripts. These functions
 /// have a limited number of overload, each overload can be variadic. We cannot

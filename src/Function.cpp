@@ -3,6 +3,7 @@
 #include <functional>
 #include <Utils.hpp>
 #include <ScriptError.hpp>
+#include <Data.hpp>
 #include <Function.hpp>
 
 Function::Function(const std::vector<Overload>& overloads):

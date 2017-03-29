@@ -8,7 +8,7 @@ BOOST_AUTO_TEST_CASE(outputTest)
 {
 	std::stringstream stream;
 	stream << Null();
-	BOOST_CHECK(stream.str() == "null");
+	BOOST_TEST(stream.str() == "null");
 }
 
 BOOST_AUTO_TEST_SUITE_END()

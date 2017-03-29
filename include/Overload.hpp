@@ -4,8 +4,10 @@
 #include <functional>
 #include <ostream>
 #include <vector>
-#include <Data.hpp>
 #include <SignatureType.hpp>
+
+// Forward declarations
+class Data;
 
 /// Conveniency typedef for a functor.
 typedef std::function<Data(const std::vector<Data>&)> Functor;

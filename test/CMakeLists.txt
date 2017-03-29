@@ -6,8 +6,9 @@ add_definitions(-DBOOST_TEST_DYN_LINK)
 
 # All test source files
 set(TEST_SOURCES
-	main.cpp
+	DataTest.cpp
 	NullTest.cpp
+	main.cpp
 	)
 
 # Create the main test executable

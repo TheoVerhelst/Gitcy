@@ -53,6 +53,8 @@ class Data
 		static const std::map<std::type_index, std::string> _typePrettyNames;
 };
 
+#include <Function.hpp>
+
 template <typename T, typename>
 Data::Data(T value):
 	_variant{std::forward<T>(value)}

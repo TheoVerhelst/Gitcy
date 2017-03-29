@@ -1,5 +1,6 @@
 #include <Utils.hpp>
 #include <Function.hpp>
+#include <Data.hpp>
 #include <Overload.hpp>
 
 Overload::Overload(const std::vector<SignatureType>& typeList, bool isVariadic, const Functor& functor):
