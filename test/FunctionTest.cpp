@@ -2,6 +2,7 @@
 #include <ScriptError.hpp>
 #include <Function.hpp>
 #include <Overload.hpp>
+#include <iostream>
 
 class OneInt : public Overload
 {
@@ -13,7 +14,7 @@ class OneInt : public Overload
 
 		virtual Data operator()(const std::vector<Data>&) const override
 		{
-			return "blah";
+			return std::string("blah");
 		}
 };
 
@@ -27,7 +28,7 @@ class VariadicDouble : public Overload
 
 		virtual Data operator()(const std::vector<Data>&) const override
 		{
-			return "blah";
+			return std::string("blah");
 		}
 };
 
@@ -41,15 +42,15 @@ class TwoDouble : public Overload
 
 		virtual Data operator()(const std::vector<Data>&) const override
 		{
-			return "blah";
+			return std::string("blah");
 		}
 };
 
-class DataTestFixture
+class FunctionTestFixture
 {
 	public:
 		/// Constructor.
-		DataTestFixture():
+		FunctionTestFixture():
 			// A normal overload, and two possibly ambiguous overloads
 			function{{std::make_shared<OneInt>(), std::make_shared<VariadicDouble>(), std::make_shared<TwoDouble>()}}
 		{
@@ -58,7 +59,7 @@ class DataTestFixture
 		Function function;
 };
 
-BOOST_FIXTURE_TEST_SUITE(DataTest, DataTestFixture)
+BOOST_FIXTURE_TEST_SUITE(FunctionTest, FunctionTestFixture)
 
 BOOST_AUTO_TEST_CASE(callOperatorNormal)
 {
