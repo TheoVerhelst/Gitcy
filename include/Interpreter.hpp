@@ -29,7 +29,7 @@ class Interpreter
 		friend class Functions;
 
 		/// All the functions that can be called in the scripts. \see Functions
-		Functions _functions;
+		BuiltinFunctions _functions;
 
 		/// The filename of the interpreted script. It is mainly used in error messages.
 		const std::string _filename;

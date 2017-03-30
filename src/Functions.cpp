@@ -1,147 +1,126 @@
 #include <iostream>
 #include <Interpreter.hpp>
-#include <Function.hpp>
 #include <Functions.hpp>
 
-Functions::Functions(Interpreter& interpreter):
-	#define BOUND(methodeName) std::bind(&Functions::methodeName, this, std::placeholders::_1)
-	print{{
-		{{}, true, BOUND(_print)}
-	}},
-	do_{{
-		{{}, true, BOUND(_do)}
-	}},
-	define{{
-		{{SignatureType::create<std::string>(), SignatureType::create()}, false, BOUND(_define)}
-	}},
-	lowerThan{{
-		{{SignatureType::create<int>(), SignatureType::create<int>()}, true, BOUND(_lowerThan<int>)},
-		{{SignatureType::create<double>(), SignatureType::create<double>()}, true, BOUND(_lowerThan<double>)}
-	}},
-	greaterThan{{
-		{{SignatureType::create<int>(), SignatureType::create<int>()}, true, BOUND(_greaterThan<int>)},
-		{{SignatureType::create<double>(), SignatureType::create<double>()}, true, BOUND(_greaterThan<double>)}
-	}},
-
-	lowerEqual{{
-		{{SignatureType::create<int>(), SignatureType::create<int>()}, true, BOUND(_lowerEqual<int>)},
-		{{SignatureType::create<double>(), SignatureType::create<double>()}, true, BOUND(_lowerEqual<double>)}
-	}},
-
-	greaterEqual{{
-		{{SignatureType::create<int>(), SignatureType::create<int>()}, true, BOUND(_greaterEqual<int>)},
-		{{SignatureType::create<double>(), SignatureType::create<double>()}, true, BOUND(_greaterEqual<double>)}
-	}},
-
-	equal{{
-		{{SignatureType::create<int>(), SignatureType::create<int>()}, true, BOUND(_equal<int>)},
-		{{SignatureType::create<double>(), SignatureType::create<double>()}, true, BOUND(_equal<double>)},
-		{{SignatureType::create<std::string>(), SignatureType::create<std::string>()}, true, BOUND(_equal<std::string>)},
-		{{SignatureType::create<bool>(), SignatureType::create<bool>()}, true, BOUND(_equal<bool>)}
-	}},
-
-	notEqual{{
-		{{SignatureType::create<int>(), SignatureType::create<int>()}, false, BOUND(_notEqual<int>)},
-		{{SignatureType::create<double>(), SignatureType::create<double>()}, false, BOUND(_notEqual<double>)},
-		{{SignatureType::create<std::string>(), SignatureType::create<std::string>()}, false, BOUND(_notEqual<std::string>)},
-		{{SignatureType::create<bool>(), SignatureType::create<bool>()}, false, BOUND(_notEqual<bool>)}
-	}},
-
-	and_{{
-		{{SignatureType::create<bool>()}, true, BOUND(_and)}
-	}},
-
-	or_{{
-		{{SignatureType::create<bool>()}, true, BOUND(_or)}
-	}},
-
-	add{{
-		{{SignatureType::create<int>()}, true, BOUND(_add<int>)},
-		{{SignatureType::create<double>()}, true, BOUND(_add<double>)},
-		{{SignatureType::create<std::string>()}, true, BOUND(_add<std::string>)}
-	}},
-
-	substract{{
-		{{SignatureType::create<int>()}, true, BOUND(_substract<int>)},
-		{{SignatureType::create<double>()}, true, BOUND(_substract<double>)}
-	}},
-
-	multiply{{
-		{{SignatureType::create<int>()}, true, BOUND(_multiply<int>)},
-		{{SignatureType::create<double>()}, true, BOUND(_multiply<double>)}
-	}},
-
-	divide{{
-		{{SignatureType::create<int>(), SignatureType::create<int>()}, true, BOUND(_divide<int>)},
-		{{SignatureType::create<double>(), SignatureType::create<double>()}, true, BOUND(_divide<double>)}
-	}},
-
-	modulo{{
-		{{SignatureType::create<int>(), SignatureType::create<int>()}, false, BOUND(_modulo)},
-		{{SignatureType::create<double>(), SignatureType::create<double>()}, false, BOUND(_fmod)}
-	}},
-	not_{{
-		{{SignatureType::create<bool>()}, false, BOUND(_not)}
-	}},
-	#undef BOUND
-	_interpreter{interpreter}
+BuiltinFunctions::BuiltinFunctions():
+	#define OVERLOAD(className) std::make_shared<BuiltinOverloads::className>()
+	print{{OVERLOAD(Print)}},
+	do_{{OVERLOAD(Do)}},
+	define{{OVERLOAD(Define)}},
+	lowerThan{{OVERLOAD(LowerThan<int>), OVERLOAD(LowerThan<double>)}},
+	greaterThan{{OVERLOAD(GreaterThan<int>), OVERLOAD(GreaterThan<double>)}},
+	lowerEqual{{OVERLOAD(LowerEqual<int>), OVERLOAD(LowerEqual<double>)}},
+	greaterEqual{{OVERLOAD(GreaterEqual<int>), OVERLOAD(GreaterEqual<double>)}},
+	equal{{OVERLOAD(Equal<int>), OVERLOAD(Equal<double>), OVERLOAD(Equal<std::string>), OVERLOAD(Equal<bool>)}},
+	notEqual{{OVERLOAD(NotEqual<int>), OVERLOAD(NotEqual<double>), OVERLOAD(NotEqual<std::string>), OVERLOAD(NotEqual<bool>)}},
+	and_{{OVERLOAD(And)}},
+	or_{{OVERLOAD(Or)}},
+	add{{OVERLOAD(Add<int>), OVERLOAD(Add<double>), OVERLOAD(Add<std::string>)}},
+	substract{{OVERLOAD(Substract<int>), OVERLOAD(Substract<double>)}},
+	multiply{{OVERLOAD(Multiply<int>), OVERLOAD(Multiply<double>)}},
+	divide{{OVERLOAD(Divide<int>), OVERLOAD(Divide<double>)}},
+	modulo{{OVERLOAD(Modulo), OVERLOAD(DoubleModulo)}},
+	not_{{OVERLOAD(Not)}}
+	#undef OVERLOAD
 {
 }
 
-Data Functions::_print(const std::vector<Data>& args) const
+namespace BuiltinOverloads
 {
-	std::cout << std::boolalpha;
-	for(size_t i(0); i < args.size(); ++i)
-		std::cout << args[i] << " ";
-	std::cout << std::endl;
-	return Null();
-}
+	Print::Print():
+		Overload{{}, true}
+	{
+	}
 
-Data Functions::_do(const std::vector<Data>& args) const
-{
-	if(args.empty())
+	Data Print::operator()(const std::vector<Data>& arguments) const
+	{
+		std::cout << std::boolalpha;
+		for(size_t i(0); i < arguments.size(); ++i)
+			std::cout << arguments[i] << " ";
+		std::cout << std::endl;
 		return Null();
-	return args.back();
-}
+	}
 
-Data Functions::_define(const std::vector<Data>& args)
-{
-	const Data value{args.at(1)};
-	_interpreter._variables.emplace(args.at(0).get<std::string>(), std::make_shared<Data>(value));
-	return value;
-}
+	Do::Do():
+		Overload{{}, true}
+	{
+	}
 
-Data Functions::_and(const std::vector<Data>& args) const
-{
-	const std::vector<bool> convertedArguments{convert<bool>(args)};
-	return std::find(convertedArguments.begin(), convertedArguments.end(), false) == convertedArguments.end();
-}
+	Data Do::operator()(const std::vector<Data>& arguments) const
+	{
+		if(arguments.empty())
+			return Null();
+		return arguments.back();
+	}
 
-Data Functions::_or(const std::vector<Data>& args) const
-{
-	const std::vector<bool> convertedArguments{convert<bool>(args)};
-	return std::find(convertedArguments.begin(), convertedArguments.end(), true) != convertedArguments.end();
-}
+	Define::Define():
+		Overload{{SignatureType::create<std::string>(), SignatureType::create()}, false}
+	{
+	}
 
-Data Functions::_modulo(const std::vector<Data>& args) const
-{
-	Data lhs(args[0]), rhs(args[1]);
-	if(rhs.get<int>() == 0)
-		throw ScriptError("modulo by zero");
-	return lhs.get<int>() % rhs.get<int>();
-}
+	Data Define::operator()(const std::vector<Data>& arguments) const
+	{
+		const Data value{arguments.at(1)};
+		// TODO // _interpreter._variables.emplace(arguments.at(0).get<std::string>(), std::make_shared<Data>(value));
+		return value;
+	}
 
-Data Functions::_fmod(const std::vector<Data>& args) const
-{
-	Data lhs(args[0]), rhs(args[1]);
-	if(rhs.get<double>() == 0.)
-		throw ScriptError("modulo by zero");
-	return std::fmod(lhs.get<double>(), rhs.get<double>());
-}
+	And::And():
+		Overload{{SignatureType::create<bool>()}, true}
+	{
+	}
 
-Data Functions::_not(const std::vector<Data>& args) const
-{
-	Data lhs(args[0]);
-	return not lhs.get<bool>();
-}
+	Data And::operator()(const std::vector<Data>& arguments) const
+	{
+		const std::vector<bool> convertedArguments{Utils::convert<bool>(arguments)};
+		return std::find(convertedArguments.begin(), convertedArguments.end(), false) == convertedArguments.end();
+	}
 
+	Or::Or():
+		Overload{{SignatureType::create<bool>()}, true}
+	{
+	}
+
+	Data Or::operator()(const std::vector<Data>& arguments) const
+	{
+		const std::vector<bool> convertedArguments{Utils::convert<bool>(arguments)};
+		return std::find(convertedArguments.begin(), convertedArguments.end(), true) != convertedArguments.end();
+	}
+
+	Modulo::Modulo():
+		Overload{{SignatureType::create<int>(), SignatureType::create<int>()}, false}
+	{
+	}
+
+	Data Modulo::operator()(const std::vector<Data>& arguments) const
+	{
+		Data lhs(arguments[0]), rhs(arguments[1]);
+		if(rhs.get<int>() == 0)
+			throw ScriptError("modulo by zero");
+		return lhs.get<int>() % rhs.get<int>();
+	}
+
+	DoubleModulo::DoubleModulo():
+		Overload{{SignatureType::create<double>(), SignatureType::create<double>()}, false}
+	{
+	}
+
+	Data DoubleModulo::operator()(const std::vector<Data>& arguments) const
+	{
+		Data lhs(arguments[0]), rhs(arguments[1]);
+		if(rhs.get<double>() == 0.)
+			throw ScriptError("modulo by zero");
+		return std::fmod(lhs.get<double>(), rhs.get<double>());
+	}
+
+	Not::Not():
+		Overload{{SignatureType::create<bool>()}, false}
+	{
+	}
+
+	Data Not::operator()(const std::vector<Data>& arguments) const
+	{
+		Data lhs(arguments[0]);
+		return not lhs.get<bool>();
+	}
+}

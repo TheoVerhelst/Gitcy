@@ -3,6 +3,9 @@
 
 #include <string>
 #include <sstream>
+#include <vector>
+#include <algorithm>
+#include <Data.hpp>
 
 /// Various functions and classes that are not directly related to the project.
 namespace Utils
@@ -30,6 +33,9 @@ namespace Utils
 	/// \param object The object to convert to string.
 	template <typename T>
 	std::string toString(const T& object);
+
+	template <typename T>
+	std::vector<T> convert(const std::vector<Data>& args);
 }
 
 namespace Utils
@@ -55,6 +61,19 @@ namespace Utils
 		std::stringstream stream;
 		stream << std::boolalpha << object;
 		return stream.str();
+	}
+
+
+	template <typename T>
+	std::vector<T> convert(const std::vector<Data>& args)
+	{
+		std::vector<T> convertedArguments;
+		std::transform(args.begin(), args.end(), std::back_inserter(convertedArguments),
+				[](const Data& data)
+				{
+					return data.get<T>();
+				});
+		return convertedArguments;
 	}
 }
 

@@ -3,13 +3,6 @@
 #include <Data.hpp>
 #include <Overload.hpp>
 
-Overload::Overload(const std::vector<SignatureType>& typeList, bool isVariadic, const Functor& functor):
-	_typeList{typeList},
-	_isVariadic{isVariadic},
-	_functor{functor}
-{
-}
-
 bool Overload::matches(const std::vector<Data>& arguments) const
 {
 	if(arguments.size() < _typeList.size() or (not _isVariadic and arguments.size() != _typeList.size()))
@@ -33,14 +26,15 @@ bool Overload::matches(const std::vector<Data>& arguments) const
 	return match;
 }
 
-Data Overload::operator()(const std::vector<Data>& arguments) const
-{
-	return _functor(arguments);
-}
-
 bool Overload::isVariadic() const
 {
 	return _isVariadic;
+}
+
+Overload::Overload(const std::vector<SignatureType>& typeList, bool isVariadic):
+	_typeList{typeList},
+	_isVariadic{isVariadic}
+{
 }
 
 std::ostream& operator<<(std::ostream& os, const Overload& overload)

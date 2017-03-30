@@ -7,6 +7,8 @@
 #include <numeric>
 #include <functional>
 #include <Function.hpp>
+#include <Overload.hpp>
+#include <Utils.hpp>
 
 // Forward declarations
 class Interpreter;
@@ -14,16 +16,12 @@ class Data;
 
 /// Holds all functions that are written in C++ but callable in scripts.
 /// These functions are public const variables, and are initialized in the
-/// constructor. This class also contains the code of the implementation of
-/// these functions, properly bound with the Overload class.
-class Functions
+/// constructor.
+class BuiltinFunctions
 {
 	public:
 		/// Constructor.
-		/// \param interpreter A reference to the interpreter. We use this
-		/// because any functions may modify the interpreter state (such as
-		/// variables).
-		Functions(Interpreter& interpreter);
+		BuiltinFunctions();
 
 		const Function print;        ///< Prints the arguments to stdout.
 		const Function do_;          ///< Just evaluates its arguments, and returns the last.
@@ -42,198 +40,372 @@ class Functions
 		const Function divide;       ///< Returns the arithmetic division between its arguments.
 		const Function modulo;       ///< Returns the arithmetic modulo between its arguments.
 		const Function not_;         ///< Returns the logical not of its argument.
-
-	private:
-		/// Implements print.
-		/// \param args The argument list.
-		Data _print(const std::vector<Data>& args) const;
-
-		/// Implements do.
-		/// \param args The argument list.
-		Data _do(const std::vector<Data>& args) const;
-
-		/// Implements define.
-		/// \param args The argument list.
-		Data _define(const std::vector<Data>& args);
-
-		/// Implements lowerThan.
-		/// \param args The argument list.
-		/// \tparam T Either int or double.
-		template <typename T>
-		Data _lowerThan(const std::vector<Data>& args) const;
-
-		/// Implements greaterThan.
-		/// \param args The argument list.
-		/// \tparam T Either int or double.
-		template <typename T>
-		Data _greaterThan(const std::vector<Data>& args) const;
-
-		/// Implements lowerEqual.
-		/// \param args The argument list.
-		/// \tparam T Either int or double.
-		template <typename T>
-		Data _lowerEqual(const std::vector<Data>& args) const;
-
-		/// Implements greaterEqual.
-		/// \param args The argument list.
-		/// \tparam T Either int or double.
-		template <typename T>
-		Data _greaterEqual(const std::vector<Data>& args) const;
-
-		/// Implements equal.
-		/// \param args The argument list.
-		/// \tparam T Either int, double, std::string or bool.
-		template <typename T>
-		Data _equal(const std::vector<Data>& args) const;
-
-		/// Implements notEqual.
-		/// \param args The argument list.
-		/// \tparam T Either int, double, std::string or bool.
-		template <typename T>
-		Data _notEqual(const std::vector<Data>& args) const;
-
-		/// Implements and.
-		/// \param args The argument list.
-		Data _and(const std::vector<Data>& args) const;
-
-		/// Implements or.
-		/// \param args The argument list.
-		Data _or(const std::vector<Data>& args) const;
-
-		/// Implements add.
-		/// \param args The argument list.
-		/// \tparam T Either int, double or string.
-		template <typename T>
-		Data _add(const std::vector<Data>& args) const;
-
-		/// Implements substract.
-		/// \param args The argument list.
-		/// \tparam T Either int or double.
-		template <typename T>
-		Data _substract(const std::vector<Data>& args) const;
-
-		/// Implements multiply.
-		/// \param args The argument list.
-		/// \tparam T Either int or double.
-		template <typename T>
-		Data _multiply(const std::vector<Data>& args) const;
-
-		/// Implements divide.
-		/// \param args The argument list.
-		/// \tparam T Either int or double.
-		template <typename T>
-		Data _divide(const std::vector<Data>& args) const;
-
-		/// Implements modulo for integers.
-		/// \param args The argument list.
-		Data _modulo(const std::vector<Data>& args) const;
-
-		/// Implements modulo for double.
-		/// \param args The argument list.
-		Data _fmod(const std::vector<Data>& args) const;
-
-		/// Implements not.
-		/// \param args The argument list.
-		Data _not(const std::vector<Data>& args) const;
-
-		template <typename T>
-		static std::vector<T> convert(const std::vector<Data>& args);
-
-		/// A reference to the interpreter, allows functions to have
-		/// side-effects.
-		Interpreter& _interpreter;
 };
+
+namespace BuiltinOverloads
+{
+	/// Implements print.
+	class Print : public Overload
+	{
+		public:
+			/// Constructor.
+			Print();
+
+			/// \see Overload::operator().
+			virtual Data operator()(const std::vector<Data>& arguments) const override;
+	};
+
+	/// Implements do.
+	class Do : public Overload
+	{
+		 public:
+			/// Constructor.
+			Do();
+
+			/// see Overload::operator().
+			virtual Data operator()(const std::vector<Data>& arguments) const override;
+	};
+
+	/// Implements define.
+	class Define : public Overload
+	{
+		 public:
+			/// Constructor.
+			Define();
+
+			/// see Overload::operator().
+			virtual Data operator()(const std::vector<Data>& arguments) const override;
+	};
+
+	/// Implements lowerThan.
+	/// \tparam T Either int or double.
+	template <typename T>
+	class LowerThan : public Overload
+	{
+		 public:
+			/// Constructor.
+			LowerThan();
+
+			/// see Overload::operator().
+			virtual Data operator()(const std::vector<Data>& arguments) const override;
+	};
+
+	/// Implements greaterThan.
+	/// \tparam T Either int or double.
+	template <typename T>
+	class GreaterThan : public Overload
+	{
+		 public:
+			/// Constructor.
+			GreaterThan();
+
+			/// see Overload::operator().
+			virtual Data operator()(const std::vector<Data>& arguments) const override;
+	};
+
+	/// Implements lowerEqual.
+	/// \tparam T Either int or double.
+	template <typename T>
+	class LowerEqual : public Overload
+	{
+		 public:
+			/// Constructor.
+			LowerEqual();
+
+			/// see Overload::operator().
+			virtual Data operator()(const std::vector<Data>& arguments) const override;
+	};
+
+	/// Implements greaterEqual.
+	/// \tparam T Either int or double.
+	template <typename T>
+	class GreaterEqual : public Overload
+	{
+		 public:
+			/// Constructor.
+			GreaterEqual();
+
+			/// see Overload::operator().
+			virtual Data operator()(const std::vector<Data>& arguments) const override;
+	};
+
+	/// Implements equal.
+	/// \tparam T Either int, double, std::string or bool.
+	template <typename T>
+	class Equal : public Overload
+	{
+		 public:
+			/// Constructor.
+			Equal();
+
+			/// see Overload::operator().
+			virtual Data operator()(const std::vector<Data>& arguments) const override;
+	};
+
+	/// Implements notEqual.
+	/// \tparam T Either int, double, std::string or bool.
+	template <typename T>
+	class NotEqual : public Overload
+	{
+		 public:
+			/// Constructor.
+			NotEqual();
+
+			/// see Overload::operator().
+			virtual Data operator()(const std::vector<Data>& arguments) const override;
+	};
+
+	/// Implements and.
+	class And : public Overload
+	{
+		 public:
+			/// Constructor.
+			And();
+
+			/// see Overload::operator().
+			virtual Data operator()(const std::vector<Data>& arguments) const override;
+	};
+
+	/// Implements or.
+	class Or : public Overload
+	{
+		 public:
+			/// Constructor.
+			Or();
+
+			/// see Overload::operator().
+			virtual Data operator()(const std::vector<Data>& arguments) const override;
+	};
+
+	/// Implements add.
+	/// \tparam T Either int, double or string.
+	template <typename T>
+	class Add : public Overload
+	{
+		 public:
+			/// Constructor.
+			Add();
+
+			/// see Overload::operator().
+			virtual Data operator()(const std::vector<Data>& arguments) const override;
+	};
+
+	/// Implements substract.
+	/// \tparam T Either int or double.
+	template <typename T>
+	class Substract : public Overload
+	{
+		 public:
+			/// Constructor.
+			Substract();
+
+			/// see Overload::operator().
+			virtual Data operator()(const std::vector<Data>& arguments) const override;
+	};
+
+	/// Implements multiply.
+	/// \tparam T Either int or double.
+	template <typename T>
+	class Multiply : public Overload
+	{
+		 public:
+			/// Constructor.
+			Multiply();
+
+			/// see Overload::operator().
+			virtual Data operator()(const std::vector<Data>& arguments) const override;
+	};
+
+	/// Implements divide.
+	/// \tparam T Either int or double.
+	template <typename T>
+	class Divide : public Overload
+	{
+		 public:
+			/// Constructor.
+			Divide();
+
+			/// see Overload::operator().
+			virtual Data operator()(const std::vector<Data>& arguments) const override;
+	};
+
+	/// Implements modulo for integers.
+	class Modulo : public Overload
+	{
+		 public:
+			/// Constructor.
+			Modulo();
+
+			/// see Overload::operator().
+			virtual Data operator()(const std::vector<Data>& arguments) const override;
+	};
+
+	/// Implements modulo for double.
+	class DoubleModulo : public Overload
+	{
+		 public:
+			/// Constructor.
+			DoubleModulo();
+
+			/// see Overload::operator().
+			virtual Data operator()(const std::vector<Data>& arguments) const override;
+	};
+
+	/// Implements not.
+	class Not : public Overload
+	{
+		 public:
+			/// Constructor.
+			Not();
+
+			/// see Overload::operator().
+			virtual Data operator()(const std::vector<Data>& arguments) const override;
+	};
+
+
+}
 
 #include <Data.hpp>
 #include <ScriptError.hpp>
 
-template <typename T>
-Data Functions::_lowerThan(const std::vector<Data>& args) const
+namespace BuiltinOverloads
 {
-	const std::vector<T> convertedArguments{convert<T>(args)};
-	return std::adjacent_find(convertedArguments.begin(), convertedArguments.end(), std::greater_equal<T>()) == convertedArguments.end();
-}
-
-template <typename T>
-Data Functions::_greaterThan(const std::vector<Data>& args) const
-{
-	const std::vector<T> convertedArguments{convert<T>(args)};
-	return std::adjacent_find(convertedArguments.begin(), convertedArguments.end(), std::less_equal<T>()) == convertedArguments.end();
-}
-
-template <typename T>
-Data Functions::_lowerEqual(const std::vector<Data>& args) const
-{
-	const std::vector<T> convertedArguments{convert<T>(args)};
-	return std::adjacent_find(convertedArguments.begin(), convertedArguments.end(), std::greater<T>()) == convertedArguments.end();
-}
-
-template <typename T>
-Data Functions::_greaterEqual(const std::vector<Data>& args) const
-{
-	const std::vector<T> convertedArguments{convert<T>(args)};
-	return std::adjacent_find(convertedArguments.begin(), convertedArguments.end(), std::less<T>()) == convertedArguments.end();
-}
-
-template <typename T>
-Data Functions::_equal(const std::vector<Data>& args) const
-{
-	const std::vector<T> convertedArguments{convert<T>(args)};
-	return std::adjacent_find(convertedArguments.begin(), convertedArguments.end(), std::not_equal_to<T>()) == convertedArguments.end();
-}
-
-template <typename T>
-Data Functions::_notEqual(const std::vector<Data>& args) const
-{
-	return _not({_equal<T>(args)});
-}
-
-template <typename T>
-Data Functions::_add(const std::vector<Data>& args) const
-{
-	const std::vector<T> convertedArguments{convert<T>(args)};
-	return std::accumulate(convertedArguments.begin(), convertedArguments.end(), T());
-}
-
-template <typename T>
-Data Functions::_substract(const std::vector<Data>& args) const
-{
-	if(args.size() == 1)
-		return -args.front().get<T>();
-	else
+	template <typename T>
+	LowerThan<T>::LowerThan():
+		Overload{{SignatureType::create<T>(), SignatureType::create<T>()}, true}
 	{
-		const std::vector<T> convertedArguments{convert<T>(args)};
-		return std::accumulate(std::next(convertedArguments.begin()), convertedArguments.end(), convertedArguments.front(), std::minus<T>());
 	}
-}
 
-template <typename T>
-Data Functions::_multiply(const std::vector<Data>& args) const
-{
-	const std::vector<T> convertedArguments{convert<T>(args)};
-	return std::accumulate(convertedArguments.begin(), convertedArguments.end(), static_cast<T>(1), std::multiplies<T>());
-}
+	template <typename T>
+	Data LowerThan<T>::operator()(const std::vector<Data>& arguments) const
+	{
+		const std::vector<T> convertedArguments{Utils::convert<T>(arguments)};
+		return std::adjacent_find(convertedArguments.begin(), convertedArguments.end(), std::greater_equal<T>()) == convertedArguments.end();
+	}
 
-template <typename T>
-Data Functions::_divide(const std::vector<Data>& args) const
-{
-	const std::vector<T> convertedArguments{convert<T>(args)};
-	// If there is a zero in the values [begin + 1, end)
-	if(std::find(std::next(convertedArguments.begin()), convertedArguments.end(), static_cast<T>(0)) != convertedArguments.end())
-		throw ScriptError("division by zero");
-	return std::accumulate(std::next(convertedArguments.begin()), convertedArguments.end(), convertedArguments.front(), std::divides<T>());
-}
+	template <typename T>
+	GreaterThan<T>::GreaterThan():
+		Overload{{SignatureType::create<T>(), SignatureType::create<T>()}, true}
+	{
+	}
 
-template <typename T>
-std::vector<T> Functions::convert(const std::vector<Data>& args)
-{
-	std::vector<T> convertedArguments;
-	std::transform(args.begin(), args.end(), std::back_inserter(convertedArguments),
-			[](const Data& data)
-			{
-				return data.get<T>();
-			});
-	return convertedArguments;
+	template <typename T>
+	Data GreaterThan<T>::operator()(const std::vector<Data>& arguments) const
+	{
+		const std::vector<T> convertedArguments{Utils::convert<T>(arguments)};
+		return std::adjacent_find(convertedArguments.begin(), convertedArguments.end(), std::less_equal<T>()) == convertedArguments.end();
+	}
+
+	template <typename T>
+	LowerEqual<T>::LowerEqual():
+		Overload{{SignatureType::create<T>(), SignatureType::create<T>()}, true}
+	{
+	}
+
+	template <typename T>
+	Data LowerEqual<T>::operator()(const std::vector<Data>& arguments) const
+	{
+		const std::vector<T> convertedArguments{Utils::convert<T>(arguments)};
+		return std::adjacent_find(convertedArguments.begin(), convertedArguments.end(), std::greater<T>()) == convertedArguments.end();
+	}
+
+	template <typename T>
+	GreaterEqual<T>::GreaterEqual():
+		Overload{{SignatureType::create<T>(), SignatureType::create<T>()}, true}
+	{
+	}
+
+	template <typename T>
+	Data GreaterEqual<T>::operator()(const std::vector<Data>& arguments) const
+	{
+		const std::vector<T> convertedArguments{Utils::convert<T>(arguments)};
+		return std::adjacent_find(convertedArguments.begin(), convertedArguments.end(), std::less<T>()) == convertedArguments.end();
+	}
+
+	template <typename T>
+	Equal<T>::Equal():
+		Overload{{SignatureType::create<T>(), SignatureType::create<T>()}, true}
+	{
+	}
+
+	template <typename T>
+	Data Equal<T>::operator()(const std::vector<Data>& arguments) const
+	{
+		const std::vector<T> convertedArguments{Utils::convert<T>(arguments)};
+		return std::adjacent_find(convertedArguments.begin(), convertedArguments.end(), std::not_equal_to<T>()) == convertedArguments.end();
+	}
+
+	template <typename T>
+	NotEqual<T>::NotEqual():
+		Overload{{SignatureType::create<T>(), SignatureType::create<T>()}, true}
+	{
+	}
+
+	template <typename T>
+	Data NotEqual<T>::operator()(const std::vector<Data>& arguments) const
+	{
+		return Not()({Equal<T>()(arguments)});
+	}
+
+	template <typename T>
+	Add<T>::Add():
+		Overload{{SignatureType::create<T>()}, true}
+	{
+	}
+
+	template <typename T>
+	Data Add<T>::operator()(const std::vector<Data>& arguments) const
+	{
+		const std::vector<T> convertedArguments{Utils::convert<T>(arguments)};
+		return std::accumulate(convertedArguments.begin(), convertedArguments.end(), T());
+	}
+
+	template <typename T>
+	Substract<T>::Substract():
+		Overload{{SignatureType::create<T>()}, true}
+	{
+	}
+
+	template <typename T>
+	Data Substract<T>::operator()(const std::vector<Data>& arguments) const
+	{
+		if(arguments.size() == 1)
+			return -arguments.front().get<T>();
+		else
+		{
+			const std::vector<T> convertedArguments{Utils::convert<T>(arguments)};
+			return std::accumulate(std::next(convertedArguments.begin()), convertedArguments.end(), convertedArguments.front(), std::minus<T>());
+		}
+	}
+
+	template <typename T>
+	Multiply<T>::Multiply():
+		Overload{{SignatureType::create<T>()}, true}
+	{
+	}
+
+	template <typename T>
+	Data Multiply<T>::operator()(const std::vector<Data>& arguments) const
+	{
+		const std::vector<T> convertedArguments{Utils::convert<T>(arguments)};
+		return std::accumulate(convertedArguments.begin(), convertedArguments.end(), static_cast<T>(1), std::multiplies<T>());
+	}
+
+	template <typename T>
+	Divide<T>::Divide():
+		Overload{{SignatureType::create<T>(), SignatureType::create<T>()}, true}
+	{
+	}
+
+	template <typename T>
+	Data Divide<T>::operator()(const std::vector<Data>& arguments) const
+	{
+		const std::vector<T> convertedArguments{Utils::convert<T>(arguments)};
+		// If there is a zero in the values [begin + 1, end)
+		if(std::find(std::next(convertedArguments.begin()), convertedArguments.end(), static_cast<T>(0)) != convertedArguments.end())
+			throw ScriptError("division by zero");
+		return std::accumulate(std::next(convertedArguments.begin()), convertedArguments.end(), convertedArguments.front(), std::divides<T>());
+	}
 }
 
 #endif

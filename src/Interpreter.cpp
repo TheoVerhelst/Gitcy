@@ -24,7 +24,6 @@ const std::map<char, char> Interpreter::escapedCharacters
 		{{'a', '\a'}, {'b', '\b'}, {'f', '\f'}, {'n', '\n'}, {'r', '\r'}, {'t', '\t'}, {'v', '\v'}};
 
 Interpreter::Interpreter(const std::string& filename):
-	_functions{*this},
 	_filename(filename),
 	_variables
 	{

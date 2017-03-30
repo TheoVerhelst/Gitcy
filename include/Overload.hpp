@@ -1,7 +1,6 @@
 #ifndef OVERLOAD_HPP
 #define OVERLOAD_HPP
 
-#include <functional>
 #include <ostream>
 #include <vector>
 #include <SignatureType.hpp>
@@ -9,13 +8,10 @@
 // Forward declarations
 class Data;
 
-/// Conveniency typedef for a functor.
-typedef std::function<Data(const std::vector<Data>&)> Functor;
-
 /// An overload is an implementation of a script function. While a script
 /// function is just a list of overloads bound to a name, an overload contains
-/// the specification of its parameters and a pointer to the C++ function to
-/// call.
+/// the specification of its parameters and a C++ function to call (the
+/// operator() to override).
 ///
 /// An overload accepts a list of parameter types being instances of
 /// SignatureType. This includes the default-constructed instance, meaning that
@@ -28,11 +24,8 @@ typedef std::function<Data(const std::vector<Data>&)> Functor;
 class Overload
 {
 	public:
-		/// Constructor.
-		/// \param typeList The list of parameters this overload can accept.
-		/// \param isVariadic Indicates whether this overload is variadic.
-		/// \param functor A pointer to the C++ function to call.
-		Overload(const std::vector<SignatureType>& typeList, bool isVariadic, const Functor& functor);
+		/// Destructor.
+		virtual ~Overload() = default;
 
 		/// Checks whether the argument list is valid for calling this overload.
 		/// \param arguments The argument list.
@@ -40,11 +33,11 @@ class Overload
 		/// otherwise.
 		bool matches(const std::vector<Data>& arguments) const;
 
-		/// Call the C++ function with the given arguments.
+		/// Call the function with the given arguments.
 		/// \pre matches(arguments)
 		/// \param arguments The arguments to forward to the function.
 		/// \return The return value of the function.
-		Data operator()(const std::vector<Data>& arguments) const;
+		virtual Data operator()(const std::vector<Data>& arguments) const = 0;
 
 		/// Overload of the output operator. It just shows the list of types
 		/// that are accepted in this overload, with an ellipsis if it is
@@ -58,15 +51,18 @@ class Overload
 		/// \returns True if this overload is variadic, false otherwise.
 		bool isVariadic() const;
 
+	protected:
+		/// Constructor.
+		/// \param typeList The list of parameters this overload can accept.
+		/// \param isVariadic Indicates whether this overload is variadic.
+		Overload(const std::vector<SignatureType>& typeList, bool isVariadic);
+
 	private:
 		/// The list of types accepted by this overload.
 		std::vector<SignatureType> _typeList;
 
 		/// Indicates whether this overload is variadic.
 		bool _isVariadic;
-
-		/// The function pointer to the C++ function to call.
-		Functor _functor;
 };
 
 

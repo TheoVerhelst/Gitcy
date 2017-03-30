@@ -26,7 +26,7 @@ class Function
 	public:
 		/// Constructor.
 		/// \param overloads A list of overloads.
-		Function(const std::vector<Overload>& overloads);
+		Function(const std::vector<std::shared_ptr<Overload>>& overloads);
 
 		/// C++ call operator, which effectively call the function of the first
 		/// matching overload.
@@ -42,7 +42,7 @@ class Function
 
 	private:
 		/// The list of overload.
-		std::vector<Overload> _overloads;
+		std::vector<std::shared_ptr<Overload>> _overloads;
 };
 
 #endif // FUNCTION_HPP
