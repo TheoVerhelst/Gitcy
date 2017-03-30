@@ -44,225 +44,40 @@ class BuiltinFunctions
 
 namespace BuiltinOverloads
 {
-	/// Implements print.
-	class Print : public Overload
-	{
-		public:
-			/// Constructor.
-			Print();
+	#define DEFINE_OVERLOAD(className) \
+	class className : public Overload \
+	{ \
+		public: \
+			className(); \
+ \
+			virtual Data operator()(const std::vector<Data>& arguments) const override; \
+	}; \
 
-			/// \see Overload::operator().
-			virtual Data operator()(const std::vector<Data>& arguments) const override;
-	};
+	#define DEFINE_TEMPLATE_OVERLOAD(className) \
+	template <typename T> \
+	DEFINE_OVERLOAD(className)
 
-	/// Implements do.
-	class Do : public Overload
-	{
-		 public:
-			/// Constructor.
-			Do();
+	DEFINE_OVERLOAD(Print)
+	DEFINE_OVERLOAD(Do)
+	DEFINE_OVERLOAD(Define)
+	DEFINE_OVERLOAD(And)
+	DEFINE_OVERLOAD(Or)
+	DEFINE_OVERLOAD(Not)
+	DEFINE_TEMPLATE_OVERLOAD(LowerThan)
+	DEFINE_TEMPLATE_OVERLOAD(GreaterThan)
+	DEFINE_TEMPLATE_OVERLOAD(LowerEqual)
+	DEFINE_TEMPLATE_OVERLOAD(GreaterEqual)
+	DEFINE_TEMPLATE_OVERLOAD(Equal)
+	DEFINE_TEMPLATE_OVERLOAD(NotEqual)
+	DEFINE_TEMPLATE_OVERLOAD(Add)
+	DEFINE_TEMPLATE_OVERLOAD(Substract)
+	DEFINE_TEMPLATE_OVERLOAD(Multiply)
+	DEFINE_TEMPLATE_OVERLOAD(Divide)
+	DEFINE_OVERLOAD(Modulo)
+	DEFINE_OVERLOAD(DoubleModulo)
 
-			/// see Overload::operator().
-			virtual Data operator()(const std::vector<Data>& arguments) const override;
-	};
-
-	/// Implements define.
-	class Define : public Overload
-	{
-		 public:
-			/// Constructor.
-			Define();
-
-			/// see Overload::operator().
-			virtual Data operator()(const std::vector<Data>& arguments) const override;
-	};
-
-	/// Implements lowerThan.
-	/// \tparam T Either int or double.
-	template <typename T>
-	class LowerThan : public Overload
-	{
-		 public:
-			/// Constructor.
-			LowerThan();
-
-			/// see Overload::operator().
-			virtual Data operator()(const std::vector<Data>& arguments) const override;
-	};
-
-	/// Implements greaterThan.
-	/// \tparam T Either int or double.
-	template <typename T>
-	class GreaterThan : public Overload
-	{
-		 public:
-			/// Constructor.
-			GreaterThan();
-
-			/// see Overload::operator().
-			virtual Data operator()(const std::vector<Data>& arguments) const override;
-	};
-
-	/// Implements lowerEqual.
-	/// \tparam T Either int or double.
-	template <typename T>
-	class LowerEqual : public Overload
-	{
-		 public:
-			/// Constructor.
-			LowerEqual();
-
-			/// see Overload::operator().
-			virtual Data operator()(const std::vector<Data>& arguments) const override;
-	};
-
-	/// Implements greaterEqual.
-	/// \tparam T Either int or double.
-	template <typename T>
-	class GreaterEqual : public Overload
-	{
-		 public:
-			/// Constructor.
-			GreaterEqual();
-
-			/// see Overload::operator().
-			virtual Data operator()(const std::vector<Data>& arguments) const override;
-	};
-
-	/// Implements equal.
-	/// \tparam T Either int, double, std::string or bool.
-	template <typename T>
-	class Equal : public Overload
-	{
-		 public:
-			/// Constructor.
-			Equal();
-
-			/// see Overload::operator().
-			virtual Data operator()(const std::vector<Data>& arguments) const override;
-	};
-
-	/// Implements notEqual.
-	/// \tparam T Either int, double, std::string or bool.
-	template <typename T>
-	class NotEqual : public Overload
-	{
-		 public:
-			/// Constructor.
-			NotEqual();
-
-			/// see Overload::operator().
-			virtual Data operator()(const std::vector<Data>& arguments) const override;
-	};
-
-	/// Implements and.
-	class And : public Overload
-	{
-		 public:
-			/// Constructor.
-			And();
-
-			/// see Overload::operator().
-			virtual Data operator()(const std::vector<Data>& arguments) const override;
-	};
-
-	/// Implements or.
-	class Or : public Overload
-	{
-		 public:
-			/// Constructor.
-			Or();
-
-			/// see Overload::operator().
-			virtual Data operator()(const std::vector<Data>& arguments) const override;
-	};
-
-	/// Implements add.
-	/// \tparam T Either int, double or string.
-	template <typename T>
-	class Add : public Overload
-	{
-		 public:
-			/// Constructor.
-			Add();
-
-			/// see Overload::operator().
-			virtual Data operator()(const std::vector<Data>& arguments) const override;
-	};
-
-	/// Implements substract.
-	/// \tparam T Either int or double.
-	template <typename T>
-	class Substract : public Overload
-	{
-		 public:
-			/// Constructor.
-			Substract();
-
-			/// see Overload::operator().
-			virtual Data operator()(const std::vector<Data>& arguments) const override;
-	};
-
-	/// Implements multiply.
-	/// \tparam T Either int or double.
-	template <typename T>
-	class Multiply : public Overload
-	{
-		 public:
-			/// Constructor.
-			Multiply();
-
-			/// see Overload::operator().
-			virtual Data operator()(const std::vector<Data>& arguments) const override;
-	};
-
-	/// Implements divide.
-	/// \tparam T Either int or double.
-	template <typename T>
-	class Divide : public Overload
-	{
-		 public:
-			/// Constructor.
-			Divide();
-
-			/// see Overload::operator().
-			virtual Data operator()(const std::vector<Data>& arguments) const override;
-	};
-
-	/// Implements modulo for integers.
-	class Modulo : public Overload
-	{
-		 public:
-			/// Constructor.
-			Modulo();
-
-			/// see Overload::operator().
-			virtual Data operator()(const std::vector<Data>& arguments) const override;
-	};
-
-	/// Implements modulo for double.
-	class DoubleModulo : public Overload
-	{
-		 public:
-			/// Constructor.
-			DoubleModulo();
-
-			/// see Overload::operator().
-			virtual Data operator()(const std::vector<Data>& arguments) const override;
-	};
-
-	/// Implements not.
-	class Not : public Overload
-	{
-		 public:
-			/// Constructor.
-			Not();
-
-			/// see Overload::operator().
-			virtual Data operator()(const std::vector<Data>& arguments) const override;
-	};
-
-
+	#undef DEFINE_OVERLOAD
+	#undef DEFINE_TEMPLATE_OVERLOAD
 }
 
 #include <Data.hpp>
