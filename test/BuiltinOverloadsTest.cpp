@@ -3,12 +3,6 @@
 #include <Functions.hpp>
 #include <Utils.hpp>
 
-template <typename TestedOverload, typename ResultType>
-void checkOverloadReturn(const std::vector<Data>& values, const ResultType& expectedValue)
-{
-	BOOST_TEST(static_cast<Data>(TestedOverload()(values)).get<ResultType>() == expectedValue);
-}
-
 BOOST_AUTO_TEST_SUITE(BuiltinOverloadsTest)
 
 BOOST_AUTO_TEST_CASE(PrintOneString)
@@ -33,32 +27,42 @@ BOOST_AUTO_TEST_CASE(PrintTwoValues)
 
 BOOST_AUTO_TEST_CASE(DoReturnsLastValue)
 {
-	checkOverloadReturn<BuiltinOverloads::Do>({4, 3.3, false}, false);
+	BOOST_TEST(BuiltinOverloads::Do()({4, 3.3, false}).get<bool>() == false);
 }
 
 BOOST_AUTO_TEST_CASE(AndTwoTruesOneFalses)
 {
-	checkOverloadReturn<BuiltinOverloads::And>({true, false, true}, false);
+	BOOST_TEST(BuiltinOverloads::And()({true, false, true}).get<bool>() == false);
 }
 
 BOOST_AUTO_TEST_CASE(AndFourTrues)
 {
-	checkOverloadReturn<BuiltinOverloads::And>({true, true, true, true}, true);
+	BOOST_TEST(BuiltinOverloads::And()({true, true, true, true}).get<bool>() == true);
 }
 
 BOOST_AUTO_TEST_CASE(OrTwoTruesOneFalses)
 {
-	checkOverloadReturn<BuiltinOverloads::Or>({true, false, true}, true);
+	BOOST_TEST(BuiltinOverloads::Or()({true, false, true}).get<bool>() == true);
 }
 
 BOOST_AUTO_TEST_CASE(OrFourFalses)
 {
-	checkOverloadReturn<BuiltinOverloads::And>({false, false, false, false}, false);
+	BOOST_TEST(BuiltinOverloads::Or()({false, false, false, false}).get<bool>() == false);
 }
 
 BOOST_AUTO_TEST_CASE(NotFalse)
 {
-	checkOverloadReturn<BuiltinOverloads::Not>({false}, true);
+	BOOST_TEST(BuiltinOverloads::Not()({false}).get<bool>() == true);
+}
+
+BOOST_AUTO_TEST_CASE(LowerThanFourOrderedDoubles)
+{
+	BOOST_TEST(BuiltinOverloads::LowerThan<double>()({2.3, 2.5, 4.3, 333.1}).get<bool>() == true);
+}
+
+BOOST_AUTO_TEST_CASE(LowerThanFourUnorderedInt)
+{
+	BOOST_TEST(BuiltinOverloads::LowerThan<int>()({2, 1, 4, 333}).get<bool>() == false);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
