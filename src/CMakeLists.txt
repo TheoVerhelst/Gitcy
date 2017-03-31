@@ -9,6 +9,7 @@ add_library(GITCY
 	Overload.cpp
 	SignatureType.cpp
 	ScriptError.cpp
+	Utils.cpp
 	)
 
 # Create the main executable

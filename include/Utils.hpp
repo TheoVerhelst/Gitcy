@@ -3,6 +3,7 @@
 
 #include <string>
 #include <sstream>
+#include <ostream>
 #include <vector>
 #include <algorithm>
 #include <Data.hpp>
@@ -36,6 +37,34 @@ namespace Utils
 
 	template <typename T>
 	std::vector<T> convert(const std::vector<Data>& args);
+
+	/// This class allows to temporarily listen to all the output being sent to
+	/// a std::ostream instance (such as std::cout or std::cerr), in order to
+	/// programmatically read this output. This can be used to test output
+	/// functions, for example.
+	class OstreamListener
+	{
+		public:
+			/// Constructor.
+			/// \param listenedStream The stream to listen to.
+			OstreamListener(std::ostream& listenedStream);
+
+			/// Destructor. Sets the listened stream to its initial state.
+			~OstreamListener();
+
+			/// Returns The output that has been sent to the listened stream so
+			/// far.
+			/// \returns The output that has been sent to the listened stream so
+			/// far.
+			std::string getOutput() const;
+
+		private:
+			std::ostream& _listenedStream;
+			std::streambuf* _streamBuffer;
+			std::ostringstream _localStream;
+	};
+
+
 }
 
 namespace Utils
