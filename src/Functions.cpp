@@ -34,10 +34,7 @@ namespace BuiltinOverloads
 
 	Data Print::operator()(const std::vector<Data>& arguments) const
 	{
-		std::cout << std::boolalpha;
-		for(size_t i(0); i < arguments.size(); ++i)
-			std::cout << arguments[i] << " ";
-		std::cout << std::endl;
+		std::cout << std::boolalpha << Utils::join(" ", arguments.begin(), arguments.end()) << std::endl;
 		return Null();
 	}
 

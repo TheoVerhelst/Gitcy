@@ -10,7 +10,7 @@ BOOST_AUTO_TEST_CASE(PrintOneString)
 	const Utils::OstreamListener coutListener{std::cout};
 	const std::string testedString{"Coucou"};
 	BuiltinOverloads::Print()({testedString});
-	BOOST_TEST(coutListener.getOutput() == testedString);
+	BOOST_TEST(coutListener.getOutput() == testedString + "\n");
 }
 
 BOOST_AUTO_TEST_SUITE_END()
