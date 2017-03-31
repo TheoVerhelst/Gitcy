@@ -18,10 +18,10 @@ class OneInt : public Overload
 		}
 };
 
-class VariadicDouble : public Overload
+class VariadicOneDouble : public Overload
 {
 	public:
-		VariadicDouble():
+		VariadicOneDouble():
 			Overload{{SignatureType::create<double>()}, true}
 		{
 		}
@@ -32,11 +32,11 @@ class VariadicDouble : public Overload
 		}
 };
 
-class TwoDouble : public Overload
+class VariadicTwoDouble : public Overload
 {
 	public:
-		TwoDouble():
-			Overload{{SignatureType::create<double>(), SignatureType::create<double>()}, false}
+		VariadicTwoDouble():
+			Overload{{SignatureType::create<double>(), SignatureType::create<double>()}, true}
 		{
 		}
 
@@ -52,7 +52,7 @@ class FunctionTestFixture
 		/// Constructor.
 		FunctionTestFixture():
 			// A normal overload, and two possibly ambiguous overloads
-			function{{std::make_shared<OneInt>(), std::make_shared<VariadicDouble>(), std::make_shared<TwoDouble>()}}
+			function{{std::make_shared<OneInt>(), std::make_shared<VariadicOneDouble>(), std::make_shared<VariadicTwoDouble>()}}
 		{
 		}
 
@@ -68,12 +68,12 @@ BOOST_AUTO_TEST_CASE(callOperatorNormal)
 
 BOOST_AUTO_TEST_CASE(callOperatorAmbiguous)
 {
-	BOOST_CHECK_THROW(function({2.2}), ScriptError);
+	BOOST_CHECK_THROW(function({2.2, 2.3}), ScriptError);
 }
 
 BOOST_AUTO_TEST_CASE(callOperatorNoOverloadFound)
 {
-	BOOST_CHECK_THROW(function({2, "bluh"}), ScriptError);
+	BOOST_CHECK_THROW(function({2, std::string("bluh")}), ScriptError);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
