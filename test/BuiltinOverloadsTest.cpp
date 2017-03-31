@@ -65,4 +65,14 @@ BOOST_AUTO_TEST_CASE(LowerThanFourUnorderedInt)
 	BOOST_TEST(BuiltinOverloads::LowerThan<int>()({2, 1, 4, 333}).get<bool>() == false);
 }
 
+BOOST_AUTO_TEST_CASE(GreaterThanFourOrderedDoubles)
+{
+	BOOST_TEST(BuiltinOverloads::GreaterThan<double>()({44.3, 1.0, -0.2, -11.2}).get<bool>() == true);
+}
+
+BOOST_AUTO_TEST_CASE(GreaterThanFourUnorderedInt)
+{
+	BOOST_TEST(BuiltinOverloads::GreaterThan<int>()({2, 1, 4, 333}).get<bool>() == false);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
