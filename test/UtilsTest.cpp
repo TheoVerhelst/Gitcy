@@ -1,4 +1,5 @@
 #include <sstream>
+#include <iostream>
 #include <boost/test/unit_test.hpp>
 #include <Functions.hpp>
 #include <Utils.hpp>
@@ -71,6 +72,19 @@ BOOST_AUTO_TEST_CASE(convertBasic)
 BOOST_AUTO_TEST_CASE(convertBadTypeThrows)
 {
 	BOOST_CHECK_THROW(Utils::convert<int>(twoBool), boost::bad_get);
+}
+
+BOOST_AUTO_TEST_CASE(ostreamListenerEmpty)
+{
+	Utils::OstreamListener listener{std::cout};
+	BOOST_TEST(listener.getOutput() == "");
+}
+
+BOOST_AUTO_TEST_CASE(ostreamListenerGetOutputBasic)
+{
+	Utils::OstreamListener listener{std::cerr};
+	std::cerr << "Xovxov " << 808 << " voxvoX";
+	BOOST_TEST(listener.getOutput() == "Xovxov 808 voxvoX");
 }
 
 BOOST_AUTO_TEST_SUITE_END()
