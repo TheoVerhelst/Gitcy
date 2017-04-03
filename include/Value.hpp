@@ -1,5 +1,5 @@
-#ifndef DATA_HPP
-#define DATA_HPP
+#ifndef VALUE_HPP
+#define VALUE_HPP
 
 #include <ostream>
 #include <string>
@@ -15,12 +15,12 @@ class Function;
 /// The type used in C++ to represent any value in script. It uses internally
 /// a boost::variant, but exposes only the needed interface.
 /// \TODO Rename to value?
-class Data
+class Value
 {
 	public:
 		/// Constructor.
-		template <typename T, typename = std::enable_if_t<std::negation<std::is_same<std::decay_t<T>, Data>>::value>>
-		Data(T value);
+		template <typename T, typename = std::enable_if_t<std::negation<std::is_same<std::decay_t<T>, Value>>::value>>
+		Value(T value);
 
 		template <typename T>
 		const T& get() const;
@@ -39,9 +39,9 @@ class Data
 
 		/// Overload of the output operator.
 		/// \param os The stream to output to.
-		/// \param null The Data object to output.
+		/// \param null The Value object to output.
 		/// \returns os.
-		friend std::ostream& operator<<(std::ostream& os, const Data& data);
+		friend std::ostream& operator<<(std::ostream& os, const Value& data);
 
 	private:
 		typedef boost::variant<Null, bool, int, double, std::string, boost::recursive_wrapper<Function>> Variant;
@@ -56,19 +56,19 @@ class Data
 #include <Function.hpp>
 
 template <typename T, typename>
-Data::Data(T value):
+Value::Value(T value):
 	_variant{std::forward<T>(value)}
 {
 }
 
 template <typename T>
-const T& Data::get() const
+const T& Value::get() const
 {
 	return boost::get<T>(_variant);
 }
 
 template <typename T>
-bool Data::holdsType() const
+bool Value::holdsType() const
 {
 	// Statically checks if T is in the Variant types
 	if(not canHoldType<T>())
@@ -78,9 +78,9 @@ bool Data::holdsType() const
 }
 
 template <typename T>
-constexpr bool Data::canHoldType()
+constexpr bool Value::canHoldType()
 {
 	return boost::mpl::contains<Variant::types, T>::value;
 }
 
-#endif // DATA_HPP
+#endif // VALUE_HPP

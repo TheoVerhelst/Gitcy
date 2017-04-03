@@ -7,7 +7,7 @@
 #include <Overload.hpp>
 
 // Forward declaration
-class Data;
+class Value;
 
 /// Class for functions defined in C++ but usable in scripts. These functions
 /// have a limited number of overload, each overload can be variadic. We cannot
@@ -32,7 +32,7 @@ class Function
 		/// matching overload.
 		/// \param arguments The arguments to pass to the overlaod functor.
 		/// \returns The return value of the overload functor.
-		Data operator()(const std::vector<Data>& arguments) const;
+		Value operator()(const std::vector<Value>& arguments) const;
 
 		/// Output operator overload.
 		/// \param os The stream to output to.

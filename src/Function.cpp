@@ -3,7 +3,7 @@
 #include <functional>
 #include <Utils.hpp>
 #include <ScriptError.hpp>
-#include <Data.hpp>
+#include <Value.hpp>
 #include <Function.hpp>
 
 Function::Function(const std::vector<std::shared_ptr<Overload>>& overloads):
@@ -11,7 +11,7 @@ Function::Function(const std::vector<std::shared_ptr<Overload>>& overloads):
 {
 }
 
-Data Function::operator()(const std::vector<Data>& arguments) const
+Value Function::operator()(const std::vector<Value>& arguments) const
 {
 	// Find the overloads that matches the arguments, and split them according to their variadicity (variadicness ?)
 	std::vector<std::shared_ptr<Overload>> variadicCandidates, nonVariadicCandidates;

@@ -35,7 +35,7 @@ class Interpreter
 		const std::string _filename;
 
 		/// The variables, as pairs of name/value.
-		std::map<std::string, std::shared_ptr<Data>> _variables;
+		std::map<std::string, std::shared_ptr<Value>> _variables;
 
 		/// After loading the script, this variables holds the script as a tree ready to be evaluated.
 		Tree<EvaluationNode>::Ptr _evaluationTree;
@@ -99,7 +99,7 @@ class Interpreter
 		/// and evaluating the values and identifiers.
 		/// \param expression The evaluation tree to evaluate.
 		/// \return The return value.
-		Data evaluateTree(const Tree<EvaluationNode>::Ptr& expression);
+		Value evaluateTree(const Tree<EvaluationNode>::Ptr& expression);
 
 		/// Finds the closing parenthesis corresponding to the opening
 		/// parenthesis token pointed by the iterator \a from.

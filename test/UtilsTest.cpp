@@ -17,7 +17,7 @@ class UtilsTestFixture
 		{
 		}
 
-		std::vector<Data> threeStrings, oneString, empty, threeInts, twoBool;
+		std::vector<Value> threeStrings, oneString, empty, threeInts, twoBool;
 };
 
 BOOST_FIXTURE_TEST_SUITE(UtilsTest, UtilsTestFixture)

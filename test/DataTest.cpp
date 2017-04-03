@@ -1,7 +1,7 @@
 #include <typeindex>
 #include <typeinfo>
 #include <boost/test/unit_test.hpp>
-#include <Data.hpp>
+#include <Value.hpp>
 
 class DataTestFixture
 {
@@ -12,7 +12,7 @@ class DataTestFixture
 		{
 		}
 
-		Data data;
+		Value data;
 };
 
 BOOST_FIXTURE_TEST_SUITE(DataTest, DataTestFixture)
@@ -49,12 +49,12 @@ BOOST_AUTO_TEST_CASE(holdsTypeRuntimeWrong)
 
 BOOST_AUTO_TEST_CASE(canHoldTypeNormal)
 {
-	BOOST_TEST(Data::canHoldType<int>());
+	BOOST_TEST(Value::canHoldType<int>());
 }
 
 BOOST_AUTO_TEST_CASE(canHoldTypeWrong)
 {
-	BOOST_TEST(not Data::canHoldType<float>());
+	BOOST_TEST(not Value::canHoldType<float>());
 }
 
 BOOST_AUTO_TEST_CASE(getTypeName)
@@ -64,12 +64,12 @@ BOOST_AUTO_TEST_CASE(getTypeName)
 
 BOOST_AUTO_TEST_CASE(getTypeNameStaticNormal)
 {
-	BOOST_TEST(Data::getTypeName(std::type_index(typeid(std::string))) == "String");
+	BOOST_TEST(Value::getTypeName(std::type_index(typeid(std::string))) == "String");
 }
 
 BOOST_AUTO_TEST_CASE(getTypeNameStaticWrong)
 {
-	BOOST_CHECK_THROW(Data::getTypeName(std::type_index(typeid(float))), std::invalid_argument);
+	BOOST_CHECK_THROW(Value::getTypeName(std::type_index(typeid(float))), std::invalid_argument);
 }
 
 BOOST_AUTO_TEST_CASE(streamOperator)

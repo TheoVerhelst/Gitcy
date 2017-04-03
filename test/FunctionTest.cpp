@@ -12,7 +12,7 @@ class OneInt : public Overload
 		{
 		}
 
-		virtual Data operator()(const std::vector<Data>&) const override
+		virtual Value operator()(const std::vector<Value>&) const override
 		{
 			return std::string("blah");
 		}
@@ -26,7 +26,7 @@ class VariadicOneDouble : public Overload
 		{
 		}
 
-		virtual Data operator()(const std::vector<Data>&) const override
+		virtual Value operator()(const std::vector<Value>&) const override
 		{
 			return std::string("blah");
 		}
@@ -40,7 +40,7 @@ class VariadicTwoDouble : public Overload
 		{
 		}
 
-		virtual Data operator()(const std::vector<Data>&) const override
+		virtual Value operator()(const std::vector<Value>&) const override
 		{
 			return std::string("blah");
 		}

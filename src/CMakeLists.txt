@@ -1,7 +1,7 @@
 # Make a library with all the project sources
 # This is useful for building the tests
 add_library(GITCY
-	Data.cpp
+	Value.cpp
 	Function.cpp
 	Functions.cpp
 	Interpreter.cpp

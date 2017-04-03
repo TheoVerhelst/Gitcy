@@ -7,7 +7,7 @@
 #include <experimental/optional>
 
 // Forward declaration
-class Data;
+class Value;
 
 /// A parameter type in an overload. If it is default-constructed, then that
 /// represents no restriction on the parameter type. If the second constructor
@@ -23,7 +23,7 @@ class SignatureType
 		/// Creates a SignatureType object representing the specified type.
 		/// This function is used instead of the constructor because we cannot
 		/// write a template constructor with an empty parameter list.
-		/// \tparam If given, either void (for no type restriction) or one of Data::types.
+		/// \tparam If given, either void (for no type restriction) or one of Value::types.
 		/// \returns An object matching the given type \a T.
 		template <typename T = void>
 		static SignatureType create();
@@ -32,7 +32,7 @@ class SignatureType
 		/// \param data The argument to compare.
 		/// \returns True if the given argument matches this object, false
 		/// otherwise.
-		bool matches(const Data& data) const;
+		bool matches(const Value& data) const;
 
 		/// Overload of the stream output operator. It display nice names for
 		/// types, such as "Integer", "String", etc...
@@ -51,13 +51,13 @@ class SignatureType
 		std::experimental::optional<std::type_index> _typeIndex;
 };
 
-#include <Data.hpp>
+#include <Value.hpp>
 
 template <typename T>
 SignatureType SignatureType::create()
 {
-	// Assert that T is either void or one that Data can contain
-	static_assert(std::disjunction<std::is_void<T>, std::bool_constant<Data::canHoldType<T>()>>::value, "type T must be one of Data::types.");
+	// Assert that T is either void or one that Value can contain
+	static_assert(std::disjunction<std::is_void<T>, std::bool_constant<Value::canHoldType<T>()>>::value, "type T must be one of Value::types.");
 
 	SignatureType res;
 	if(not std::is_void<T>::value)

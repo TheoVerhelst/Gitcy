@@ -32,7 +32,7 @@ namespace BuiltinOverloads
 	{
 	}
 
-	Data Print::operator()(const std::vector<Data>& arguments) const
+	Value Print::operator()(const std::vector<Value>& arguments) const
 	{
 		std::cout << std::boolalpha << Utils::join(" ", arguments.begin(), arguments.end()) << std::endl;
 		return Null();
@@ -43,7 +43,7 @@ namespace BuiltinOverloads
 	{
 	}
 
-	Data Do::operator()(const std::vector<Data>& arguments) const
+	Value Do::operator()(const std::vector<Value>& arguments) const
 	{
 		if(arguments.empty())
 			return Null();
@@ -55,10 +55,10 @@ namespace BuiltinOverloads
 	{
 	}
 
-	Data Define::operator()(const std::vector<Data>& arguments) const
+	Value Define::operator()(const std::vector<Value>& arguments) const
 	{
-		const Data value{arguments.at(1)};
-		// TODO // _interpreter._variables.emplace(arguments.at(0).get<std::string>(), std::make_shared<Data>(value));
+		const Value value{arguments.at(1)};
+		// TODO // _interpreter._variables.emplace(arguments.at(0).get<std::string>(), std::make_shared<Value>(value));
 		return value;
 	}
 
@@ -67,7 +67,7 @@ namespace BuiltinOverloads
 	{
 	}
 
-	Data And::operator()(const std::vector<Data>& arguments) const
+	Value And::operator()(const std::vector<Value>& arguments) const
 	{
 		const std::vector<bool> convertedArguments{Utils::convert<bool>(arguments)};
 		return std::find(convertedArguments.begin(), convertedArguments.end(), false) == convertedArguments.end();
@@ -78,7 +78,7 @@ namespace BuiltinOverloads
 	{
 	}
 
-	Data Or::operator()(const std::vector<Data>& arguments) const
+	Value Or::operator()(const std::vector<Value>& arguments) const
 	{
 		const std::vector<bool> convertedArguments{Utils::convert<bool>(arguments)};
 		return std::find(convertedArguments.begin(), convertedArguments.end(), true) != convertedArguments.end();
@@ -89,9 +89,9 @@ namespace BuiltinOverloads
 	{
 	}
 
-	Data Modulo::operator()(const std::vector<Data>& arguments) const
+	Value Modulo::operator()(const std::vector<Value>& arguments) const
 	{
-		Data lhs(arguments[0]), rhs(arguments[1]);
+		Value lhs(arguments[0]), rhs(arguments[1]);
 		if(rhs.get<int>() == 0)
 			throw ScriptError("modulo by zero");
 		return lhs.get<int>() % rhs.get<int>();
@@ -102,9 +102,9 @@ namespace BuiltinOverloads
 	{
 	}
 
-	Data DoubleModulo::operator()(const std::vector<Data>& arguments) const
+	Value DoubleModulo::operator()(const std::vector<Value>& arguments) const
 	{
-		Data lhs(arguments[0]), rhs(arguments[1]);
+		Value lhs(arguments[0]), rhs(arguments[1]);
 		if(rhs.get<double>() == 0.)
 			throw ScriptError("modulo by zero");
 		return std::fmod(lhs.get<double>(), rhs.get<double>());
@@ -115,9 +115,9 @@ namespace BuiltinOverloads
 	{
 	}
 
-	Data Not::operator()(const std::vector<Data>& arguments) const
+	Value Not::operator()(const std::vector<Value>& arguments) const
 	{
-		Data lhs(arguments[0]);
+		Value lhs(arguments[0]);
 		return not lhs.get<bool>();
 	}
 }

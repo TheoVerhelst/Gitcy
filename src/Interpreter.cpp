@@ -27,27 +27,27 @@ Interpreter::Interpreter(const std::string& filename):
 	_filename(filename),
 	_variables
 	{
-		{"print",  std::make_shared<Data>(_functions.print)},
-		{"do",     std::make_shared<Data>(_functions.do_)},
-		{"define", std::make_shared<Data>(_functions.define)},
-		{"<",      std::make_shared<Data>(_functions.lowerThan)},
-		{">",      std::make_shared<Data>(_functions.greaterThan)},
-		{"<=",     std::make_shared<Data>(_functions.lowerEqual)},
-		{">=",     std::make_shared<Data>(_functions.greaterEqual)},
-		{"=",      std::make_shared<Data>(_functions.equal)},
-		{"is",     std::make_shared<Data>(_functions.equal)},
-		{"!=",     std::make_shared<Data>(_functions.notEqual)},
-		{"and",    std::make_shared<Data>(_functions.and_)},
-		{"or",     std::make_shared<Data>(_functions.or_)},
-		{"+",      std::make_shared<Data>(_functions.add)},
-		{"-",      std::make_shared<Data>(_functions.substract)},
-		{"*",      std::make_shared<Data>(_functions.multiply)},
-		{"/",      std::make_shared<Data>(_functions.divide)},
-		{"%",      std::make_shared<Data>(_functions.modulo)},
-		{"!",      std::make_shared<Data>(_functions.not_)},
-		{"true",   std::make_shared<Data>(true)},
-		{"false",  std::make_shared<Data>(false)},
-		{"null",   std::make_shared<Data>(Null())}
+		{"print",  std::make_shared<Value>(_functions.print)},
+		{"do",     std::make_shared<Value>(_functions.do_)},
+		{"define", std::make_shared<Value>(_functions.define)},
+		{"<",      std::make_shared<Value>(_functions.lowerThan)},
+		{">",      std::make_shared<Value>(_functions.greaterThan)},
+		{"<=",     std::make_shared<Value>(_functions.lowerEqual)},
+		{">=",     std::make_shared<Value>(_functions.greaterEqual)},
+		{"=",      std::make_shared<Value>(_functions.equal)},
+		{"is",     std::make_shared<Value>(_functions.equal)},
+		{"!=",     std::make_shared<Value>(_functions.notEqual)},
+		{"and",    std::make_shared<Value>(_functions.and_)},
+		{"or",     std::make_shared<Value>(_functions.or_)},
+		{"+",      std::make_shared<Value>(_functions.add)},
+		{"-",      std::make_shared<Value>(_functions.substract)},
+		{"*",      std::make_shared<Value>(_functions.multiply)},
+		{"/",      std::make_shared<Value>(_functions.divide)},
+		{"%",      std::make_shared<Value>(_functions.modulo)},
+		{"!",      std::make_shared<Value>(_functions.not_)},
+		{"true",   std::make_shared<Value>(true)},
+		{"false",  std::make_shared<Value>(false)},
+		{"null",   std::make_shared<Value>(Null())}
 	}
 {
 	loadScript();
@@ -122,10 +122,10 @@ EvaluationNode Interpreter::parseToken(const std::string& token)
 {
 	// Real literal
 	if(std::regex_match(token, realLiteralRegex))
-		return Data(stof(token));
+		return Value(stof(token));
 	// Integer literal
 	else if(std::regex_match(token, integerLiteralRegex))
-		return Data(stoi(token));
+		return Value(stoi(token));
 	// String literal
 	else if(std::regex_match(token, stringLiteralRegex))
 	{
@@ -145,7 +145,7 @@ EvaluationNode Interpreter::parseToken(const std::string& token)
 			else
 				res += *it;
 		}
-		return Data(res);
+		return Value(res);
 	}
 	// Identifier
 	else if(std::regex_match(token, identifierRegex))
@@ -157,7 +157,7 @@ EvaluationNode Interpreter::parseToken(const std::string& token)
 		throw ScriptError("Unrecognized token: \"" + token + "\"");
 }
 
-Data Interpreter::evaluateTree(const Tree<EvaluationNode>::Ptr& expression)
+Value Interpreter::evaluateTree(const Tree<EvaluationNode>::Ptr& expression)
 {
 	const EvaluationNode node{expression->getValue()};
 	if(node.type() == typeid(FunctionCall))
@@ -166,21 +166,21 @@ Data Interpreter::evaluateTree(const Tree<EvaluationNode>::Ptr& expression)
 			throw ScriptError("Function call whithout function to call");
 
 		// Evaluate the first child, it is the function to call
-		const Data& functionData{evaluateTree(*expression->begin())};
+		const Value& functionData{evaluateTree(*expression->begin())};
 		// Check that the first child is a function
 		if(not functionData.holdsType<Function>())
 			throw ScriptError("Function call on non-function expression (got type \"" + functionData.getTypeName() + "\")");
 
 		const Function& function{functionData.get<Function>()};
-		std::vector<Data> args;
+		std::vector<Value> args;
 		// Loop over the children from the second child to the last one
 		for(auto it(std::next(expression->begin())); it != expression->end(); ++it)
 			args.push_back(evaluateTree(*it));
 
 		return function(args);
 	}
-	else if(node.type() == typeid(Data))
-		return boost::get<Data>(node);
+	else if(node.type() == typeid(Value))
+		return boost::get<Value>(node);
 	else // Identifier
 	{
 		const Identifier identifier{boost::get<Identifier>(node)};

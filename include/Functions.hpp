@@ -12,7 +12,7 @@
 
 // Forward declarations
 class Interpreter;
-class Data;
+class Value;
 
 /// Holds all functions that are written in C++ but callable in scripts.
 /// These functions are public const variables, and are initialized in the
@@ -50,7 +50,7 @@ namespace BuiltinOverloads
 		public: \
 			className(); \
  \
-			virtual Data operator()(const std::vector<Data>& arguments) const override; \
+			virtual Value operator()(const std::vector<Value>& arguments) const override; \
 	}; \
 
 	#define DEFINE_TEMPLATE_OVERLOAD(className) \
@@ -80,7 +80,7 @@ namespace BuiltinOverloads
 	#undef DEFINE_TEMPLATE_OVERLOAD
 }
 
-#include <Data.hpp>
+#include <Value.hpp>
 #include <ScriptError.hpp>
 
 namespace BuiltinOverloads
@@ -92,7 +92,7 @@ namespace BuiltinOverloads
 	}
 
 	template <typename T>
-	Data LowerThan<T>::operator()(const std::vector<Data>& arguments) const
+	Value LowerThan<T>::operator()(const std::vector<Value>& arguments) const
 	{
 		const std::vector<T> convertedArguments{Utils::convert<T>(arguments)};
 		return std::adjacent_find(convertedArguments.begin(), convertedArguments.end(), std::greater_equal<T>()) == convertedArguments.end();
@@ -105,7 +105,7 @@ namespace BuiltinOverloads
 	}
 
 	template <typename T>
-	Data GreaterThan<T>::operator()(const std::vector<Data>& arguments) const
+	Value GreaterThan<T>::operator()(const std::vector<Value>& arguments) const
 	{
 		const std::vector<T> convertedArguments{Utils::convert<T>(arguments)};
 		return std::adjacent_find(convertedArguments.begin(), convertedArguments.end(), std::less_equal<T>()) == convertedArguments.end();
@@ -118,7 +118,7 @@ namespace BuiltinOverloads
 	}
 
 	template <typename T>
-	Data LowerEqual<T>::operator()(const std::vector<Data>& arguments) const
+	Value LowerEqual<T>::operator()(const std::vector<Value>& arguments) const
 	{
 		const std::vector<T> convertedArguments{Utils::convert<T>(arguments)};
 		return std::adjacent_find(convertedArguments.begin(), convertedArguments.end(), std::greater<T>()) == convertedArguments.end();
@@ -131,7 +131,7 @@ namespace BuiltinOverloads
 	}
 
 	template <typename T>
-	Data GreaterEqual<T>::operator()(const std::vector<Data>& arguments) const
+	Value GreaterEqual<T>::operator()(const std::vector<Value>& arguments) const
 	{
 		const std::vector<T> convertedArguments{Utils::convert<T>(arguments)};
 		return std::adjacent_find(convertedArguments.begin(), convertedArguments.end(), std::less<T>()) == convertedArguments.end();
@@ -144,7 +144,7 @@ namespace BuiltinOverloads
 	}
 
 	template <typename T>
-	Data Equal<T>::operator()(const std::vector<Data>& arguments) const
+	Value Equal<T>::operator()(const std::vector<Value>& arguments) const
 	{
 		const std::vector<T> convertedArguments{Utils::convert<T>(arguments)};
 		return std::adjacent_find(convertedArguments.begin(), convertedArguments.end(), std::not_equal_to<T>()) == convertedArguments.end();
@@ -157,7 +157,7 @@ namespace BuiltinOverloads
 	}
 
 	template <typename T>
-	Data NotEqual<T>::operator()(const std::vector<Data>& arguments) const
+	Value NotEqual<T>::operator()(const std::vector<Value>& arguments) const
 	{
 		return Not()({Equal<T>()(arguments)});
 	}
@@ -169,7 +169,7 @@ namespace BuiltinOverloads
 	}
 
 	template <typename T>
-	Data Add<T>::operator()(const std::vector<Data>& arguments) const
+	Value Add<T>::operator()(const std::vector<Value>& arguments) const
 	{
 		const std::vector<T> convertedArguments{Utils::convert<T>(arguments)};
 		return std::accumulate(convertedArguments.begin(), convertedArguments.end(), T());
@@ -182,7 +182,7 @@ namespace BuiltinOverloads
 	}
 
 	template <typename T>
-	Data Substract<T>::operator()(const std::vector<Data>& arguments) const
+	Value Substract<T>::operator()(const std::vector<Value>& arguments) const
 	{
 		if(arguments.size() == 1)
 			return -arguments.front().get<T>();
@@ -200,7 +200,7 @@ namespace BuiltinOverloads
 	}
 
 	template <typename T>
-	Data Multiply<T>::operator()(const std::vector<Data>& arguments) const
+	Value Multiply<T>::operator()(const std::vector<Value>& arguments) const
 	{
 		const std::vector<T> convertedArguments{Utils::convert<T>(arguments)};
 		return std::accumulate(convertedArguments.begin(), convertedArguments.end(), static_cast<T>(1), std::multiplies<T>());
@@ -213,7 +213,7 @@ namespace BuiltinOverloads
 	}
 
 	template <typename T>
-	Data Divide<T>::operator()(const std::vector<Data>& arguments) const
+	Value Divide<T>::operator()(const std::vector<Value>& arguments) const
 	{
 		const std::vector<T> convertedArguments{Utils::convert<T>(arguments)};
 		// If there is a zero in the values [begin + 1, end)

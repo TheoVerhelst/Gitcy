@@ -6,7 +6,7 @@
 #include <ostream>
 #include <vector>
 #include <algorithm>
-#include <Data.hpp>
+#include <Value.hpp>
 
 /// Various functions and classes that are not directly related to the project.
 namespace Utils
@@ -36,7 +36,7 @@ namespace Utils
 	std::string toString(const T& object);
 
 	template <typename T>
-	std::vector<T> convert(const std::vector<Data>& args);
+	std::vector<T> convert(const std::vector<Value>& args);
 
 	/// This class allows to temporarily listen to all the output being sent to
 	/// a std::ostream instance (such as std::cout or std::cerr), in order to
@@ -92,11 +92,11 @@ namespace Utils
 
 
 	template <typename T>
-	std::vector<T> convert(const std::vector<Data>& args)
+	std::vector<T> convert(const std::vector<Value>& args)
 	{
 		std::vector<T> convertedArguments;
 		std::transform(args.begin(), args.end(), std::back_inserter(convertedArguments),
-				[](const Data& data)
+				[](const Value& data)
 				{
 					return data.get<T>();
 				});

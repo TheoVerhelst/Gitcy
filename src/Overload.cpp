@@ -1,9 +1,9 @@
 #include <Utils.hpp>
 #include <Function.hpp>
-#include <Data.hpp>
+#include <Value.hpp>
 #include <Overload.hpp>
 
-bool Overload::matches(const std::vector<Data>& arguments) const
+bool Overload::matches(const std::vector<Value>& arguments) const
 {
 	if(arguments.size() < _typeList.size() or (not _isVariadic and arguments.size() != _typeList.size()))
 		return false;

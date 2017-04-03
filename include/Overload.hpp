@@ -6,7 +6,7 @@
 #include <SignatureType.hpp>
 
 // Forward declarations
-class Data;
+class Value;
 
 /// An overload is an implementation of a script function. While a script
 /// function is just a list of overloads bound to a name, an overload contains
@@ -31,13 +31,13 @@ class Overload
 		/// \param arguments The argument list.
 		/// \returns True is the ardument list matches this overload, false
 		/// otherwise.
-		bool matches(const std::vector<Data>& arguments) const;
+		bool matches(const std::vector<Value>& arguments) const;
 
 		/// Call the function with the given arguments.
 		/// \pre matches(arguments)
 		/// \param arguments The arguments to forward to the function.
 		/// \return The return value of the function.
-		virtual Data operator()(const std::vector<Data>& arguments) const = 0;
+		virtual Value operator()(const std::vector<Value>& arguments) const = 0;
 
 		/// Overload of the output operator. It just shows the list of types
 		/// that are accepted in this overload, with an ellipsis if it is
