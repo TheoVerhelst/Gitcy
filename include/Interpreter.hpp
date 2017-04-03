@@ -8,7 +8,7 @@
 #include <memory>
 #include <Tree.hpp>
 #include <EvaluationNode.hpp>
-#include <Functions.hpp>
+#include <BuiltinFunctions.hpp>
 
 /// Main class. Reads a file given its filename and interprets it.
 class Interpreter
@@ -26,7 +26,7 @@ class Interpreter
 		typedef std::vector<std::string> TokenVector;
 		typedef TokenVector::const_iterator TokenIterator;
 
-		friend class Functions;
+		friend class BuiltinFunctions;
 
 		/// All the functions that can be called in the scripts. \see Functions
 		BuiltinFunctions _functions;

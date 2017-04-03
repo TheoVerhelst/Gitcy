@@ -1,15 +1,16 @@
 # Make a library with all the project sources
 # This is useful for building the tests
 add_library(GITCY
-	Value.cpp
+	BuiltinFunctions.cpp
+	BuiltinFunctionsOverloads.cpp
 	Function.cpp
-	Functions.cpp
 	Interpreter.cpp
 	Null.cpp
 	Overload.cpp
 	SignatureType.cpp
 	ScriptError.cpp
 	Utils.cpp
+	Value.cpp
 	)
 
 # Create the main executable

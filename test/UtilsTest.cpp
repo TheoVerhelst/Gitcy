@@ -1,7 +1,7 @@
 #include <sstream>
 #include <iostream>
 #include <boost/test/unit_test.hpp>
-#include <Functions.hpp>
+#include <BuiltinFunctions.hpp>
 #include <Utils.hpp>
 
 class UtilsTestFixture
