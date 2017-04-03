@@ -10,8 +10,10 @@ set(TEST_SOURCES
 	DataTest.cpp
 	FunctionTest.cpp
 	NullTest.cpp
+	SignatureTypeTest.cpp
+	UtilsTest.cpp
 	main.cpp
-	)
+)
 
 # Create the main test executable
 add_executable(${EXECUTABLE_NAME}Test ${TEST_SOURCES})

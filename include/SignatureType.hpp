@@ -57,7 +57,7 @@ template <typename T>
 SignatureType SignatureType::create()
 {
 	// Assert that T is either void or one that Data can contain
-	static_assert(std::disjunction<std::is_void<T>, std::bool_constant<Data::canHoldType<T>()>>::value, "type T  must be one of Data::types.");
+	static_assert(std::disjunction<std::is_void<T>, std::bool_constant<Data::canHoldType<T>()>>::value, "type T must be one of Data::types.");
 
 	SignatureType res;
 	if(not std::is_void<T>::value)

@@ -63,8 +63,6 @@ namespace Utils
 			std::streambuf* _streamBuffer;
 			std::ostringstream _localStream;
 	};
-
-
 }
 
 namespace Utils
