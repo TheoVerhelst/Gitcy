@@ -32,7 +32,7 @@ class Function
 		/// matching overload.
 		/// \param arguments The arguments to pass to the overlaod functor.
 		/// \returns The return value of the overload functor.
-		Value operator()(const std::vector<Value>& arguments) const;
+		Value call(const std::vector<Value>& arguments) const;
 
 		/// Output operator overload.
 		/// \param os The stream to output to.

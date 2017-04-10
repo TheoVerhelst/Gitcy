@@ -12,7 +12,7 @@ class OneInt : public Overload
 		{
 		}
 
-		virtual Value operator()(const std::vector<Value>&) const override
+		virtual Value call(const std::vector<Value>&) const override
 		{
 			return std::string("blah");
 		}
@@ -26,7 +26,7 @@ class VariadicOneDouble : public Overload
 		{
 		}
 
-		virtual Value operator()(const std::vector<Value>&) const override
+		virtual Value call(const std::vector<Value>&) const override
 		{
 			return std::string("blah");
 		}
@@ -40,7 +40,7 @@ class VariadicTwoDouble : public Overload
 		{
 		}
 
-		virtual Value operator()(const std::vector<Value>&) const override
+		virtual Value call(const std::vector<Value>&) const override
 		{
 			return std::string("blah");
 		}
@@ -63,17 +63,17 @@ BOOST_FIXTURE_TEST_SUITE(FunctionTest, FunctionTestFixture)
 
 BOOST_AUTO_TEST_CASE(callOperatorNormal)
 {
-	BOOST_TEST(function({3}).get<std::string>() == "blah");
+	BOOST_TEST(function.call({3}).get<std::string>() == "blah");
 }
 
 BOOST_AUTO_TEST_CASE(callOperatorAmbiguous)
 {
-	BOOST_CHECK_THROW(function({2.2, 2.3}), ScriptError);
+	BOOST_CHECK_THROW(function.call({2.2, 2.3}), ScriptError);
 }
 
 BOOST_AUTO_TEST_CASE(callOperatorNoOverloadFound)
 {
-	BOOST_CHECK_THROW(function({2, std::string("bluh")}), ScriptError);
+	BOOST_CHECK_THROW(function.call({2, std::string("bluh")}), ScriptError);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

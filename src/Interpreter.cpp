@@ -6,6 +6,7 @@
 #include <Function.hpp>
 #include <ScriptError.hpp>
 #include <Utils.hpp>
+#include <BuiltinMacros.hpp>
 
 const std::string Interpreter::realLiteral("\\d*\\.\\d*");
 const std::string Interpreter::integerLiteral("\\d+");
@@ -62,7 +63,7 @@ void Interpreter::loadScript()
 
 void Interpreter::interpret()
 {
-	evaluateTree(_evaluationTree);
+	BuiltinMacros::Evaluate().call(_evaluationTree, _variables);
 }
 
 Interpreter::TokenVector Interpreter::tokenize(std::string code)
@@ -155,41 +156,6 @@ EvaluationNode Interpreter::parseToken(const std::string& token)
 		return FunctionCall();
 	else
 		throw ScriptError("Unrecognized token: \"" + token + "\"");
-}
-
-Value Interpreter::evaluateTree(const Tree<EvaluationNode>::Ptr& expression)
-{
-	const EvaluationNode node{expression->getValue()};
-	if(node.type() == typeid(FunctionCall))
-	{
-		if(not expression->hasChildren())
-			throw ScriptError("Function call whithout function to call");
-
-		// Evaluate the first child, it is the function to call
-		const Value& functionData{evaluateTree(*expression->begin())};
-		// Check that the first child is a function
-		if(not functionData.holdsType<Function>())
-			throw ScriptError("Function call on non-function expression (got type \"" + functionData.getTypeName() + "\")");
-
-		const Function& function{functionData.get<Function>()};
-		std::vector<Value> args;
-		// Loop over the children from the second child to the last one
-		for(auto it(std::next(expression->begin())); it != expression->end(); ++it)
-			args.push_back(evaluateTree(*it));
-
-		return function(args);
-	}
-	else if(node.type() == typeid(Value))
-		return boost::get<Value>(node);
-	else // Identifier
-	{
-		const Identifier identifier{boost::get<Identifier>(node)};
-		auto it(_variables.find(identifier));
-		if(it == _variables.end())
-			throw ScriptError("Unknown variable: \"" + identifier + "\"");
-
-		return *(it->second);
-	}
 }
 
 Interpreter::TokenIterator Interpreter::findClosingParenthesis(Interpreter::TokenIterator from, Interpreter::TokenIterator to)

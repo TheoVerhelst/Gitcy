@@ -3,8 +3,10 @@
 add_library(GITCY
 	BuiltinFunctions.cpp
 	BuiltinFunctionsOverloads.cpp
+	BuiltinMacros.cpp
 	Function.cpp
 	Interpreter.cpp
+	Macro.cpp
 	Null.cpp
 	Overload.cpp
 	SignatureType.cpp

@@ -5,6 +5,7 @@
 #include <boost/blank.hpp>
 #include <boost/variant.hpp>
 #include <Value.hpp>
+#include <Tree.hpp>
 
 /// Represents an identifier in the evaluation tree of the interpreter. In
 /// facts, we only need to store the name of the identifier.
@@ -20,5 +21,7 @@ typedef boost::blank FunctionCall;
 /// evaluate at runtime, a literal representing a value or a function call.
 /// This type allows to store them seamlessly.
 typedef boost::variant<Identifier, Value, FunctionCall> EvaluationNode;
+
+typedef Tree<EvaluationNode> EvaluationTree;
 
 #endif // EVALUATION_NODE_HPP

@@ -11,7 +11,7 @@ Function::Function(const std::vector<std::shared_ptr<Overload>>& overloads):
 {
 }
 
-Value Function::operator()(const std::vector<Value>& arguments) const
+Value Function::call(const std::vector<Value>& arguments) const
 {
 	// Find the overloads that matches the arguments, and split them according to their variadicity (variadicness ?)
 	std::vector<std::shared_ptr<Overload>> variadicCandidates, nonVariadicCandidates;
@@ -39,7 +39,7 @@ Value Function::operator()(const std::vector<Value>& arguments) const
 						Utils::toString(Function(candidateSet.get())));
 			}
 			else
-				return (*candidateSet.get().front())(arguments);
+				return candidateSet.get().front()->call(arguments);
 		}
 	}
 

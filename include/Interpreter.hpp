@@ -95,12 +95,6 @@ class Interpreter
 		/// \returns The corresponding evaluation node.
 		static EvaluationNode parseToken(const std::string& token);
 
-		/// Evaluates an evaluation tree, by calling recursively the functions
-		/// and evaluating the values and identifiers.
-		/// \param expression The evaluation tree to evaluate.
-		/// \return The return value.
-		Value evaluateTree(const Tree<EvaluationNode>::Ptr& expression);
-
 		/// Finds the closing parenthesis corresponding to the opening
 		/// parenthesis token pointed by the iterator \a from.
 		/// \param from The starting iterator where to begin the search.

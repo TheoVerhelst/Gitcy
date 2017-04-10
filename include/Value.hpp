@@ -11,6 +11,7 @@
 
 // Forward declaration
 class Function;
+class Macro;
 
 /// The type used in C++ to represent any value in script. It uses internally
 /// a boost::variant, but exposes only the needed interface.
@@ -44,7 +45,7 @@ class Value
 		friend std::ostream& operator<<(std::ostream& os, const Value& data);
 
 	private:
-		typedef boost::variant<Null, bool, int, double, std::string, boost::recursive_wrapper<Function>> Variant;
+		typedef boost::variant<Null, bool, int, double, std::string, boost::recursive_wrapper<Function>, boost::recursive_wrapper<std::shared_ptr<Macro>>> Variant;
 
 		/// Actual variant.
 		Variant _variant;
@@ -71,10 +72,8 @@ template <typename T>
 bool Value::holdsType() const
 {
 	// Statically checks if T is in the Variant types
-	if(not canHoldType<T>())
-		return false;
-	else
-		return _variant.type() == typeid(T);
+	static_assert(canHoldType<T>(), "T is not in the Variant types");
+	return _variant.type() == typeid(T);
 }
 
 template <typename T>

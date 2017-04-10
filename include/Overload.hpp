@@ -37,7 +37,7 @@ class Overload
 		/// \pre matches(arguments)
 		/// \param arguments The arguments to forward to the function.
 		/// \return The return value of the function.
-		virtual Value operator()(const std::vector<Value>& arguments) const = 0;
+		virtual Value call(const std::vector<Value>& arguments) const = 0;
 
 		/// Overload of the output operator. It just shows the list of types
 		/// that are accepted in this overload, with an ellipsis if it is
