@@ -9,6 +9,7 @@ add_library(GITCY
 	Macro.cpp
 	Null.cpp
 	Overload.cpp
+	Scope.cpp
 	SignatureType.cpp
 	ScriptError.cpp
 	Utils.cpp

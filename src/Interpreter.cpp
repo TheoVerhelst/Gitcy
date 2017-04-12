@@ -26,8 +26,8 @@ const std::map<char, char> Interpreter::escapedCharacters
 
 Interpreter::Interpreter(const std::string& filename):
 	_filename(filename),
-	_variables
-	{
+	_globalScope
+	{{
 		{"print",  std::make_shared<Value>(_functions.print)},
 		{"do",     std::make_shared<Value>(_functions.do_)},
 		{"define", std::make_shared<Value>(_functions.define)},
@@ -49,7 +49,7 @@ Interpreter::Interpreter(const std::string& filename):
 		{"true",   std::make_shared<Value>(true)},
 		{"false",  std::make_shared<Value>(false)},
 		{"null",   std::make_shared<Value>(Null())}
-	}
+	}}
 {
 	loadScript();
 }
@@ -63,7 +63,7 @@ void Interpreter::loadScript()
 
 void Interpreter::interpret()
 {
-	BuiltinMacros::Evaluate().call(_evaluationTree, _variables);
+	BuiltinMacros::Evaluate().call(_evaluationTree, _globalScope);
 }
 
 Interpreter::TokenVector Interpreter::tokenize(std::string code)

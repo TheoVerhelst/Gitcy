@@ -11,27 +11,27 @@ namespace BuiltinMacros
 			/// Evaluates an evaluation tree, by calling recursively the functions
 			/// or macro, and evaluating the values and identifiers.
 			/// \param expression The evaluation tree to evaluate.
-			/// \param variables The variables currently defined.
+			/// \param scope The variables currently defined in the calling scope.
 			/// \returns The resulting value of the evaluation.
-			virtual Value call(const Tree<EvaluationNode>::Ptr& expression, std::map<std::string, std::shared_ptr<Value>>& variables) override;
+			virtual Value call(const Tree<EvaluationNode>::Ptr& expression, const Scope& scope) override;
 	};
 
 	class Define : public Macro
 	{
 		public:
-			Value call(const Tree<EvaluationNode>::Ptr& tree, std::map<std::string, std::shared_ptr<Value>>& variables) override;
+			Value call(const Tree<EvaluationNode>::Ptr& expression, const Scope& scope) override;
 	};
 
 	class If : public Macro
 	{
 		public:
-			Value call(const Tree<EvaluationNode>::Ptr& tree, std::map<std::string, std::shared_ptr<Value>>& variables) override;
+			Value call(const Tree<EvaluationNode>::Ptr& expression, const Scope& scope) override;
 	};
 
 	class DefineFunction : public Macro
 	{
 		public:
-			Value call(const Tree<EvaluationNode>::Ptr& tree, std::map<std::string, std::shared_ptr<Value>>& variables) override;
+			Value call(const Tree<EvaluationNode>::Ptr& expression, const Scope& scope) override;
 	};
 }
 

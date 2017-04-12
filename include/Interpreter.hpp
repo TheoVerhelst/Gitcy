@@ -9,6 +9,7 @@
 #include <Tree.hpp>
 #include <EvaluationNode.hpp>
 #include <BuiltinFunctions.hpp>
+#include <Scope.hpp>
 
 /// Main class. Reads a file given its filename and interprets it.
 class Interpreter
@@ -34,8 +35,8 @@ class Interpreter
 		/// The filename of the interpreted script. It is mainly used in error messages.
 		const std::string _filename;
 
-		/// The variables, as pairs of name/value.
-		std::map<std::string, std::shared_ptr<Value>> _variables;
+		/// The global scope.
+		Scope _globalScope;
 
 		/// After loading the script, this variables holds the script as a tree ready to be evaluated.
 		Tree<EvaluationNode>::Ptr _evaluationTree;

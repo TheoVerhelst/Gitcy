@@ -4,7 +4,7 @@
 
 namespace BuiltinMacros
 {
-	Value Evaluate::call(const Tree<EvaluationNode>::Ptr& expression, std::map<std::string, std::shared_ptr<Value>>& variables)
+	Value Evaluate::call(const Tree<EvaluationNode>::Ptr& expression, const Scope& scope)
 	{
 		const EvaluationNode node{expression->getValue()};
 		if(node.type() == typeid(FunctionCall))
@@ -13,7 +13,7 @@ namespace BuiltinMacros
 				throw ScriptError("Call expression without macro/function to call");
 
 			// Evaluate the first child, it is the function/macro to call
-			const Value& functionData{call(*expression->begin(), variables)};
+			const Value& functionData{call(*expression->begin(), scope)};
 
 			// Check that the first child is a function
 			if(functionData.holdsType<Function>())
@@ -22,12 +22,12 @@ namespace BuiltinMacros
 				std::vector<Value> args;
 				// Loop over the children from the second child to the last one
 				for(auto it(std::next(expression->begin())); it != expression->end(); ++it)
-					args.push_back(call(*it, variables));
+					args.push_back(call(*it, scope));
 
 				return function.call(args);
 			}
 			else if(functionData.holdsType<std::shared_ptr<Macro>>())
-				return functionData.get<std::shared_ptr<Macro>>()->call(expression, variables);
+				return functionData.get<std::shared_ptr<Macro>>()->call(expression, scope);
 			else
 				throw ScriptError("Call expression on non-callable value (got type \"" + functionData.getTypeName() + "\")");
 		}
@@ -36,25 +36,28 @@ namespace BuiltinMacros
 		else // Identifier
 		{
 			const Identifier identifier{boost::get<Identifier>(node)};
-			auto it(variables.find(identifier));
-			if(it == variables.end())
+			try
+			{
+				return scope.getVariable(identifier);
+			}
+			catch(const std::out_of_range& e)
+			{
 				throw ScriptError("Unknown variable: \"" + identifier + "\"");
-
-			return *(it->second);
+			}
 		}
 	}
 
-	Value Define::call(const Tree<EvaluationNode>::Ptr& tree, std::map<std::string, std::shared_ptr<Value>>& variables)
+	Value Define::call(const Tree<EvaluationNode>::Ptr& expression, const Scope& scope)
 	{
 		return true;
 	}
 
-	Value If::call(const Tree<EvaluationNode>::Ptr& tree, std::map<std::string, std::shared_ptr<Value>>& variables)
+	Value If::call(const Tree<EvaluationNode>::Ptr& expression, const Scope& scope)
 	{
 		return true;
 	}
 
-	Value DefineFunction::call(const Tree<EvaluationNode>::Ptr& tree, std::map<std::string, std::shared_ptr<Value>>& variables)
+	Value DefineFunction::call(const Tree<EvaluationNode>::Ptr& expression, const Scope& scope)
 	{
 		return true;
 	}

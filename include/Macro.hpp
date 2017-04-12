@@ -6,6 +6,7 @@
 #include <memory>
 #include <Tree.hpp>
 #include <EvaluationNode.hpp>
+#include <Scope.hpp>
 
 // Forward declarations
 class Value;
@@ -17,7 +18,7 @@ class Macro
 		virtual ~Macro() = default;
 
 
-		virtual Value call(const Tree<EvaluationNode>::Ptr&, std::map<std::string, std::shared_ptr<Value>>&) = 0;
+		virtual Value call(const Tree<EvaluationNode>::Ptr& expression, const Scope& scope) = 0;
 };
 
 #endif // MACRO_HPP
