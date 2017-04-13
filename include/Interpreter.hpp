@@ -17,7 +17,7 @@ class Interpreter
 	public:
 		/// Constructor.
 		/// \param filename The filename of the script to interpret.
-		Interpreter(const std::string& filename);
+		explicit Interpreter(const std::string& filename);
 
 		/// Interpret the script loaded at construction.
 		void interpret();

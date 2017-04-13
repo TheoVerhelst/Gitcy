@@ -47,7 +47,7 @@ namespace Utils
 		public:
 			/// Constructor.
 			/// \param listenedStream The stream to listen to.
-			OstreamListener(std::ostream& listenedStream);
+			explicit OstreamListener(std::ostream& listenedStream);
 
 			/// Destructor. Sets the listened stream to its initial state.
 			~OstreamListener();

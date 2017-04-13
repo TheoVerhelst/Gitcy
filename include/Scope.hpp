@@ -12,7 +12,7 @@ class Scope
 	public:
 		/// Constructor.
 		/// \param variables The variables of the scope.
-		Scope(std::map<std::string, std::shared_ptr<Value>> variables);
+		explicit Scope(const std::map<std::string, std::shared_ptr<Value>>& variables);
 
 		/// Get the variable bound to the name \a name.
 		/// \param name The name of the variable to get.

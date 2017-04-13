@@ -24,7 +24,7 @@ class Function : public Callable
 	public:
 		/// Constructor.
 		/// \param overloads A list of overloads.
-		Function(const std::vector<std::shared_ptr<Overload>>& overloads);
+		explicit Function(const std::vector<std::shared_ptr<Overload>>& overloads);
 
 		/// Calls the function pointer of the first matching overload.
 		/// \param expression The expression of the arguments to pass to the overload functor.

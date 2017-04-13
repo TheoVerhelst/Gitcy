@@ -1,7 +1,7 @@
 #include <Value.hpp>
 #include <Scope.hpp>
 
-Scope::Scope(std::map<std::string, std::shared_ptr<Value>> variables):
+Scope::Scope(const std::map<std::string, std::shared_ptr<Value>>& variables):
 	_variables{variables}
 {
 }
@@ -15,4 +15,3 @@ void Scope::setVariable(const std::string& name, const Value& newValue)
 {
 	_variables.at(name) = std::make_shared<Value>(newValue);
 }
-

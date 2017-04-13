@@ -9,7 +9,7 @@ class ScriptError: public std::runtime_error
 	public:
 		/// Constructor.
 		/// \param what A string explaining the error.
-		ScriptError(const std::string& what="") throw();
+		explicit ScriptError(const std::string& what="") throw();
 };
 
 #endif // SCRIPT_ERROR_HPP
