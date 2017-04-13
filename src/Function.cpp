@@ -4,6 +4,7 @@
 #include <Utils.hpp>
 #include <ScriptError.hpp>
 #include <Value.hpp>
+#include <BuiltinCallables.hpp>
 #include <Function.hpp>
 
 Function::Function(const std::vector<std::shared_ptr<Overload>>& overloads):
@@ -57,7 +58,7 @@ std::vector<Value> Function::getArgumentsFromExpression(const Tree<EvaluationNod
 	std::vector<Value> arguments;
 	// Loop over the children from the second child to the last one
 	for(auto it(std::next(expression->begin())); it != expression->end(); ++it)
-		arguments.push_back(call(*it, scope));
+		arguments.push_back(BuiltinCallables::Evaluate().call(*it, scope));
 	return arguments;
 }
 
