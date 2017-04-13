@@ -3,10 +3,9 @@
 add_library(GITCY
 	BuiltinFunctions.cpp
 	BuiltinFunctionsOverloads.cpp
-	BuiltinMacros.cpp
+	BuiltinCallables.cpp
 	Function.cpp
 	Interpreter.cpp
-	Macro.cpp
 	Null.cpp
 	Overload.cpp
 	Scope.cpp

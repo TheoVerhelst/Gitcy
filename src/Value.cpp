@@ -1,4 +1,3 @@
-#include <Function.hpp>
 #include <Value.hpp>
 
 const std::map<std::type_index, std::string> Value::_typePrettyNames
@@ -7,7 +6,7 @@ const std::map<std::type_index, std::string> Value::_typePrettyNames
 	{typeid(double), "Real"},
 	{typeid(bool), "Boolean"},
 	{typeid(std::string), "String"},
-	{typeid(Function), "Function"}
+	{typeid(std::shared_ptr<Callable>), "Callable"}
 };
 
 bool Value::holdsType(const std::type_index& typeIndex) const

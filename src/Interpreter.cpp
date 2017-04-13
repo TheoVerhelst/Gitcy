@@ -6,7 +6,7 @@
 #include <Function.hpp>
 #include <ScriptError.hpp>
 #include <Utils.hpp>
-#include <BuiltinMacros.hpp>
+#include <BuiltinCallables.hpp>
 
 const std::string Interpreter::realLiteral("\\d*\\.\\d*");
 const std::string Interpreter::integerLiteral("\\d+");
@@ -63,7 +63,7 @@ void Interpreter::loadScript()
 
 void Interpreter::interpret()
 {
-	BuiltinMacros::Evaluate().call(_evaluationTree, _globalScope);
+	BuiltinCallables::Evaluate().call(_evaluationTree, _globalScope);
 }
 
 Interpreter::TokenVector Interpreter::tokenize(std::string code)
@@ -97,8 +97,8 @@ std::pair<Interpreter::TokenIterator, Tree<EvaluationNode>::Ptr> Interpreter::pa
 	TokenIterator pastIterator{from};
 	Tree<EvaluationNode>::Ptr evaluationTree{Tree<EvaluationNode>::create(parseToken(*from))};
 
-	// If we construct a function call expression
-	if(evaluationTree->getValue().type() == typeid(FunctionCall))
+	// If we construct a call expression
+	if(evaluationTree->getValue().type() == typeid(Call))
 	{
 		// Check that there is a closing parenthesis
 		const auto closingParenthesis(findClosingParenthesis(from, to));
@@ -153,7 +153,7 @@ EvaluationNode Interpreter::parseToken(const std::string& token)
 		return Identifier(token);
 	// Function call
 	else if(token == openingParenthesisLiteral)
-		return FunctionCall();
+		return Call();
 	else
 		throw ScriptError("Unrecognized token: \"" + token + "\"");
 }

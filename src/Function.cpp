@@ -11,8 +11,10 @@ Function::Function(const std::vector<std::shared_ptr<Overload>>& overloads):
 {
 }
 
-Value Function::call(const std::vector<Value>& arguments) const
+Value Function::call(const Tree<EvaluationNode>::Ptr& expression, const Scope& scope)
 {
+	const std::vector<Value> arguments(getArgumentsFromExpression(expression, scope));
+		
 	// Find the overloads that matches the arguments, and split them according to their variadicity (variadicness ?)
 	std::vector<std::shared_ptr<Overload>> variadicCandidates, nonVariadicCandidates;
 	for(auto& overload : _overloads)
@@ -47,6 +49,16 @@ Value Function::call(const std::vector<Value>& arguments) const
 			"Got:\n"
 			"\t(" + Utils::join(", ", arguments.begin(), arguments.end()) + ")\n"
 			"Overloads:\n" + Utils::toString(*this));
+}
+
+std::vector<Value> Function::getArgumentsFromExpression(const Tree<EvaluationNode>::Ptr& expression, const Scope& scope)
+{
+	// TODO use std::transform
+	std::vector<Value> arguments;
+	// Loop over the children from the second child to the last one
+	for(auto it(std::next(expression->begin())); it != expression->end(); ++it)
+		arguments.push_back(call(*it, scope));
+	return arguments;
 }
 
 std::ostream& operator<<(std::ostream& os, const Function& function)

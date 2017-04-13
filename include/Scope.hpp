@@ -3,7 +3,9 @@
 
 #include <map>
 #include <string>
-#include <Value.hpp>
+
+// Forward declarations
+class Value;
 
 class Scope
 {

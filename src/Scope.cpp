@@ -1,3 +1,4 @@
+#include <Value.hpp>
 #include <Scope.hpp>
 
 Scope::Scope(std::map<std::string, std::shared_ptr<Value>> variables):

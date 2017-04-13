@@ -9,13 +9,11 @@
 #include <boost/mpl/contains.hpp>
 #include <Null.hpp>
 
-// Forward declaration
-class Function;
-class Macro;
+// Forward declarations
+class Callable;
 
 /// The type used in C++ to represent any value in script. It uses internally
 /// a boost::variant, but exposes only the needed interface.
-/// \TODO Rename to value?
 class Value
 {
 	public:
@@ -45,7 +43,7 @@ class Value
 		friend std::ostream& operator<<(std::ostream& os, const Value& data);
 
 	private:
-		typedef boost::variant<Null, bool, int, double, std::string, boost::recursive_wrapper<Function>, boost::recursive_wrapper<std::shared_ptr<Macro>>> Variant;
+		typedef boost::variant<Null, bool, int, double, std::string, boost::recursive_wrapper<std::shared_ptr<Callable>>> Variant;
 
 		/// Actual variant.
 		Variant _variant;
@@ -54,7 +52,7 @@ class Value
 		static const std::map<std::type_index, std::string> _typePrettyNames;
 };
 
-#include <Function.hpp>
+#include <Callable.hpp>
 
 template <typename T, typename>
 Value::Value(T value):
