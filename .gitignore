@@ -1,1 +1,9 @@
 build/
+
+# CodeLite stuff
+*.batch_build
+*.project
+*.workspace
+cmake-build-Debug/
+cmake-build-Release/
+.codelite/
