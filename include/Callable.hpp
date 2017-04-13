@@ -19,7 +19,7 @@ class Callable
 		// Destructor.
 		virtual ~Callable() = default;
 
-		virtual Value call(const Tree<EvaluationNode>::Ptr& expression, const Scope& scope) = 0;
+		virtual Value call(const Tree<EvaluationNode>::Ptr& expression, Scope& scope) = 0;
 };
 
 #endif // CALLABLE_HPP

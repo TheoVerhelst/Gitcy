@@ -13,5 +13,5 @@ const Value& Scope::getVariable(const std::string& name) const
 
 void Scope::setVariable(const std::string& name, const Value& newValue)
 {
-	_variables.at(name) = std::make_shared<Value>(newValue);
+	_variables[name] = std::make_shared<Value>(newValue);
 }

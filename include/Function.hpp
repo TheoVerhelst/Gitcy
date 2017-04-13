@@ -29,7 +29,7 @@ class Function : public Callable
 		/// Calls the function pointer of the first matching overload.
 		/// \param expression The expression of the arguments to pass to the overload functor.
 		/// \returns The return value of the overload functor.
-		virtual Value call(const Tree<EvaluationNode>::Ptr& expression, const Scope& scope) override;
+		virtual Value call(const Tree<EvaluationNode>::Ptr& expression, Scope& scope) override;
 
 		/// Output operator overload.
 		/// \param os The stream to output to.
@@ -38,7 +38,7 @@ class Function : public Callable
 		friend std::ostream& operator<<(std::ostream& os, const Function& function);
 
 	private:
-		std::vector<Value> getArgumentsFromExpression(const Tree<EvaluationNode>::Ptr& expression, const Scope& scope);
+		std::vector<Value> getArgumentsFromExpression(const Tree<EvaluationNode>::Ptr& expression, Scope& scope);
 		
 		/// The list of overload.
 		std::vector<std::shared_ptr<Overload>> _overloads;

@@ -27,19 +27,7 @@ namespace BuiltinFunctionsOverloads
 			return Null();
 		return arguments.back();
 	}
-
-	Define::Define():
-		Overload{{SignatureType::create<std::string>(), SignatureType::create()}, false}
-	{
-	}
-
-	Value Define::call(const std::vector<Value>& arguments) const
-	{
-		const Value value{arguments.at(1)};
-		// TODO // _interpreter._variables.emplace(arguments.at(0).get<std::string>(), std::make_shared<Value>(value));
-		return value;
-	}
-
+	
 	And::And():
 		Overload{{SignatureType::create<bool>()}, true}
 	{

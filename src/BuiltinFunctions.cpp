@@ -7,7 +7,6 @@ BuiltinFunctions::BuiltinFunctions():
 	#define OVERLOAD(className) std::make_shared<BuiltinFunctionsOverloads::className>()
 	print{new Function({OVERLOAD(Print)})},
 	do_{new Function({OVERLOAD(Do)})},
-	define{new Function({OVERLOAD(Define)})},
 	lowerThan{new Function({OVERLOAD(LowerThan<int>), OVERLOAD(LowerThan<double>)})},
 	greaterThan{new Function({OVERLOAD(GreaterThan<int>), OVERLOAD(GreaterThan<double>)})},
 	lowerEqual{new Function({OVERLOAD(LowerEqual<int>), OVERLOAD(LowerEqual<double>)})},

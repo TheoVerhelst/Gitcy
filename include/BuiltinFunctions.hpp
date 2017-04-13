@@ -14,7 +14,6 @@ class BuiltinFunctions
 
 		const std::shared_ptr<Callable> print;        ///< Prints the arguments to stdout.
 		const std::shared_ptr<Callable> do_;          ///< Just evaluates its arguments, and returns the last.
-		const std::shared_ptr<Callable> define;       ///< Binds a value to a name.
 		const std::shared_ptr<Callable> lowerThan;    ///< Checks if first argument is lower than second.
 		const std::shared_ptr<Callable> greaterThan;  ///< Checks if first argument is greater than second.
 		const std::shared_ptr<Callable> lowerEqual;   ///< Checks if first argument is lower of equal to the second.

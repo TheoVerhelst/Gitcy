@@ -12,7 +12,7 @@ Function::Function(const std::vector<std::shared_ptr<Overload>>& overloads):
 {
 }
 
-Value Function::call(const Tree<EvaluationNode>::Ptr& expression, const Scope& scope)
+Value Function::call(const Tree<EvaluationNode>::Ptr& expression, Scope& scope)
 {
 	const std::vector<Value> arguments(getArgumentsFromExpression(expression, scope));
 		
@@ -52,7 +52,7 @@ Value Function::call(const Tree<EvaluationNode>::Ptr& expression, const Scope& s
 			"Overloads:\n" + Utils::toString(*this));
 }
 
-std::vector<Value> Function::getArgumentsFromExpression(const Tree<EvaluationNode>::Ptr& expression, const Scope& scope)
+std::vector<Value> Function::getArgumentsFromExpression(const Tree<EvaluationNode>::Ptr& expression, Scope& scope)
 {
 	// TODO use std::transform
 	std::vector<Value> arguments;

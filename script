@@ -9,4 +9,7 @@
 			(= (/ 4 2 2) 1)
 			(= (or true false false) true)
 			(= (or false false false) false)
-			(= (+ "a" "b") "ab"))))
+			(= (+ "a" "b") "ab")))
+	(define x 3)
+	(print x)
+)
