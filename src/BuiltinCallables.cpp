@@ -42,7 +42,7 @@ namespace BuiltinCallables
 	{
 		auto identifierIterator(std::next(expression->begin()));
 		if(expression->numberChildren() != 3 or (*identifierIterator)->getValue().type() != typeid(Identifier))
-			throw ScriptError("define must be called with two arguments, the first one being an identifier.");
+			throw ScriptError("\"define\" must be called with two arguments, the first one being an identifier.");
 		const Identifier identifier{boost::get<Identifier>((*identifierIterator)->getValue())};
 		const Value value{Evaluate().call(*std::next(identifierIterator), scope)};
 		scope.setVariable(identifier, value);
@@ -51,7 +51,25 @@ namespace BuiltinCallables
 
 	Value If::call(const Tree<EvaluationNode>::Ptr& expression, Scope& scope)
 	{
-		return true;
+		const auto testNode{*(expression->begin() + 1)};
+		const auto ifBodyNode{*(expression->begin() + 2)};
+		const auto elseBodyNode{*(expression->begin() + 3)};
+		const std::size_t numberChildren{expression->numberChildren()};
+		// Evaluate the condition
+		const Value testValue{Evaluate().call(testNode, scope)};
+		
+		if(not (numberChildren == 3 or numberChildren == 4))
+			throw ScriptError("\"if\" must be called with two or three arguments (got " + std::to_string(numberChildren) +")");
+		if(not testValue.holdsType<bool>())
+			throw ScriptError("First argument of \"if\" must be a boolean value (got \"" + testValue.getTypeName() + "\")");
+		// If the condition is met, then execute the if body
+		if(testValue.get<bool>())
+			return Evaluate().call(ifBodyNode, scope);
+		// Else, execute the else body only if it exists
+		else if(expression->numberChildren() == 4)
+			return Evaluate().call(elseBodyNode, scope);
+		else
+			return Null();
 	}
 
 	Value DefineFunction::call(const Tree<EvaluationNode>::Ptr& expression, Scope& scope)
