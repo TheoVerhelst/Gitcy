@@ -4,14 +4,14 @@
 #include <map>
 #include <string>
 #include <memory>
+#include <boost/blank.hpp>
+#include <boost/variant.hpp>
 #include <Tree.hpp>
-#include <Scope.hpp>
 
 // Forward declarations
+class Scope;
 class Value;
-typedef std::string Identifier;
-typedef boost::blank Call;
-typedef boost::variant<Identifier, Value, Call> EvaluationNode;
+typedef Tree<boost::variant<std::string, Value, boost::blank>> EvaluationTree;
 
 class Callable
 {
@@ -19,7 +19,7 @@ class Callable
 		// Destructor.
 		virtual ~Callable() = default;
 
-		virtual Value call(const Tree<EvaluationNode>::Ptr& expression, Scope& scope) = 0;
+		virtual Value call(const EvaluationTree& expression, Scope& scope) = 0;
 };
 
 #endif // CALLABLE_HPP

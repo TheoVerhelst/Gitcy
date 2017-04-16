@@ -1,7 +1,10 @@
 #ifndef BUILTIN_FUNCTIONS_HPP
 #define BUILTIN_FUNCTIONS_HPP
 
-#include <Function.hpp>
+#include <memory>
+
+// Forward declarations
+class Callable;
 
 /// Holds all functions that are written in C++ but callable in scripts.
 /// These functions are public const variables, and are initialized in the

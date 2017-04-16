@@ -12,5 +12,4 @@
 			(= (+ "a" "b") "ab")))
 	(define x false)
 	(if x (print "YA") (print "NO"))
-	(if (! x) (print "HAY"))
-)
+	(if (! x) (print "HAY")))

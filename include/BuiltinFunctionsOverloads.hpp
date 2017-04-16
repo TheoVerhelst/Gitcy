@@ -2,8 +2,10 @@
 #define BUILTIN_FUNCTIONS_OVERLOADS_HPP
 
 #include <vector>
-#include <Value.hpp>
 #include <Overload.hpp>
+
+// Forward declarations
+class Value;
 
 namespace BuiltinFunctionsOverloads
 {
@@ -48,6 +50,7 @@ namespace BuiltinFunctionsOverloads
 #include <Utils.hpp>
 #include <SignatureType.hpp>
 #include <ScriptError.hpp>
+#include <Value.hpp>
 
 namespace BuiltinFunctionsOverloads
 {

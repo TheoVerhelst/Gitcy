@@ -3,8 +3,8 @@
 #include <functional>
 #include <Utils.hpp>
 #include <ScriptError.hpp>
-#include <Value.hpp>
 #include <BuiltinCallables.hpp>
+#include <Overload.hpp>
 #include <Function.hpp>
 
 Function::Function(const std::vector<std::shared_ptr<Overload>>& overloads):
@@ -12,9 +12,9 @@ Function::Function(const std::vector<std::shared_ptr<Overload>>& overloads):
 {
 }
 
-Value Function::call(const Tree<EvaluationNode>::Ptr& expression, Scope& scope)
+Value Function::call(const EvaluationTree& expression, Scope& scope)
 {
-	const std::vector<Value> arguments(getArgumentsFromExpression(expression, scope));
+	const std::vector<Value> arguments(evaluateArguments(expression, scope));
 		
 	// Find the overloads that matches the arguments, and split them according to their variadicity (variadicness ?)
 	std::vector<std::shared_ptr<Overload>> variadicCandidates, nonVariadicCandidates;
@@ -52,12 +52,12 @@ Value Function::call(const Tree<EvaluationNode>::Ptr& expression, Scope& scope)
 			"Overloads:\n" + Utils::toString(*this));
 }
 
-std::vector<Value> Function::getArgumentsFromExpression(const Tree<EvaluationNode>::Ptr& expression, Scope& scope)
+std::vector<Value> Function::evaluateArguments(const EvaluationTree& expression, Scope& scope)
 {
 	// TODO use std::transform
 	std::vector<Value> arguments;
 	// Loop over the children from the second child to the last one
-	for(auto it(std::next(expression->begin())); it != expression->end(); ++it)
+	for(auto it(std::next(expression.begin())); it != expression.end(); ++it)
 		arguments.push_back(BuiltinCallables::Evaluate().call(*it, scope));
 	return arguments;
 }

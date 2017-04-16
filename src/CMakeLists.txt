@@ -11,6 +11,7 @@ add_library(GITCY
 	Scope.cpp
 	SignatureType.cpp
 	ScriptError.cpp
+	UserDefinedFunction.cpp
 	Utils.cpp
 	Value.cpp
 	)

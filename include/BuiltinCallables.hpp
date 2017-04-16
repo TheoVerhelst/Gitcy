@@ -13,25 +13,25 @@ namespace BuiltinCallables
 			/// \param expression The evaluation tree to evaluate.
 			/// \param scope The variables currently defined in the calling scope.
 			/// \returns The resulting value of the evaluation.
-			virtual Value call(const Tree<EvaluationNode>::Ptr& expression, Scope& scope) override;
+			virtual Value call(const EvaluationTree& expression, Scope& scope) override;
 	};
 
 	class Define : public Callable
 	{
 		public:
-			Value call(const Tree<EvaluationNode>::Ptr& expression, Scope& scope) override;
+			Value call(const EvaluationTree& expression, Scope& scope) override;
 	};
 
 	class If : public Callable
 	{
 		public:
-			Value call(const Tree<EvaluationNode>::Ptr& expression, Scope& scope) override;
+			Value call(const EvaluationTree& expression, Scope& scope) override;
 	};
 
 	class DefineFunction : public Callable
 	{
 		public:
-			Value call(const Tree<EvaluationNode>::Ptr& expression, Scope& scope) override;
+			Value call(const EvaluationTree& expression, Scope& scope) override;
 	};
 }
 

@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <Function.hpp>
 #include <BuiltinFunctionsOverloads.hpp>
 #include <BuiltinFunctions.hpp>
 

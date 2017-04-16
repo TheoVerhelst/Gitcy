@@ -6,10 +6,9 @@
 #include <map>
 #include <regex>
 #include <memory>
-#include <Tree.hpp>
-#include <EvaluationNode.hpp>
 #include <BuiltinFunctions.hpp>
 #include <Scope.hpp>
+#include <EvaluationNode.hpp>
 
 /// Main class. Reads a file given its filename and interprets it.
 class Interpreter
@@ -27,8 +26,6 @@ class Interpreter
 		typedef std::vector<std::string> TokenVector;
 		typedef TokenVector::const_iterator TokenIterator;
 
-		friend class BuiltinFunctions;
-
 		/// All the functions that can be called in the scripts. \see Functions
 		BuiltinFunctions _functions;
 
@@ -39,7 +36,7 @@ class Interpreter
 		Scope _globalScope;
 
 		/// After loading the script, this variables holds the script as a tree ready to be evaluated.
-		Tree<EvaluationNode>::Ptr _evaluationTree;
+		EvaluationTree _evaluationTree;
 
 
 		// Parsing
@@ -76,7 +73,7 @@ class Interpreter
 		/// Makes an evaluation tree out of a list of tokens.
 		/// \param tokens The list of token to use.
 		/// \returns A tree of evaluation node corresponding to the code.
-		static Tree<EvaluationNode>::Ptr constructTree(const TokenVector& tokens);
+		static EvaluationTree constructTree(const TokenVector& tokens);
 
 		/// Given two iterators of a token vector, makes a tree out of the
 		/// expression starting at the first iterator. The second iterator has
@@ -89,7 +86,7 @@ class Interpreter
 		/// \returns A pair where \a first is an iterator pointing to the first
 		/// token that is not part of the constructed expression, and \a second
 		/// is the constructed tree.
-		static std::pair<TokenIterator, Tree<EvaluationNode>::Ptr> parseExpression(TokenIterator from, TokenIterator to);
+		static std::pair<TokenIterator, EvaluationTree> parseExpression(TokenIterator from, TokenIterator to);
 
 		/// Parses a token, and returns the corresponding evaluation node.
 		/// \param token The token to parse.

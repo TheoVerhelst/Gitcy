@@ -1,12 +1,10 @@
 #include <algorithm>
 #include <fstream>
 #include <iostream>
-#include <EvaluationNode.hpp>
-#include <Interpreter.hpp>
-#include <Function.hpp>
 #include <ScriptError.hpp>
 #include <Utils.hpp>
 #include <BuiltinCallables.hpp>
+#include <Interpreter.hpp>
 
 const std::string Interpreter::realLiteral("\\d*\\.\\d*");
 const std::string Interpreter::integerLiteral("\\d+");
@@ -89,18 +87,19 @@ Interpreter::TokenVector Interpreter::tokenize(std::string code)
 	return tokens;
 }
 
-Tree<EvaluationNode>::Ptr Interpreter::constructTree(const Interpreter::TokenVector& tokens)
+EvaluationTree Interpreter::constructTree(const Interpreter::TokenVector& tokens)
 {
 	return parseExpression(tokens.begin(), tokens.end()).second;
 }
 
-std::pair<Interpreter::TokenIterator, Tree<EvaluationNode>::Ptr> Interpreter::parseExpression(Interpreter::TokenIterator from, Interpreter::TokenIterator to)
+std::pair<Interpreter::TokenIterator, EvaluationTree> Interpreter::parseExpression(Interpreter::TokenIterator from, Interpreter::TokenIterator to)
 {
 	TokenIterator pastIterator{from};
-	Tree<EvaluationNode>::Ptr evaluationTree{Tree<EvaluationNode>::create(parseToken(*from))};
+	const EvaluationNode node{parseToken(*from)};
+	std::vector<EvaluationTree> childs;
 
 	// If we construct a call expression
-	if(evaluationTree->getValue().type() == typeid(Call))
+	if(node.type() == typeid(Call))
 	{
 		// Check that there is a closing parenthesis
 		const auto closingParenthesis(findClosingParenthesis(from, to));
@@ -114,11 +113,11 @@ std::pair<Interpreter::TokenIterator, Tree<EvaluationNode>::Ptr> Interpreter::pa
 		{
 			auto result(parseExpression(it, to));
 			it = result.first;
-			evaluationTree->addChild(result.second);
+			childs.push_back(result.second);
 		}
 	}
 
-	return {pastIterator, evaluationTree};
+	return {pastIterator, {node, childs}};
 }
 
 EvaluationNode Interpreter::parseToken(const std::string& token)
@@ -163,7 +162,7 @@ EvaluationNode Interpreter::parseToken(const std::string& token)
 Interpreter::TokenIterator Interpreter::findClosingParenthesis(Interpreter::TokenIterator from, Interpreter::TokenIterator to)
 {
 	int depth{0};
-	for(;from != to; ++from)
+	while(from != to)
 	{
 		if(*from == openingParenthesisLiteral)
 			++depth;
@@ -171,7 +170,7 @@ Interpreter::TokenIterator Interpreter::findClosingParenthesis(Interpreter::Toke
 			--depth;
 		if(depth <= 0)
 			break;
+		++from;
 	}
 	return from;
 }
-

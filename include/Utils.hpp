@@ -6,7 +6,9 @@
 #include <ostream>
 #include <vector>
 #include <algorithm>
-#include <Value.hpp>
+
+// Forward declarations
+class Value;
 
 /// Various functions and classes that are not directly related to the project.
 namespace Utils
@@ -64,6 +66,8 @@ namespace Utils
 			std::ostringstream _localStream;
 	};
 }
+
+#include <Value.hpp>
 
 namespace Utils
 {

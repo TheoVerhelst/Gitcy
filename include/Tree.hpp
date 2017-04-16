@@ -9,43 +9,26 @@ template <typename T>
 class Tree
 {
 	public:
-		typedef std::shared_ptr<Tree<T>> Ptr;
-		typedef typename std::vector<Ptr>::iterator Iterator;
-		typedef typename std::vector<Ptr>::const_iterator ConstIterator;
+		typedef typename std::vector<Tree>::iterator Iterator;
+		typedef typename std::vector<Tree>::const_iterator ConstIterator;
 
-		static Ptr create(const T& value,
-				const std::vector<Ptr>& children=std::vector<Ptr>());
+		Tree() = default;
+		Tree(const T& value, const std::vector<Tree>& children=std::vector<Tree>());
 		const T& getValue() const;
-		T& getValue();
-		void setValue(const T& newValue);
 		size_t numberChildren() const;
 		bool hasChildren() const;
-		void addChild(Ptr child);
 		Iterator begin();
 		ConstIterator begin() const;
 		Iterator end();
 		ConstIterator end() const;
 
 	private:
-		Tree(const T& value, const std::vector<Ptr>& children=std::vector<Ptr>());
-		void setParent(Ptr newParent);
-
-		std::vector<Ptr> _children;
-		Ptr _parent;
-		Ptr _self;
+		std::vector<Tree> _children;
 		T _data;
 };
 
 template <typename T>
-typename Tree<T>::Ptr Tree<T>::create(const T& value, const std::vector<Tree<T>::Ptr>& children)
-{
-	Ptr res{new Tree<T>(value, children)};
-	res->_self = res;
-	return res;
-}
-
-template <typename T>
-Tree<T>::Tree(const T& value, const std::vector<Tree<T>::Ptr>& children):
+Tree<T>::Tree(const T& value, const std::vector<Tree<T>>& children):
 	_children{children},
 	_data{value}
 {
@@ -58,18 +41,6 @@ const T& Tree<T>::getValue() const
 }
 
 template <typename T>
-T& Tree<T>::getValue()
-{
-	return _data;
-}
-
-template <typename T>
-void Tree<T>::setValue(const T& newValue)
-{
-	_data = newValue;
-}
-
-template <typename T>
 size_t Tree<T>::numberChildren() const
 {
 	return _children.size();
@@ -79,13 +50,6 @@ template <typename T>
 bool Tree<T>::hasChildren() const
 {
 	return not _children.empty();
-}
-
-template <typename T>
-void Tree<T>::addChild(Tree<T>::Ptr child)
-{
-	_children.push_back(child);
-	child->setParent(_self);
 }
 
 template <typename T>
@@ -110,12 +74,6 @@ template <typename T>
 typename Tree<T>::ConstIterator Tree<T>::end() const
 {
 	return _children.end();
-}
-
-template <typename T>
-void Tree<T>::setParent(Tree<T>::Ptr newParent)
-{
-	_parent = newParent;
 }
 
 #endif
