@@ -1,15 +1,4 @@
 (do
-	(print (and true true false) "=" false)
-	(print (and true true true) "=" true)
-	(print
-		(and
-			(= (+ 1 2 3 4) 10)
-			(= (- 1 2 3) (- 4))
-			(= (* 3 4 2) 24)
-			(= (/ 4 2 2) 1)
-			(= (or true false false) true)
-			(= (or false false false) false)
-			(= (+ "a" "b") "ab")))
-	(define x false)
-	(if x (print "YA") (print "NO"))
-	(if (! x) (print "HAY")))
+	(function test x y (+ x y))
+	(print (test 3 4))
+)

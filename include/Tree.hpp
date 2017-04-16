@@ -17,6 +17,7 @@ class Tree
 		const T& getValue() const;
 		size_t numberChildren() const;
 		bool hasChildren() const;
+		const Tree& getChild(std::size_t index) const;
 		Iterator begin();
 		ConstIterator begin() const;
 		Iterator end();
@@ -50,6 +51,12 @@ template <typename T>
 bool Tree<T>::hasChildren() const
 {
 	return not _children.empty();
+}
+
+template <typename T>
+const Tree<T>& Tree<T>::getChild(std::size_t index) const
+{
+	return _children.at(index);
 }
 
 template <typename T>

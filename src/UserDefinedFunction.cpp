@@ -19,7 +19,13 @@ Value UserDefinedFunction::call(const std::vector<Value>& arguments) const
 	// already checked this.
 	for(std::size_t i{0}; i < arguments.size(); ++i)
 		localScope.setVariable(_parameterNames.at(i), arguments[i]);
-	return BuiltinCallables::Evaluate().call(_functionBody, localScope);
+	// Skip the "function" call identifier, the user-defined function identifier
+	// and the parameter identifiers
+	Value lastValue{Null()};
+	for(std::size_t i{2 + _parameterNames.size()}; i < _functionBody.numberChildren(); ++i)
+		// Evaluate each part of the body of the function
+		lastValue = BuiltinCallables::Evaluate().call(_functionBody.getChild(i), localScope);
+	return lastValue;
 }
 		
 std::vector<SignatureType> UserDefinedFunction::generateSignature(const EvaluationTree& functionBody)
@@ -32,19 +38,12 @@ std::vector<SignatureType> UserDefinedFunction::generateSignature(const Evaluati
 std::vector<Identifier> UserDefinedFunction::generateParameterNames(const EvaluationTree& functionBody)
 {
 	std::vector<Identifier> result;
-	// The first node is the function identifier, we have to skip it, it is not
-	// part of the argument list
-	// TODO find better
-	bool functionIdentifierSkipped{false};
-	for(auto& node : functionBody)
+	// Skip the "function" call identifier and the user-defined function identifier
+	for(std::size_t i{2}; i < functionBody.numberChildren(); ++i)
 	{
-		if(not functionIdentifierSkipped)
-		{
-			functionIdentifierSkipped = true;
-			continue;
-		}
-		if(node.getValue().type() == typeid(Identifier))
-			result.push_back(boost::get<Identifier>(node.getValue()));
+		const auto& nodeValue(functionBody.getChild(i).getValue());
+		if(nodeValue.type() == typeid(Identifier))
+			result.push_back(boost::get<Identifier>(nodeValue));
 		else
 			return result;
 	}
