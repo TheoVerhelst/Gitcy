@@ -4,7 +4,6 @@
 #include <string>
 #include <boost/blank.hpp>
 #include <boost/variant.hpp>
-#include <Tree.hpp>
 #include <Value.hpp>
 
 /// Represents an identifier in the evaluation tree of the interpreter. In
@@ -20,7 +19,5 @@ typedef boost::blank Call;
 /// evaluate at runtime, a literal representing a value or a call.
 /// This type allows to store them seamlessly.
 typedef boost::variant<Identifier, Value, Call> EvaluationNode;
-
-typedef Tree<EvaluationNode> EvaluationTree;
 
 #endif // EVALUATION_NODE_HPP

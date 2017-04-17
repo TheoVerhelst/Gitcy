@@ -3,6 +3,7 @@
 
 #include <map>
 #include <string>
+#include <memory>
 
 // Forward declarations
 class Value;

@@ -8,7 +8,7 @@
 #include <memory>
 #include <BuiltinFunctions.hpp>
 #include <Scope.hpp>
-#include <EvaluationNode.hpp>
+#include <EvaluationTree.hpp>
 
 /// Main class. Reads a file given its filename and interprets it.
 class Interpreter

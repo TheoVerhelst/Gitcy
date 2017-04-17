@@ -1,10 +1,8 @@
-#include <sstream>
-#include <algorithm>
-#include <functional>
 #include <Utils.hpp>
 #include <ScriptError.hpp>
 #include <BuiltinCallables.hpp>
 #include <Overload.hpp>
+#include <EvaluationTree.hpp>
 #include <Function.hpp>
 
 Function::Function(const std::vector<std::shared_ptr<Overload>>& overloads):

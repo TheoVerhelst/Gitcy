@@ -1,11 +1,7 @@
 #ifndef BUILTIN_FUNCTIONS_OVERLOADS_HPP
 #define BUILTIN_FUNCTIONS_OVERLOADS_HPP
 
-#include <vector>
 #include <Overload.hpp>
-
-// Forward declarations
-class Value;
 
 namespace BuiltinFunctionsOverloads
 {

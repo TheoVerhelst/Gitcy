@@ -9,6 +9,7 @@ class ScriptError: public std::runtime_error
 	public:
 		/// Constructor.
 		/// \param what A string explaining the error.
+		/// \TODO Do we need this constructor ?
 		explicit ScriptError(const std::string& what="") throw();
 };
 

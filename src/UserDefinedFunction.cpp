@@ -1,5 +1,6 @@
 #include <BuiltinCallables.hpp>
 #include <Scope.hpp>
+#include <EvaluationTree.hpp>
 #include <UserDefinedFunction.hpp>
 
 UserDefinedFunction::UserDefinedFunction(const EvaluationTree& functionBody, Scope& scope):
@@ -35,13 +36,13 @@ std::vector<SignatureType> UserDefinedFunction::generateSignature(const Evaluati
 	return std::vector<SignatureType>(generateParameterNames(functionBody).size(), SignatureType::create());
 }
 
-std::vector<Identifier> UserDefinedFunction::generateParameterNames(const EvaluationTree& functionBody)
+std::vector<std::string> UserDefinedFunction::generateParameterNames(const EvaluationTree& functionBody)
 {
-	std::vector<Identifier> result;
+	std::vector<std::string> result;
 	// Skip the "function" call identifier and the user-defined function identifier
 	for(std::size_t i{2}; i < functionBody.numberChildren(); ++i)
 	{
-		const auto& nodeValue(functionBody.getChild(i).getValue());
+		const auto& nodeValue(functionBody.getChild(i).getNode());
 		if(nodeValue.type() == typeid(Identifier))
 			result.push_back(boost::get<Identifier>(nodeValue));
 		else

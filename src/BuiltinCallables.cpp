@@ -3,14 +3,14 @@
 #include <Function.hpp>
 #include <Scope.hpp>
 #include <UserDefinedFunction.hpp>
-#include <EvaluationNode.hpp>
+#include <EvaluationTree.hpp>
 #include <BuiltinCallables.hpp>
 
 namespace BuiltinCallables
 {
 	Value evaluate(const EvaluationTree& expression, Scope& scope)
 	{
-		const EvaluationNode node{expression.getValue()};
+		const EvaluationNode node{expression.getNode()};
 		if(node.type() == typeid(Call))
 		{
 			if(not expression.hasChildren())
@@ -47,10 +47,10 @@ namespace BuiltinCallables
 			throw ScriptError("\"define\" must be called with two arguments");
 		const EvaluationTree& identifierNode{expression.getChild(1)};
 		const EvaluationTree& valueNode{expression.getChild(2)};
-		if(identifierNode.getValue().type() != typeid(Identifier))
+		if(identifierNode.getNode().type() != typeid(Identifier))
 			throw ScriptError("The first argument to \"define\" must be an identifier.");
 			
-		const Identifier identifier{boost::get<Identifier>(identifierNode.getValue())};
+		const Identifier identifier{boost::get<Identifier>(identifierNode.getNode())};
 		const Value value{evaluate(valueNode, scope)};
 		scope.setVariable(identifier, value);
 		return value;
@@ -84,10 +84,10 @@ namespace BuiltinCallables
 		if(expression.numberChildren() <= 3)
 			throw ScriptError("\"function\" needs at least two arguments: an identifier and the function body");
 		const auto identifierNode{expression.getChild(1)};
-		if(identifierNode.getValue().type() != typeid(Identifier))
+		if(identifierNode.getNode().type() != typeid(Identifier))
 			throw ScriptError("First argument of \"function\" must be an identifier");
 		
-		const Identifier identifier{boost::get<Identifier>(identifierNode.getValue())};
+		const Identifier identifier{boost::get<Identifier>(identifierNode.getNode())};
 		const Value value{Function({std::make_shared<UserDefinedFunction>(expression, scope)})};
 		scope.setVariable(identifier, value);
 		return value;

@@ -2,13 +2,11 @@
 #define USER_DEFINED_FUNCTION_HPP
 
 #include <Overload.hpp>
-#include <Tree.hpp>
+#include <SignatureType.hpp>
 
 // Forward declarations
 class Scope;
-class Value;
-typedef std::string Identifier;
-typedef Tree<boost::variant<Identifier, Value, boost::blank>> EvaluationTree;
+class EvaluationTree;
 
 /// A user-defined function is a function defined in Gitcy code with the macro
 /// "function". This class holds the body of the function as a part of the
@@ -50,11 +48,11 @@ class UserDefinedFunction : public Overload
 		/// \returns The proper signature vector.
 		static std::vector<SignatureType> generateSignature(const EvaluationTree& functionBody);
 		
-		static std::vector<Identifier> generateParameterNames(const EvaluationTree& functionBody);
+		static std::vector<std::string> generateParameterNames(const EvaluationTree& functionBody);
 		
 		const EvaluationTree& _functionBody;
 		Scope& _scope;
-		const std::vector<Identifier> _parameterNames;
+		const std::vector<std::string> _parameterNames;
 };
 
 #endif // USER_DEFINED_FUNCTION_HPP
