@@ -22,7 +22,7 @@ class Overload;
 /// * Else, a ScriptError is raised, explaining the error.
 ///
 /// \see Overload
-class Function : public Callable
+class Function final
 {
 	public:
 		/// Constructor.
@@ -32,7 +32,7 @@ class Function : public Callable
 		/// Calls the function pointer of the first matching overload.
 		/// \param expression The expression of the arguments to pass to the overload functor.
 		/// \returns The return value of the overload functor.
-		virtual Value call(const EvaluationTree& expression, Scope& scope) override;
+		Value operator()(const EvaluationTree& expression, Scope& scope);
 
 		/// Output operator overload.
 		/// \param os The stream to output to.

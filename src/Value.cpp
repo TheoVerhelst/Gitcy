@@ -6,7 +6,7 @@ const std::map<std::type_index, std::string> Value::_typePrettyNames
 	{typeid(double), "Real"},
 	{typeid(bool), "Boolean"},
 	{typeid(std::string), "String"},
-	{typeid(std::shared_ptr<Callable>), "Callable"}
+	{typeid(Callable), "Callable"}
 };
 
 bool Value::holdsType(const std::type_index& typeIndex) const

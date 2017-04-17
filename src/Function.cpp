@@ -12,7 +12,7 @@ Function::Function(const std::vector<std::shared_ptr<Overload>>& overloads):
 {
 }
 
-Value Function::call(const EvaluationTree& expression, Scope& scope)
+Value Function::operator()(const EvaluationTree& expression, Scope& scope)
 {
 	const std::vector<Value> arguments(evaluateArguments(expression, scope));
 		
@@ -58,7 +58,7 @@ std::vector<Value> Function::evaluateArguments(const EvaluationTree& expression,
 	std::vector<Value> arguments;
 	// Loop over the children from the second child to the last one
 	for(auto it(std::next(expression.begin())); it != expression.end(); ++it)
-		arguments.push_back(BuiltinCallables::Evaluate().call(*it, scope));
+		arguments.push_back(BuiltinCallables::evaluate(*it, scope));
 	return arguments;
 }
 

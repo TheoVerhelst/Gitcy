@@ -3,11 +3,12 @@
 #include <Function.hpp>
 #include <Scope.hpp>
 #include <UserDefinedFunction.hpp>
+#include <EvaluationNode.hpp>
 #include <BuiltinCallables.hpp>
 
 namespace BuiltinCallables
 {
-	Value Evaluate::call(const EvaluationTree& expression, Scope& scope)
+	Value evaluate(const EvaluationTree& expression, Scope& scope)
 	{
 		const EvaluationNode node{expression.getValue()};
 		if(node.type() == typeid(Call))
@@ -16,11 +17,11 @@ namespace BuiltinCallables
 				throw ScriptError("Call expression without any macro/function to call");
 
 			// Evaluate the first child, it is the function/macro to call
-			const Value& callable{call(expression.getChild(0), scope)};
+			const Value& callable{evaluate(expression.getChild(0), scope)};
 
 			// Check that the first child is a callable
-			if(callable.holdsType<std::shared_ptr<Callable>>())
-				return callable.get<std::shared_ptr<Callable>>()->call(expression, scope);
+			if(callable.holdsType<Callable>())
+				return callable.get<Callable>()(expression, scope);
 			else
 				throw ScriptError("Call expression on non-callable value (got type \"" + callable.getTypeName() + "\")");
 		}
@@ -40,7 +41,7 @@ namespace BuiltinCallables
 		}
 	}
 
-	Value Define::call(const EvaluationTree& expression, Scope& scope)
+	Value define(const EvaluationTree& expression, Scope& scope)
 	{
 		if(expression.numberChildren() != 3)
 			throw ScriptError("\"define\" must be called with two arguments");
@@ -50,12 +51,12 @@ namespace BuiltinCallables
 			throw ScriptError("The first argument to \"define\" must be an identifier.");
 			
 		const Identifier identifier{boost::get<Identifier>(identifierNode.getValue())};
-		const Value value{Evaluate().call(valueNode, scope)};
+		const Value value{evaluate(valueNode, scope)};
 		scope.setVariable(identifier, value);
 		return value;
 	}
 
-	Value If::call(const EvaluationTree& expression, Scope& scope)
+	Value if_(const EvaluationTree& expression, Scope& scope)
 	{
 		const std::size_t numberChildren{expression.numberChildren()};
 		if(not (numberChildren == 3 or numberChildren == 4))
@@ -64,21 +65,21 @@ namespace BuiltinCallables
 		const EvaluationTree& ifBodyNode{expression.getChild(2)};
 		
 		// Evaluate the condition
-		const Value testValue{Evaluate().call(testNode, scope)};
+		const Value testValue{evaluate(testNode, scope)};
 		if(not testValue.holdsType<bool>())
 			throw ScriptError("First argument of \"if\" must be a boolean value (got \"" + testValue.getTypeName() + "\")");
 			
 		// If the condition is met, then execute the if body
 		if(testValue.get<bool>())
-			return Evaluate().call(ifBodyNode, scope);
+			return evaluate(ifBodyNode, scope);
 		// Else, execute the else body only if it exists
 		else if(expression.numberChildren() == 4)
-			return Evaluate().call(expression.getChild(3), scope);
+			return evaluate(expression.getChild(3), scope);
 		else
 			return Null();
 	}
 
-	Value DefineFunction::call(const EvaluationTree& expression, Scope& scope)
+	Value defineFunction(const EvaluationTree& expression, Scope& scope)
 	{
 		if(expression.numberChildren() <= 3)
 			throw ScriptError("\"function\" needs at least two arguments: an identifier and the function body");
@@ -87,7 +88,7 @@ namespace BuiltinCallables
 			throw ScriptError("First argument of \"function\" must be an identifier");
 		
 		const Identifier identifier{boost::get<Identifier>(identifierNode.getValue())};
-		const Value value{std::shared_ptr<Callable>(new Function({std::make_shared<UserDefinedFunction>(expression, scope)}))};
+		const Value value{Function({std::make_shared<UserDefinedFunction>(expression, scope)})};
 		scope.setVariable(identifier, value);
 		return value;
 	}

@@ -2,11 +2,13 @@
 #define USER_DEFINED_FUNCTION_HPP
 
 #include <Overload.hpp>
-#include <EvaluationNode.hpp>
+#include <Tree.hpp>
 
 // Forward declarations
 class Scope;
 class Value;
+typedef std::string Identifier;
+typedef Tree<boost::variant<Identifier, Value, boost::blank>> EvaluationTree;
 
 /// A user-defined function is a function defined in Gitcy code with the macro
 /// "function". This class holds the body of the function as a part of the

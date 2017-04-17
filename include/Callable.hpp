@@ -1,11 +1,9 @@
 #ifndef CALLABLE_HPP
 #define CALLABLE_HPP
 
-#include <map>
-#include <string>
-#include <memory>
-#include <boost/blank.hpp>
+#include <functional>
 #include <boost/variant.hpp>
+#include <boost/blank.hpp>
 #include <Tree.hpp>
 
 // Forward declarations
@@ -13,13 +11,6 @@ class Scope;
 class Value;
 typedef Tree<boost::variant<std::string, Value, boost::blank>> EvaluationTree;
 
-class Callable
-{
-	public:
-		// Destructor.
-		virtual ~Callable() = default;
-
-		virtual Value call(const EvaluationTree& expression, Scope& scope) = 0;
-};
+typedef std::function<Value(const EvaluationTree& expression, Scope& scope)> Callable;
 
 #endif // CALLABLE_HPP

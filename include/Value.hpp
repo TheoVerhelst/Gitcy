@@ -8,9 +8,7 @@
 #include <boost/variant.hpp>
 #include <boost/mpl/contains.hpp>
 #include <Null.hpp>
-
-// Forward declarations
-class Callable;
+#include <Callable.hpp>
 
 /// The type used in C++ to represent any value in script. It uses internally
 /// a boost::variant, but exposes only the needed interface.
@@ -43,7 +41,7 @@ class Value
 		friend std::ostream& operator<<(std::ostream& os, const Value& data);
 
 	private:
-		typedef boost::variant<Null, bool, int, double, std::string, boost::recursive_wrapper<std::shared_ptr<Callable>>> Variant;
+		typedef boost::variant<Null, bool, int, double, std::string, boost::recursive_wrapper<Callable>> Variant;
 
 		/// Actual variant.
 		Variant _variant;
@@ -51,8 +49,6 @@ class Value
 		/// Map of pretty names for types to display in the output operator.
 		static const std::map<std::type_index, std::string> _typePrettyNames;
 };
-
-#include <Callable.hpp>
 
 template <typename T, typename>
 Value::Value(T value):

@@ -5,34 +5,18 @@
 
 namespace BuiltinCallables
 {
-	class Evaluate : public Callable
-	{
-		public:
-			/// Evaluates an evaluation tree, by calling recursively the callables,
-			/// and evaluating the values and identifiers.
-			/// \param expression The evaluation tree to evaluate.
-			/// \param scope The variables currently defined in the calling scope.
-			/// \returns The resulting value of the evaluation.
-			virtual Value call(const EvaluationTree& expression, Scope& scope) override;
-	};
+	/// Evaluates an evaluation tree, by calling recursively the callables,
+	/// and evaluating the values and identifiers.
+	/// \param expression The evaluation tree to evaluate.
+	/// \param scope The variables currently defined in the calling scope.
+	/// \returns The resulting value of the evaluation.
+	Value evaluate(const EvaluationTree& expression, Scope& scope);
 
-	class Define : public Callable
-	{
-		public:
-			Value call(const EvaluationTree& expression, Scope& scope) override;
-	};
+	Value define(const EvaluationTree& expression, Scope& scope);
+	
+	Value if_(const EvaluationTree& expression, Scope& scope);
 
-	class If : public Callable
-	{
-		public:
-			Value call(const EvaluationTree& expression, Scope& scope) override;
-	};
-
-	class DefineFunction : public Callable
-	{
-		public:
-			Value call(const EvaluationTree& expression, Scope& scope) override;
-	};
+	Value defineFunction(const EvaluationTree& expression, Scope& scope);
 }
 
 #endif // BUILTIN_CALLABLE_HPP

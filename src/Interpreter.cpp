@@ -46,9 +46,9 @@ Interpreter::Interpreter(const std::string& filename):
 		{"true",     std::make_shared<Value>(true)},
 		{"false",    std::make_shared<Value>(false)},
 		{"null",     std::make_shared<Value>(Null())},
-		{"define",   std::make_shared<Value>(std::shared_ptr<Callable>(new BuiltinCallables::Define()))},
-		{"if",       std::make_shared<Value>(std::shared_ptr<Callable>(new BuiltinCallables::If()))},
-		{"function", std::make_shared<Value>(std::shared_ptr<Callable>(new BuiltinCallables::DefineFunction()))},
+		{"define",   std::make_shared<Value>(Callable(BuiltinCallables::define))},
+		{"if",       std::make_shared<Value>(Callable(BuiltinCallables::if_))},
+		{"function", std::make_shared<Value>(Callable(BuiltinCallables::defineFunction))},
 	}}
 {
 	loadScript();
@@ -63,7 +63,7 @@ void Interpreter::loadScript()
 
 void Interpreter::interpret()
 {
-	BuiltinCallables::Evaluate().call(_evaluationTree, _globalScope);
+	BuiltinCallables::evaluate(_evaluationTree, _globalScope);
 }
 
 Interpreter::TokenVector Interpreter::tokenize(std::string code)
