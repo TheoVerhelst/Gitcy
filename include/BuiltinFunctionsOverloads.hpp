@@ -3,6 +3,7 @@
 
 #include <Overload.hpp>
 
+/// Holds the implementation of the builtin functions.
 namespace BuiltinFunctionsOverloads
 {
 	#define DEFINE_OVERLOAD(className) \

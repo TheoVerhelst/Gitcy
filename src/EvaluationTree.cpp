@@ -4,6 +4,7 @@ EvaluationTree::EvaluationTree(const EvaluationNode& node, const std::vector<Eva
 	_node{node},
 	_children{children}
 {
+	assert(children.empty() or node.type() == typeid(Call));
 }
 
 const EvaluationNode& EvaluationTree::getNode() const

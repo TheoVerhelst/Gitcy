@@ -42,8 +42,8 @@ class Function final
 
 	private:
 		std::vector<Value> evaluateArguments(const EvaluationTree& expression, Scope& scope);
-		
-		/// The list of overload.
+
+		/// The list of overloads.
 		std::vector<std::shared_ptr<Overload>> _overloads;
 };
 
