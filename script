@@ -4,4 +4,6 @@
 		(if (< i 100)
 			(loop (+ i 1)))
 	) 0)
+	(print if)
+	(print +)
 )

@@ -4,6 +4,7 @@ add_library(GITCY
 	BuiltinFunctions.cpp
 	BuiltinFunctionsOverloads.cpp
 	BuiltinCallables.cpp
+	Callable.cpp
 	EvaluationTree.cpp
 	Function.cpp
 	Interpreter.cpp

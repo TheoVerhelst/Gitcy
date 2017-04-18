@@ -3,7 +3,16 @@
 
 #include <Overload.hpp>
 
-/// Holds the implementation of the builtin functions.
+/// Holds the implementation of the builtin functions. This is not the same as
+/// the Function object: while a Function object is a Callable in the code,
+/// an overload is the actual C++ code, which may be different according to the
+/// type of the arguments, for example. For example, the modulo function need to
+/// defined as `a % b` for integers, and as `std::fmod(a, b)` for reals. The
+/// right overload is choosed by the class Function at call time.
+///
+/// Most overloads are defined as templates, since the source code is the same
+/// common between multiple types (e.g. a + b for adding integers and reals),
+/// but we still need to generate separate functions.
 namespace BuiltinFunctionsOverloads
 {
 	#define DEFINE_OVERLOAD(className) \
