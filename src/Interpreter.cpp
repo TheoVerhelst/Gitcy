@@ -18,7 +18,7 @@ const std::regex Interpreter::realLiteralRegex(realLiteral);
 const std::regex Interpreter::integerLiteralRegex(integerLiteral);
 const std::regex Interpreter::stringLiteralRegex(stringLiteral);
 const std::regex Interpreter::identifierRegex(identifier);
-const std::regex Interpreter::tokenRegex("("+realLiteral+"|"+integerLiteral+"|"+stringLiteral+"|"+identifier+"|"+parenthesisLiteral+")[[:space:]]*");
+const std::regex Interpreter::tokenRegex("[[:space:]]*("+realLiteral+"|"+integerLiteral+"|"+stringLiteral+"|"+identifier+"|"+parenthesisLiteral+")[[:space:]]*");
 const std::map<char, char> Interpreter::escapedCharacters
 		{{'a', '\a'}, {'b', '\b'}, {'f', '\f'}, {'n', '\n'}, {'r', '\r'}, {'t', '\t'}, {'v', '\v'}};
 
@@ -89,7 +89,15 @@ Interpreter::TokenVector Interpreter::tokenize(std::string code)
 
 EvaluationTree Interpreter::constructTree(const Interpreter::TokenVector& tokens)
 {
-	return parseExpression(tokens.begin(), tokens.end()).second;
+	const EvaluationNode implicitDoNode{Call()};
+	std::vector<EvaluationTree> expressions = {{Identifier("do"), {}}};
+	for(auto it(tokens.begin()); it != tokens.end(); ++it)
+	{
+		auto result(parseExpression(it, tokens.end()));
+		it = result.first;
+		expressions.push_back(result.second);
+	}
+	return {implicitDoNode, expressions};
 }
 
 std::pair<Interpreter::TokenIterator, EvaluationTree> Interpreter::parseExpression(Interpreter::TokenIterator from, Interpreter::TokenIterator to)

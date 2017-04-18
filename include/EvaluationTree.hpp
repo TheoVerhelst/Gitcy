@@ -23,7 +23,7 @@ class EvaluationTree
 		/// \param node The value of the node (function call, value, ...).
 		/// \param children The children trees of the node, if the node is a
 		/// function call.
-		EvaluationTree(const EvaluationNode& node, const std::vector<EvaluationTree>& children=std::vector<EvaluationTree>());
+		EvaluationTree(const EvaluationNode& node, const std::vector<EvaluationTree>& children);
 
 		/// Get the value of the evaluation node.
 		const EvaluationNode& getNode() const;
