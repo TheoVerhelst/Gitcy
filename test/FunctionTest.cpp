@@ -2,7 +2,9 @@
 #include <ScriptError.hpp>
 #include <Function.hpp>
 #include <Overload.hpp>
-#include <iostream>
+#include <EvaluationTree.hpp>
+#include <Scope.hpp>
+#include <Parser.hpp>
 
 class OneInt : public Overload
 {
@@ -52,28 +54,30 @@ class FunctionTestFixture
 		/// Constructor.
 		FunctionTestFixture():
 			// A normal overload, and two possibly ambiguous overloads
-			function{{std::make_shared<OneInt>(), std::make_shared<VariadicOneDouble>(), std::make_shared<VariadicTwoDouble>()}}
+			function{{std::make_shared<OneInt>(), std::make_shared<VariadicOneDouble>(), std::make_shared<VariadicTwoDouble>()}},
+			scope{{}}
 		{
 		}
 
 		Function function;
+		Scope scope;
 };
 
 BOOST_FIXTURE_TEST_SUITE(FunctionTest, FunctionTestFixture)
 
 BOOST_AUTO_TEST_CASE(callOperatorNormal)
 {
-	BOOST_TEST(function.call({3}).get<std::string>() == "blah");
+	BOOST_TEST(function(Parser::constructTree("(function 3)"), scope).get<std::string>() == "blah");
 }
 
 BOOST_AUTO_TEST_CASE(callOperatorAmbiguous)
 {
-	BOOST_CHECK_THROW(function.call({2.2, 2.3}), ScriptError);
+	BOOST_CHECK_THROW(function(Parser::constructTree("(function 2.2 2.3)"), scope), ScriptError);
 }
 
 BOOST_AUTO_TEST_CASE(callOperatorNoOverloadFound)
 {
-	BOOST_CHECK_THROW(function.call({2, std::string("bluh")}), ScriptError);
+	BOOST_CHECK_THROW(function(Parser::constructTree("(function 2 \"bluh\")"), scope), ScriptError);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

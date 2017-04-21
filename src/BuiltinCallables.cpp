@@ -36,7 +36,7 @@ namespace BuiltinCallables
 			}
 			catch(const std::out_of_range& e)
 			{
-				throw ScriptError("Unknown variable: \"" + identifier + "\"");
+				throw ScriptError("Unknown identifier: \"" + identifier + "\"");
 			}
 		}
 	}

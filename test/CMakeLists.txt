@@ -7,7 +7,7 @@ add_definitions(-DBOOST_TEST_DYN_LINK)
 # All test source files
 set(TEST_SOURCES
 	BuiltinFunctionsOverloadsTest.cpp
-	BuiltinMacrosTest.cpp
+	BuiltinCallablesTest.cpp
 	DataTest.cpp
 	FunctionTest.cpp
 	NullTest.cpp

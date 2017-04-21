@@ -10,6 +10,7 @@ add_library(GITCY
 	Interpreter.cpp
 	Null.cpp
 	Overload.cpp
+	Parser.cpp
 	Scope.cpp
 	SignatureType.cpp
 	ScriptError.cpp

@@ -13,7 +13,7 @@ class EvaluationTree
 		/// Typedef for tree iteration.
 		typedef typename std::vector<EvaluationTree>::iterator Iterator;
 
-		/// Typedef for tree non-modifying iteration.
+		/// Typedef for non-modifying tree iteration.
 		typedef typename std::vector<EvaluationTree>::const_iterator ConstIterator;
 
 		/// Constructor for an empty tree.

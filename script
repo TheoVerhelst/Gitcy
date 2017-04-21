@@ -1,8 +1,4 @@
-
-((function loop i
-	(print i)
-	(if (< i 100)
-		(loop (+ i 1)))
-) 0)
-(print if)
-(print +)
+(define test 32)
+(define test2 666)
+(if (!= test test2)
+	(define test 11))
