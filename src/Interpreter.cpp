@@ -1,11 +1,13 @@
 #include <fstream>
 #include <memory>
+#include <iostream>
 #include <Parser.hpp>
+#include <ScriptError.hpp>
 #include <BuiltinCallables.hpp>
 #include <Interpreter.hpp>
 
-Interpreter::Interpreter(const std::string& filename):
-	_filename(filename),
+Interpreter::Interpreter():
+	_prompt{">>> "},
 	_globalScope
 	{{
 		{"print",    std::make_shared<Value>(_functions.print)},
@@ -33,17 +35,35 @@ Interpreter::Interpreter(const std::string& filename):
 		{"function", std::make_shared<Value>(Callable(BuiltinCallables::defineFunction))},
 	}}
 {
-	loadScript();
 }
 
-void Interpreter::loadScript()
+void Interpreter::loadFile(const std::string& filename)
 {
-	std::ifstream stream{_filename};
+	std::ifstream stream{filename};
 	const std::string fileContent{std::istreambuf_iterator<char>(stream), std::istreambuf_iterator<char>()};
 	_evaluationTree = Parser::constructTree(fileContent);
 }
 
-void Interpreter::interpret()
+Value Interpreter::interpret()
 {
-	BuiltinCallables::evaluate(_evaluationTree, _globalScope);
+	return BuiltinCallables::evaluate(_evaluationTree, _globalScope);
+}
+
+void Interpreter::runPrompt()
+{
+	while(true)
+	{
+		std::cout << _prompt;
+		std::string input;
+		std::getline(std::cin, input);
+		_evaluationTree = Parser::constructTree(input);
+		try
+		{
+			std::cout << interpret() << std::endl;
+		}
+		catch(const ScriptError& e)
+		{
+			std::cerr << "Script error: " << e.what() << std::endl;
+		}
+	}
 }

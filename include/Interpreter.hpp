@@ -9,30 +9,29 @@
 class Interpreter
 {
 	public:
-		/// Constructor.
+		// Default constructor.
+		Interpreter();
+		
 		/// \param filename The filename of the script to interpret.
-		explicit Interpreter(const std::string& filename);
+		void loadFile(const std::string& filename);
 
 		/// Interprets the script loaded at construction.
-		void interpret();
+		Value interpret();
+		
+		void runPrompt();
 
 	private:
 		/// All the functions that can be called in the scripts. \see Functions
 		BuiltinFunctions _functions;
-
-		/// The filename of the interpreted script. It is mainly used in error
-		/// messages.
-		const std::string _filename;
+		
+		const std::string _prompt;
 
 		/// The global scope.
 		Scope _globalScope;
-
+		
 		/// After loading the script, this variables holds the script as a tree
 		/// ready to be evaluated.
 		EvaluationTree _evaluationTree;
-
-		/// Loads the script at filename _filename;
-		void loadScript();
 };
 
 #endif
