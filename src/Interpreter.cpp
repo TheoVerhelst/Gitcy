@@ -1,4 +1,3 @@
-#include <fstream>
 #include <memory>
 #include <iostream>
 #include <Parser.hpp>
@@ -37,9 +36,8 @@ Interpreter::Interpreter():
 {
 }
 
-void Interpreter::loadFile(const std::string& filename)
+void Interpreter::loadFromStream(std::istream& stream)
 {
-	std::ifstream stream{filename};
 	const std::string fileContent{std::istreambuf_iterator<char>(stream), std::istreambuf_iterator<char>()};
 	_evaluationTree = Parser::constructTree(fileContent);
 }

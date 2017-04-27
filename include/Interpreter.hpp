@@ -1,6 +1,8 @@
 #ifndef INTERPRETER_HPP
 #define INTERPRETER_HPP
 
+#include <string>
+#include <istream>
 #include <BuiltinFunctions.hpp>
 #include <Scope.hpp>
 #include <EvaluationTree.hpp>
@@ -12,8 +14,9 @@ class Interpreter
 		// Default constructor.
 		Interpreter();
 		
-		/// \param filename The filename of the script to interpret.
-		void loadFile(const std::string& filename);
+		/// Loads the source code from an input stream.
+		/// \param stream An input stream from which read the source code.
+		void loadFromStream(std::istream& stream);
 
 		/// Interprets the script loaded at construction.
 		Value interpret();

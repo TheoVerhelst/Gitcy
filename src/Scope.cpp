@@ -6,12 +6,12 @@ Scope::Scope(const std::map<std::string, std::shared_ptr<Value>>& variables):
 {
 }
 
-const Value& Scope::getVariable(const std::string& name) const
+const Value& Scope::getVariable(const std::string& identifier) const
 {
-	return *_variables.at(name);
+	return *_variables.at(identifier);
 }
 
-void Scope::setVariable(const std::string& name, const Value& newValue)
+void Scope::setVariable(const std::string& identifier, const Value& value)
 {
-	_variables[name] = std::make_shared<Value>(newValue);
+	_variables[identifier] = std::make_shared<Value>(value);
 }
