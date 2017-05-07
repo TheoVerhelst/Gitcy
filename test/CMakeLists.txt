@@ -16,8 +16,15 @@ set(TEST_SOURCES
 	main.cpp
 )
 
+set(TEST_EXECUTABLE_NAME "${EXECUTABLE_NAME}Test")
+
 # Create the main test executable
-add_executable(${EXECUTABLE_NAME}Test ${TEST_SOURCES})
+add_executable(${TEST_EXECUTABLE_NAME} ${TEST_SOURCES})
 
 # Link the executable with our binaries and boost library
-target_link_libraries(${EXECUTABLE_NAME}Test GITCY ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+target_link_libraries(${TEST_EXECUTABLE_NAME} GITCY ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
+
+# Execute tests after the build
+add_custom_command(TARGET ${TEST_EXECUTABLE_NAME} POST_BUILD
+    COMMAND "${CMAKE_BINARY_DIR}/${TEST_EXECUTABLE_NAME}"
+)

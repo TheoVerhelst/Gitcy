@@ -27,12 +27,12 @@ Interpreter::Interpreter():
 		{"/",        std::make_shared<Value>(Callable(_functions.divide))},
 		{"%",        std::make_shared<Value>(Callable(_functions.modulo))},
 		{"!",        std::make_shared<Value>(Callable(_functions.not_))},
-		{"true",     std::make_shared<Value>(true)},
-		{"false",    std::make_shared<Value>(false)},
-		{"null",     std::make_shared<Value>(Null())},
 		{"define",   std::make_shared<Value>(Callable(BuiltinCallables::define))},
 		{"if",       std::make_shared<Value>(Callable(BuiltinCallables::if_))},
 		{"function", std::make_shared<Value>(Callable(BuiltinCallables::defineFunction))},
+		{"true",     std::make_shared<Value>(true)},
+		{"false",    std::make_shared<Value>(false)},
+		{"null",     std::make_shared<Value>(Null())},
 	}}
 {
 }
