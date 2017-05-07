@@ -26,7 +26,7 @@ EvaluationTree Parser::constructTree(const std::string& code)
 	return parseExpression(tokens.begin(), tokens.end()).second;
 }
 
-EvaluationTree Parser::constructMultipleTree(const std::string& code)
+EvaluationTree Parser::constructMultipleTrees(const std::string& code)
 {
 	// The implicit "do" statement allows to evaluate more than one tree
 	return constructTree(openingParenthesisLiteral + "do " + code + closingParenthesisLiteral);

@@ -13,7 +13,7 @@ Function::Function(const std::vector<std::shared_ptr<Overload>>& overloads):
 Value Function::operator()(const EvaluationTree& expression, Scope& scope)
 {
 	const std::vector<Value> arguments(evaluateArguments(expression, scope));
-		
+
 	// Find the overloads that matches the arguments, and split them according to their variadicity (variadicness ?)
 	std::vector<std::shared_ptr<Overload>> variadicCandidates, nonVariadicCandidates;
 	for(auto& overload : _overloads)
@@ -52,11 +52,9 @@ Value Function::operator()(const EvaluationTree& expression, Scope& scope)
 
 std::vector<Value> Function::evaluateArguments(const EvaluationTree& expression, Scope& scope)
 {
-	// TODO use std::transform
 	std::vector<Value> arguments;
-	// Loop over the children from the second child to the last one
-	for(auto it(std::next(expression.begin())); it != expression.end(); ++it)
-		arguments.push_back(BuiltinCallables::evaluate(*it, scope));
+	std::transform(expression.begin(), expression.end(), arguments.begin(),
+		std::bind(BuiltinCallables::evaluate, std::placeholders::_1, std::ref(scope)));
 	return arguments;
 }
 

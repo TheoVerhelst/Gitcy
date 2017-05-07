@@ -17,7 +17,8 @@ class Value
 {
 	public:
 		/// Constructor.
-		/// \tparam T The type that will be held internally.
+		/// \param value The value that will be held.
+		/// \tparam T The type of the value that will be held.
 		/// \TODO another overload taking const T& ?
 		template <typename T, typename = std::enable_if_t<std::negation<std::is_same<std::decay_t<T>, Value>>::value>>
 		Value(T value);
