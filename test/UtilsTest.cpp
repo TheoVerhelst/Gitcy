@@ -71,7 +71,7 @@ BOOST_AUTO_TEST_CASE(convertBasic)
 
 BOOST_AUTO_TEST_CASE(convertBadTypeThrows)
 {
-	BOOST_CHECK_THROW(Utils::convert<int>(twoBool), boost::bad_get);
+	BOOST_CHECK_THROW(Utils::convert<int>(twoBool), ValueBadGet);
 }
 
 BOOST_AUTO_TEST_CASE(ostreamListenerEmpty)
@@ -88,4 +88,3 @@ BOOST_AUTO_TEST_CASE(ostreamListenerGetOutputBasic)
 }
 
 BOOST_AUTO_TEST_SUITE_END()
-

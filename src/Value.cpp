@@ -3,12 +3,12 @@
 
 bool Value::holdsType(const std::type_index& typeIndex) const
 {
-	return typeIndex == std::type_index(_value.type());
+	return typeIndex == std::type_index(boost::type_erasure::typeid_of(_value));
 }
 
 std::string Value::getTypeName() const
 {
-	return ValueTypes::getTypeName(std::type_index(_value.type()));
+	return ValueTypes::getTypeName(std::type_index(boost::type_erasure::typeid_of(_value)));
 }
 
 std::ostream& operator<<(std::ostream& os, const Value& data)

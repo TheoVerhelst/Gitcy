@@ -3,13 +3,16 @@
 
 #include <ostream>
 #include <typeindex>
-#include <boost/any.hpp>
+#include <boost/type_erasure/any.hpp>
+#include <boost/type_erasure/any_cast.hpp>
+#include <boost/type_erasure/builtin.hpp>
+#include <boost/type_erasure/operators.hpp>
+#include <ValueBadGet.hpp>
 
 /// The type used in C++ to represent any value in script. It uses internally
-/// a boost::variant, but exposes only the needed interface. A Value can store
-/// multiple type (Null, bool, int, double, std::string and Callable), but
-/// one instance can only contain one value of one type at a time, just like
-/// boost::variant (or std::variant).
+/// a boost class, and exposes only the needed interface. A Value can store
+/// multiple types, but one instance can only contain one value of one type at a
+/// time, just like boost::any (or std::any).
 class Value
 {
 	public:
@@ -22,23 +25,19 @@ class Value
 		/// Gets the value with type T.
 		/// \tparam T The type supposed to be held by this instance.
 		/// \returns The held value.
-		/// \throws boost::bad_any_cast if this instance does not hold a value
-		/// of type T.
+		/// \throws ValueBadGet if this instance does not hold a value of type
+		/// T.
 		template <typename T>
 		const T& get() const;
 
-		/// Checks whether this instance holds the type T. A compile-time check
-		/// is done to ensure that T is one of the supported types. To check
-		/// whether an instance could contain an arbitrary type, see
-		/// canHoldType.
+		/// Checks whether this instance holds the type T.
 		/// \tparam T The type to check
 		/// \returns true if this instance holds a value of type T.
 		template <typename T>
 		bool holdsType() const;
 
 		/// Checks whether this instance holds the type represented by
-		/// typeIndex. To check whether an instance could contain an arbitrary
-		/// type, see canHoldType. A std::type_index can be created as:
+		/// typeIndex. A std::type_index can be created as:
 		/// \code
 		/// value.holdsType(std::type_index(typeid(int)));
 		/// \endcode
@@ -59,7 +58,13 @@ class Value
 
 	private:
 		/// Actual variant.
-		boost::any _value;
+		boost::type_erasure::any<
+			boost::mpl::vector<
+				boost::type_erasure::copy_constructible<>,
+				boost::type_erasure::assignable<>,
+				boost::type_erasure::typeid_<>,
+				boost::type_erasure::ostreamable<>
+		>> _value;
 };
 
 template <typename T, typename>
@@ -71,13 +76,20 @@ Value::Value(T value):
 template <typename T>
 const T& Value::get() const
 {
-	return boost::any_cast<const T&>(_value);
+	try
+	{
+		return boost::type_erasure::any_cast<const T&>(_value);
+	}
+	catch(const boost::type_erasure::bad_any_cast& e)
+	{
+		throw ValueBadGet(e.what());
+	}
 }
 
 template <typename T>
 bool Value::holdsType() const
 {
-	return _value.type() == typeid(T);
+	return boost::type_erasure::typeid_of(_value) == typeid(T);
 }
 
 #endif // VALUE_HPP

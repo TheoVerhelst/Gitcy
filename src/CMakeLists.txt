@@ -17,6 +17,7 @@ add_library(GITCY
 	UserDefinedFunction.cpp
 	Utils.cpp
 	Value.cpp
+	ValueBadGet.cpp
 	ValueTypes.cpp
 	)
 

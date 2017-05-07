@@ -3,7 +3,7 @@
 
 ```
 (define expand-acronym
-	(function (acronym)
+	(function acronym
 		(if (= acronym "Gitcy")
 			(for (word "Gitcy Isn't Turing Complete Yet")
 				(expand-acronym word)
@@ -14,4 +14,4 @@
 (expand-acronym "Gitcy")
 
 ```
-Will result in a stack overflow when Gitcy will be Turing Complete.
+Would result in a stack overflow if the function `word` where defined.

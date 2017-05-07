@@ -6,14 +6,22 @@ add_definitions(-DBOOST_TEST_DYN_LINK)
 
 # All test source files
 set(TEST_SOURCES
-	BuiltinFunctionsOverloadsTest.cpp
 	BuiltinCallablesTest.cpp
-	DataTest.cpp
+	BuiltinFunctionsOverloadsTest.cpp
+	BuiltinFunctionsTest.cpp
+	CallableTest.cpp
+	EvaluationTreeTest.cpp
 	FunctionTest.cpp
-	NullTest.cpp
-	SignatureTypeTest.cpp
-	UtilsTest.cpp
+	InterpreterTest.cpp
 	main.cpp
+	NullTest.cpp
+	OverloadTest.cpp
+	ParserTest.cpp
+	ScopeTest.cpp
+	SignatureTypeTest.cpp
+	UserDefinedFunctionTest.cpp
+	UtilsTest.cpp
+	ValueTest.cpp
 )
 
 set(TEST_EXECUTABLE_NAME "${EXECUTABLE_NAME}Test")
