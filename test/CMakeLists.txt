@@ -22,6 +22,7 @@ set(TEST_SOURCES
 	UserDefinedFunctionTest.cpp
 	UtilsTest.cpp
 	ValueTest.cpp
+	ValueTypesTest.cpp
 )
 
 set(TEST_EXECUTABLE_NAME "${EXECUTABLE_NAME}Test")
