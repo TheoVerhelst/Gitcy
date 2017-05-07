@@ -17,13 +17,19 @@ class Parser
 		/// \param code The code to use.
 		/// \returns A tree of evaluation nodes corresponding to the code.
 		static EvaluationTree constructTree(const std::string& code);
-	
+
+		/// Makes an evaluation tree out of Gitcy code, with a do statement
+		/// enclosing the code, allowing to evaluate more than one tree.
+		/// \param code The code to use.
+		/// \returns A tree of evaluation nodes corresponding to the code.
+		static EvaluationTree constructMultipleTrees(const std::string& code);
+
 	private:
 
 		/// We use vector of strings in alot of places in this class.
 		typedef std::vector<std::string> TokenVector;
 		typedef TokenVector::const_iterator TokenIterator;
-		
+
 		// Parsing
 		static const std::string realLiteral;               ///< Regex string of a real number literal.
 		static const std::string integerLiteral;            ///< Regex string of an integer number literal.
@@ -43,7 +49,7 @@ class Parser
 		/// preceded by a backslash. For example, the character 'n' is
 		/// translated to '\n'.
 		static const std::map<char, char> escapedCharacters;
-		
+
 		/// Convert a string of code to a list of tokens as defined by the regex
 		/// tokenRegex.
 		/// \param code The code to tokenize.

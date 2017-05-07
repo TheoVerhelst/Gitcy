@@ -22,9 +22,14 @@ const std::map<char, char> Parser::escapedCharacters
 
 EvaluationTree Parser::constructTree(const std::string& code)
 {
-	// The implicit "do" statement allows to evaluate more than one tree
-	const TokenVector tokens{tokenize(openingParenthesisLiteral + "do " + code + closingParenthesisLiteral)};
+	const TokenVector tokens{tokenize(code)};
 	return parseExpression(tokens.begin(), tokens.end()).second;
+}
+
+EvaluationTree Parser::constructMultipleTree(const std::string& code)
+{
+	// The implicit "do" statement allows to evaluate more than one tree
+	return constructTree(openingParenthesisLiteral + "do " + code + closingParenthesisLiteral);
 }
 
 Parser::TokenVector Parser::tokenize(std::string code)

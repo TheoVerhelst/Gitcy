@@ -40,7 +40,7 @@ Interpreter::Interpreter():
 void Interpreter::loadFromStream(std::istream& stream)
 {
 	const std::string fileContent{std::istreambuf_iterator<char>(stream), std::istreambuf_iterator<char>()};
-	_evaluationTree = Parser::constructTree(fileContent);
+	_evaluationTree = Parser::constructMultipleTrees(fileContent);
 }
 
 Value Interpreter::interpret()
