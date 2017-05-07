@@ -25,6 +25,7 @@ class SignatureType
 		/// write a template constructor with an empty parameter list.
 		/// \tparam If given, either void (for no type restriction) or one of Value::types.
 		/// \returns An object matching the given type \a T.
+		/// \TODO split in two methods, the other one not template ?
 		template <typename T = void>
 		static SignatureType create();
 
@@ -51,14 +52,11 @@ class SignatureType
 		std::experimental::optional<std::type_index> _typeIndex;
 };
 
-#include <Value.hpp>
+#include <ValueTypes.hpp>
 
 template <typename T>
 SignatureType SignatureType::create()
 {
-	// Assert that T is either void or one that Value can contain
-	static_assert(std::disjunction<std::is_void<T>, std::bool_constant<Value::canHoldType<T>()>>::value, "type T must be one of Value::types.");
-
 	SignatureType res;
 	if(not std::is_void<T>::value)
 		res._typeIndex = std::type_index(typeid(T));

@@ -7,7 +7,7 @@
 int main(int argc, char** argv)
 {
 	Interpreter interpreter;
-	constexpr std::string standardInputFilename{"-"};
+	const std::string standardInputFilename{"-"};
 	try
 	{
 		if(argc == 1)

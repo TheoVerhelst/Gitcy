@@ -28,7 +28,7 @@ class UserDefinedFunction : public Overload
 		/// \param functionBody The body of the user-defined function.
 		/// \param scope The scope in which the function is being
 		/// called and defined.
-		UserDefinedFunction(const EvaluationTree& functionBody, const Scope& scope);
+		UserDefinedFunction(const EvaluationTree& functionBody, Scope& scope);
 
 		/// Call the function with the given arguments, by first copying the
 		/// scope given in the constructor, and then injecting the arguments in

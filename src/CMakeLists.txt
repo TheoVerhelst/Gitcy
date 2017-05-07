@@ -17,6 +17,7 @@ add_library(GITCY
 	UserDefinedFunction.cpp
 	Utils.cpp
 	Value.cpp
+	ValueTypes.cpp
 	)
 
 # Create the main executable

@@ -49,12 +49,13 @@ BOOST_AUTO_TEST_CASE(holdsTypeRuntimeWrong)
 
 BOOST_AUTO_TEST_CASE(canHoldTypeNormal)
 {
-	BOOST_TEST(Value::canHoldType<int>());
+	// TODO move this in another test
+	BOOST_TEST(ValueTypes::isSupportedType<int>());
 }
 
 BOOST_AUTO_TEST_CASE(canHoldTypeWrong)
 {
-	BOOST_TEST(not Value::canHoldType<float>());
+	BOOST_TEST(not ValueTypes::isSupportedType<float>());
 }
 
 BOOST_AUTO_TEST_CASE(getTypeName)
@@ -64,7 +65,7 @@ BOOST_AUTO_TEST_CASE(getTypeName)
 
 BOOST_AUTO_TEST_CASE(getTypeNameStaticNormal)
 {
-	BOOST_TEST(Value::getTypeName(std::type_index(typeid(std::string))) == "String");
+	BOOST_TEST(ValueTypes::getTypeName(std::type_index(typeid(std::string))) == "String");
 }
 
 BOOST_AUTO_TEST_CASE(getTypeNameStaticWrong)

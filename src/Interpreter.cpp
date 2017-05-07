@@ -1,6 +1,7 @@
 #include <memory>
 #include <iostream>
 #include <Parser.hpp>
+#include <Null.hpp>
 #include <ScriptError.hpp>
 #include <BuiltinCallables.hpp>
 #include <Interpreter.hpp>
@@ -9,23 +10,23 @@ Interpreter::Interpreter():
 	_prompt{">>> "},
 	_globalScope
 	{{
-		{"print",    std::make_shared<Value>(_functions.print)},
-		{"do",       std::make_shared<Value>(_functions.do_)},
-		{"<",        std::make_shared<Value>(_functions.lowerThan)},
-		{">",        std::make_shared<Value>(_functions.greaterThan)},
-		{"<=",       std::make_shared<Value>(_functions.lowerEqual)},
-		{">=",       std::make_shared<Value>(_functions.greaterEqual)},
-		{"=",        std::make_shared<Value>(_functions.equal)},
-		{"is",       std::make_shared<Value>(_functions.equal)},
-		{"!=",       std::make_shared<Value>(_functions.notEqual)},
-		{"and",      std::make_shared<Value>(_functions.and_)},
-		{"or",       std::make_shared<Value>(_functions.or_)},
-		{"+",        std::make_shared<Value>(_functions.add)},
-		{"-",        std::make_shared<Value>(_functions.substract)},
-		{"*",        std::make_shared<Value>(_functions.multiply)},
-		{"/",        std::make_shared<Value>(_functions.divide)},
-		{"%",        std::make_shared<Value>(_functions.modulo)},
-		{"!",        std::make_shared<Value>(_functions.not_)},
+		{"print",    std::make_shared<Value>(Callable(_functions.print))},
+		{"do",       std::make_shared<Value>(Callable(_functions.do_))},
+		{"<",        std::make_shared<Value>(Callable(_functions.lowerThan))},
+		{">",        std::make_shared<Value>(Callable(_functions.greaterThan))},
+		{"<=",       std::make_shared<Value>(Callable(_functions.lowerEqual))},
+		{">=",       std::make_shared<Value>(Callable(_functions.greaterEqual))},
+		{"=",        std::make_shared<Value>(Callable(_functions.equal))},
+		{"is",       std::make_shared<Value>(Callable(_functions.equal))},
+		{"!=",       std::make_shared<Value>(Callable(_functions.notEqual))},
+		{"and",      std::make_shared<Value>(Callable(_functions.and_))},
+		{"or",       std::make_shared<Value>(Callable(_functions.or_))},
+		{"+",        std::make_shared<Value>(Callable(_functions.add))},
+		{"-",        std::make_shared<Value>(Callable(_functions.substract))},
+		{"*",        std::make_shared<Value>(Callable(_functions.multiply))},
+		{"/",        std::make_shared<Value>(Callable(_functions.divide))},
+		{"%",        std::make_shared<Value>(Callable(_functions.modulo))},
+		{"!",        std::make_shared<Value>(Callable(_functions.not_))},
 		{"true",     std::make_shared<Value>(true)},
 		{"false",    std::make_shared<Value>(false)},
 		{"null",     std::make_shared<Value>(Null())},

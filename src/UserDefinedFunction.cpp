@@ -1,5 +1,6 @@
 #include <BuiltinCallables.hpp>
 #include <Scope.hpp>
+#include <Null.hpp>
 #include <EvaluationTree.hpp>
 #include <UserDefinedFunction.hpp>
 
@@ -28,7 +29,7 @@ Value UserDefinedFunction::call(const std::vector<Value>& arguments) const
 		lastValue = BuiltinCallables::evaluate(_functionBody.getChild(i), localScope);
 	return lastValue;
 }
-		
+
 std::vector<SignatureType> UserDefinedFunction::generateSignature(const EvaluationTree& functionBody)
 {
 	// Since generateParameterNames already parses the beginning of the body
