@@ -67,7 +67,10 @@ BOOST_FIXTURE_TEST_SUITE(FunctionTest, FunctionTestFixture)
 
 BOOST_AUTO_TEST_CASE(callOperatorNormal)
 {
-	BOOST_TEST(function(Parser::constructTree("(function 3)"), scope).get<std::string>() == "blah");
+	auto tree = Parser::constructTree("(function 3)");
+	auto res = function(tree, scope);
+	auto s = res.get<std::string>();
+	BOOST_TEST(s == "blah");
 }
 
 BOOST_AUTO_TEST_CASE(callOperatorAmbiguous)

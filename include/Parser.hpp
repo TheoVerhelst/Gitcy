@@ -10,6 +10,7 @@
 // Forward declarations
 class EvaluationTree;
 
+// TODO remove static
 class Parser
 {
 	public:

@@ -19,9 +19,14 @@ class Value
 		/// Constructor.
 		/// \param value The value that will be held.
 		/// \tparam T The type of the value that will be held.
-		/// \TODO another overload taking const T& ?
 		template <typename T, typename = std::enable_if_t<std::negation<std::is_same<std::decay_t<T>, Value>>::value>>
-		Value(T value);
+		Value(T&& value);
+
+		/// Constructor.
+		/// \param value The value that will be held.
+		/// \tparam T The type of the value that will be held.
+		template <typename T, typename = std::enable_if_t<std::negation<std::is_same<std::decay_t<T>, Value>>::value>>
+		Value(const T& value);
 
 		/// Gets the value with type T.
 		/// \tparam T The type supposed to be held by this instance.
@@ -62,15 +67,23 @@ class Value
 		boost::type_erasure::any<
 			boost::mpl::vector<
 				boost::type_erasure::copy_constructible<>,
+				boost::type_erasure::destructible<>,
 				boost::type_erasure::assignable<>,
 				boost::type_erasure::typeid_<>,
-				boost::type_erasure::ostreamable<>
+				boost::type_erasure::ostreamable<>,
+				boost::type_erasure::relaxed
 		>> _value;
 };
 
 template <typename T, typename>
-Value::Value(T value):
+Value::Value(T&& value):
 	_value{std::forward<T>(value)}
+{
+}
+
+template <typename T, typename>
+Value::Value(const T& value):
+	_value{value}
 {
 }
 
