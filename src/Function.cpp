@@ -53,8 +53,8 @@ Value Function::operator()(const EvaluationTree& expression, Scope& scope)
 std::vector<Value> Function::evaluateArguments(const EvaluationTree& expression, Scope& scope)
 {
 	std::vector<Value> arguments;
-	std::transform(std::next(expression.begin()), expression.end(), arguments.begin(),
-		std::bind(BuiltinCallables::evaluate, std::placeholders::_1, std::ref(scope)));
+	for(auto it(std::next(expression.begin())); it != expression.end(); ++it)
+		arguments.push_back(BuiltinCallables::evaluate(*it, scope));
 	return arguments;
 }
 

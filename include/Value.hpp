@@ -3,11 +3,9 @@
 
 #include <ostream>
 #include <typeindex>
-#include <boost/type_erasure/any.hpp>
-#include <boost/type_erasure/any_cast.hpp>
-#include <boost/type_erasure/builtin.hpp>
-#include <boost/type_erasure/operators.hpp>
+#include <memory>
 #include <ValueBadGet.hpp>
+#include <ValueImpl.hpp>
 
 /// The type used in C++ to represent any value in script. It uses internally
 /// a boost class, and exposes only the needed interface. A Value can store
@@ -16,17 +14,17 @@
 class Value
 {
 	public:
-		/// Constructor.
-		/// \param value The value that will be held.
-		/// \tparam T The type of the value that will be held.
-		template <typename T, typename = std::enable_if_t<std::negation<std::is_same<std::decay_t<T>, Value>>::value>>
-		Value(T&& value);
+		Value(const Value& other);
+
+		Value(Value&& other);
 
 		/// Constructor.
 		/// \param value The value that will be held.
 		/// \tparam T The type of the value that will be held.
 		template <typename T, typename = std::enable_if_t<std::negation<std::is_same<std::decay_t<T>, Value>>::value>>
-		Value(const T& value);
+		Value(T value);
+
+		Value& operator=(Value other);
 
 		/// Gets the value with type T.
 		/// \tparam T The type supposed to be held by this instance.
@@ -56,6 +54,8 @@ class Value
 		/// \returns The type name.
 		std::string getTypeName() const;
 
+		friend void swap(Value& lhs, Value& rhs);
+
 		/// Overload of the output operator.
 		/// \param os The stream to output to.
 		/// \param null The Value object to output.
@@ -63,47 +63,31 @@ class Value
 		friend std::ostream& operator<<(std::ostream& os, const Value& data);
 
 	private:
-		/// Actual variant.
-		boost::type_erasure::any<
-			boost::mpl::vector<
-				boost::type_erasure::copy_constructible<>,
-				boost::type_erasure::destructible<>,
-				boost::type_erasure::assignable<>,
-				boost::type_erasure::typeid_<>,
-				boost::type_erasure::ostreamable<>,
-				boost::type_erasure::relaxed
-		>> _value;
+		std::unique_ptr<ValueImplBase> _value;
 };
 
 template <typename T, typename>
-Value::Value(T&& value):
-	_value{std::forward<T>(value)}
-{
-}
-
-template <typename T, typename>
-Value::Value(const T& value):
-	_value{value}
+Value::Value(T value):
+	_value{new ValueImpl<T>{std::move(value)}}
 {
 }
 
 template <typename T>
 const T& Value::get() const
 {
-	try
-	{
-		return boost::type_erasure::any_cast<const T&>(_value);
-	}
-	catch(const boost::type_erasure::bad_any_cast& e)
-	{
-		throw ValueBadGet(e.what());
-	}
+	if(holdsType<T>())
+		return static_cast<ValueImpl<T>*>(_value.get())->getValue();
+	else
+		throw ValueBadGet("Bad Value::get<T> with T="
+				+ std::string(typeid(T).name())
+				+ " while storing type "
+				+ std::string(_value->type().name()));
 }
 
 template <typename T>
 bool Value::holdsType() const
 {
-	return boost::type_erasure::typeid_of(_value) == typeid(T);
+	return _value->type() == typeid(T);
 }
 
 #endif // VALUE_HPP
