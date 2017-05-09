@@ -4,21 +4,22 @@
 #include <Utils.hpp>
 #include <Parser.hpp>
 
-const std::string Parser::realLiteral("\\d*\\.\\d*");
-const std::string Parser::integerLiteral("\\d+");
-const std::string Parser::stringLiteral("\"(?:[^\"]|\\\\\")*\"|'(?:[^']|\\\\')*'");
-const std::string Parser::identifier("[\\w+%=!/<>&*|-]+");
-const std::string Parser::openingParenthesisLiteral("(");
-const std::string Parser::closingParenthesisLiteral(")");
-const std::string Parser::parenthesisLiteral("\\(|\\)");
-
-const std::regex Parser::realLiteralRegex(realLiteral);
-const std::regex Parser::integerLiteralRegex(integerLiteral);
-const std::regex Parser::stringLiteralRegex(stringLiteral);
-const std::regex Parser::identifierRegex(identifier);
-const std::regex Parser::tokenRegex("[[:space:]]*("+realLiteral+"|"+integerLiteral+"|"+stringLiteral+"|"+identifier+"|"+parenthesisLiteral+")[[:space:]]*");
-const std::map<char, char> Parser::escapedCharacters
-		{{'a', '\a'}, {'b', '\b'}, {'f', '\f'}, {'n', '\n'}, {'r', '\r'}, {'t', '\t'}, {'v', '\v'}};
+Parser::Parser():
+	realLiteral{"\\d*\\.\\d*"},
+	integerLiteral{"\\d+"},
+	stringLiteral{"\"(?:[^\"]|\\\\\")*\"|'(?:[^']|\\\\')*'"},
+	identifier{"[\\w+%=!/<>&*|-]+"},
+	openingParenthesisLiteral{"("},
+	closingParenthesisLiteral{")"},
+	parenthesisLiteral{"\\(|\\)"},
+	realLiteralRegex{realLiteral},
+	integerLiteralRegex{integerLiteral},
+	stringLiteralRegex{stringLiteral},
+	identifierRegex{identifier},
+	tokenRegex{"[[:space:]]*("+realLiteral+"|"+integerLiteral+"|"+stringLiteral+"|"+identifier+"|"+parenthesisLiteral+")[[:space:]]*"},
+	escapedCharacters{{'a', '\a'}, {'b', '\b'}, {'f', '\f'}, {'n', '\n'}, {'r', '\r'}, {'t', '\t'}, {'v', '\v'}}
+{
+}
 
 EvaluationTree Parser::constructTree(const std::string& code)
 {

@@ -61,26 +61,24 @@ class FunctionTestFixture
 
 		Function function;
 		Scope scope;
+		Parser parser;
 };
 
 BOOST_FIXTURE_TEST_SUITE(FunctionTest, FunctionTestFixture)
 
-BOOST_AUTO_TEST_CASE(callOperatorNormal)
+BOOST_AUTO_TEST_CASE(callReturnsBlah)
 {
-	auto tree = Parser::constructTree("(function 3)");
-	auto res = function(tree, scope);
-	auto s = res.get<std::string>();
-	BOOST_TEST(s == "blah");
+	BOOST_TEST(function(parser.constructTree("(function 3)"), scope).get<std::string>() == "blah");
 }
 
-BOOST_AUTO_TEST_CASE(callOperatorAmbiguous)
+BOOST_AUTO_TEST_CASE(ambiguousOverloadCallThrows)
 {
-	BOOST_CHECK_THROW(function(Parser::constructTree("(function 2.2 2.3)"), scope), ScriptError);
+	BOOST_CHECK_THROW(function(parser.constructTree("(function 2.2 2.3)"), scope), ScriptError);
 }
 
-BOOST_AUTO_TEST_CASE(callOperatorNoOverloadFound)
+BOOST_AUTO_TEST_CASE(nonExistingOverloadCallThrows)
 {
-	BOOST_CHECK_THROW(function(Parser::constructTree("(function 2 \"bluh\")"), scope), ScriptError);
+	BOOST_CHECK_THROW(function(parser.constructTree("(function 2 \"bluh\")"), scope), ScriptError);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

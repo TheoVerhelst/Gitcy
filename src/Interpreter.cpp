@@ -1,6 +1,5 @@
 #include <memory>
 #include <iostream>
-#include <Parser.hpp>
 #include <Null.hpp>
 #include <ScriptError.hpp>
 #include <BuiltinCallables.hpp>
@@ -40,7 +39,7 @@ Interpreter::Interpreter():
 void Interpreter::loadFromStream(std::istream& stream)
 {
 	const std::string fileContent{std::istreambuf_iterator<char>(stream), std::istreambuf_iterator<char>()};
-	_evaluationTree = Parser::constructMultipleTrees(fileContent);
+	_evaluationTree = _parser.constructMultipleTrees(fileContent);
 }
 
 Value Interpreter::interpret()
@@ -55,7 +54,7 @@ void Interpreter::runPrompt()
 		std::cout << _prompt;
 		std::string input;
 		std::getline(std::cin, input);
-		_evaluationTree = Parser::constructTree(input);
+		_evaluationTree = _parser.constructTree(input);
 		try
 		{
 			std::cout << interpret() << std::endl;
