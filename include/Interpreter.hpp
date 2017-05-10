@@ -25,9 +25,6 @@ class Interpreter
 		void runPrompt();
 
 	private:
-		/// All the functions that can be called in the scripts. \see Functions
-		BuiltinFunctions _functions;
-
 		const std::string _prompt;
 
 		Parser _parser;

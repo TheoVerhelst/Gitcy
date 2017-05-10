@@ -1,4 +1,2 @@
-(define test 32)
-(define test2 666)
-(if (!= test test2)
-	(define test 11))
+(define x 21)
+(print (+ x 1))

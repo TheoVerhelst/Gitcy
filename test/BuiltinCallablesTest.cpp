@@ -9,9 +9,8 @@ class BuiltinCallablesTestFixture
 {
 	public:
 		Parser parser;
-        BuiltinFunctions functions;
         Scope scope{{{"a", std::make_shared<Value>(32)},
-                {"+", std::make_shared<Value>(functions.add)}}};
+                {"+", std::make_shared<Value>(BuiltinFunctions::add)}}};
 };
 
 BOOST_FIXTURE_TEST_SUITE(BuiltinCallablesEvaluateTest, BuiltinCallablesTestFixture)

@@ -24,7 +24,8 @@ int main(int argc, char** argv)
 					std::ifstream stream{filename};
 					interpreter.loadFromStream(stream);
 				}
-				interpreter.interpret();
+				for(int j = 0; j < 1000; ++j)
+					interpreter.interpret();
 			}
 		}
 	}
