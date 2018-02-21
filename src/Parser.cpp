@@ -58,7 +58,7 @@ std::pair<Parser::TokenIterator, EvaluationTree> Parser::parseExpression(Parser:
 {
 	TokenIterator pastIterator{from};
 	const EvaluationNode node{parseToken(*from)};
-	std::vector<EvaluationTree> childs;
+	std::vector<EvaluationTree> children;
 
 	// If we construct a call expression
 	if(node.type() == typeid(Call))
@@ -70,16 +70,16 @@ std::pair<Parser::TokenIterator, EvaluationTree> Parser::parseExpression(Parser:
 
 		pastIterator = closingParenthesis;
 
-		// Add childs by evaluating following tokens
+		// Add children by evaluating following tokens
 		for(auto it(from + 1); it != closingParenthesis; ++it)
 		{
 			auto result(parseExpression(it, to));
 			it = result.first;
-			childs.push_back(result.second);
+			children.push_back(result.second);
 		}
 	}
 
-	return {pastIterator, {node, childs}};
+	return {pastIterator, {node, children}};
 }
 
 EvaluationNode Parser::parseToken(const std::string& token)

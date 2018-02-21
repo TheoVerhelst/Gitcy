@@ -41,7 +41,7 @@ class UserDefinedFunction : public Overload
 	private:
 		/// Generates a std::vector which has only unspecified types, but the
 		/// same number of elements as the number of identifiers in the first
-		/// childs of the function body. i.e. if the function body starts with
+		/// child of the function body. i.e. if the function body starts with
 		/// two identifiers and continues with a function call, then the
 		/// returned vector will have two elements).
 		/// \param functionBody The function body, as an evaluation tree.

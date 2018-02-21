@@ -5,8 +5,6 @@
 #include <Callable.hpp>
 
 /// Holds all functions that are written in C++ but callable in scripts.
-/// These functions are public const variables, and are initialized in the
-/// constructor.
 class BuiltinFunctions
 {
 	public:

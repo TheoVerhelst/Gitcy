@@ -3,12 +3,12 @@
 
 #include <ostream>
 #include <typeindex>
+#include <type_traits>
 #include <memory>
 #include <ValueBadGet.hpp>
 #include <ValueImpl.hpp>
 
-/// The type used in C++ to represent any value in script. It uses internally
-/// a boost class, and exposes only the needed interface. A Value can store
+/// The type used in C++ to represent any value in script. A Value can store
 /// multiple types, but one instance can only contain one value of one type at a
 /// time, just like boost::any (or std::any).
 class Value
@@ -21,7 +21,7 @@ class Value
 		/// Constructor.
 		/// \param value The value that will be held.
 		/// \tparam T The type of the value that will be held.
-		template <typename T, typename = std::enable_if_t<std::negation<std::is_same<std::decay_t<T>, Value>>::value>>
+		template <typename T, typename = std::enable_if_t<not std::is_same<std::decay_t<T>, Value>::value>>
 		Value(T value);
 
 		Value& operator=(Value other);
