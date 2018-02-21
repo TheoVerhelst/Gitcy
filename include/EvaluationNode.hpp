@@ -10,7 +10,7 @@
 /// facts, we only need to store the name of the identifier.
 typedef std::string Identifier;
 
-/// In the evaluation tree, a call is only defined by its argument, the first
+/// In the evaluation tree, a call is only defined by its arguments, the first
 /// one being the callable to call and the remaining ones the arguments.
 /// So we have no data to store in the node itself (only in its children).
 typedef boost::blank Call;

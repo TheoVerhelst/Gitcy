@@ -1,7 +1,2 @@
-(define x 21)
-(define y (+ x 12))
-(if (and (< (+ x y) 11) true true true true)
-	(do
-		(define r "abc")
-		(+ "TRUE" r))
-	(= (% x 2) 1))
+(function cou a b (+ a b))
+(print (cou 1 2))

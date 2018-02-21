@@ -22,11 +22,7 @@ class Interpreter
 		/// Interprets the script loaded at construction.
 		Value interpret();
 
-		void runPrompt();
-
 	private:
-		const std::string _prompt;
-
 		Parser _parser;
 
 		/// The global scope.

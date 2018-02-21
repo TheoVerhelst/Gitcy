@@ -6,7 +6,6 @@
 #include <Interpreter.hpp>
 
 Interpreter::Interpreter():
-	_prompt{">>> "},
 	_globalScope
 	{{
 		{"print",    std::make_shared<Value>(BuiltinFunctions::print)},
@@ -45,23 +44,4 @@ void Interpreter::loadFromStream(std::istream& stream)
 Value Interpreter::interpret()
 {
 	return BuiltinCallables::evaluate(_evaluationTree, _globalScope);
-}
-
-void Interpreter::runPrompt()
-{
-	while(true)
-	{
-		std::cout << _prompt;
-		std::string input;
-		std::getline(std::cin, input);
-		_evaluationTree = _parser.constructTree(input);
-		try
-		{
-			std::cout << interpret() << std::endl;
-		}
-		catch(const ScriptError& e)
-		{
-			std::cerr << "Script error: " << e.what() << std::endl;
-		}
-	}
 }
