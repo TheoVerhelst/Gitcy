@@ -58,6 +58,12 @@ class EvaluationTree
 		/// \returns The past-the-end const iterator.
 		ConstIterator end() const;
 
+		/// Overload of the output operator.
+		/// \param os The stream to output to.
+		/// \param null The EvaluationTree object to output.
+		/// \returns os.
+		friend std::ostream& operator<<(std::ostream& os, const EvaluationTree& object);
+
 	private:
 		EvaluationNode _node; ///< The current node.
 		std::vector<EvaluationTree> _children; /// The children trees.

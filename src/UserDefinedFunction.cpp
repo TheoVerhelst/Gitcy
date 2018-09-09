@@ -25,8 +25,10 @@ Value UserDefinedFunction::call(const std::vector<Value>& arguments) const
 	// and the parameter identifiers
 	Value lastValue{Null()};
 	for(std::size_t i{2 + _parameterNames.size()}; i < _functionBody.numberChildren(); ++i)
+	{
 		// Evaluate each part of the body of the function
 		lastValue = BuiltinCallables::evaluate(_functionBody.getChild(i), localScope);
+	}
 	return lastValue;
 }
 

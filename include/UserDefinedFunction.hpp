@@ -3,10 +3,10 @@
 
 #include <Overload.hpp>
 #include <SignatureType.hpp>
+#include <EvaluationTree.hpp>
 
 // Forward declarations
 class Scope;
-class EvaluationTree;
 
 /// A user-defined function is a function defined in Gitcy code with the macro
 /// "function". This class holds the body of the function as a part of the
@@ -56,7 +56,7 @@ class UserDefinedFunction : public Overload
 
 		/// The body of the function, will be evaluated each time the function
 		/// is called.
-		const EvaluationTree& _functionBody;
+		const EvaluationTree _functionBody;
 
 		/// The scope of execution of the function.
 		Scope& _scope;

@@ -39,7 +39,6 @@ int main(int argc, char** argv)
 		}
 		catch(const ScriptError& e)
 		{
-			std::cerr << "Script error:" << std::endl;
 			std::cerr << e.what() << std::endl;
 		}
 	}

@@ -45,9 +45,15 @@ Value Function::operator()(const EvaluationTree& expression, Scope& scope)
 	}
 
 	throw ScriptError("No overload found for given arguments:\n"
-			"Got:\n"
+			"Arguments:\n"
 			"\t(" + Utils::join(", ", arguments.begin(), arguments.end()) + ")\n"
-			"Overloads:\n" + Utils::toString(*this));
+			"Of type:\n"
+			"\t(" + std::accumulate(arguments.begin(), arguments.end(), std::string(),
+				[](const std::string& a, const Value& b)
+				{
+					return a + (a.empty() ? "" : ", ") + b.getTypeName();
+				}) + ")\n"
+			"Do not match any of the overloads:\n" + Utils::toString(*this));
 }
 
 std::vector<Value> Function::evaluateArguments(const EvaluationTree& expression, Scope& scope)

@@ -1,3 +1,4 @@
+#include <Utils.hpp>
 #include <EvaluationTree.hpp>
 
 EvaluationTree::EvaluationTree(const EvaluationNode& node, const std::vector<EvaluationTree>& children):
@@ -24,6 +25,7 @@ bool EvaluationTree::hasChildren() const
 
 const EvaluationTree& EvaluationTree::getChild(std::size_t index) const
 {
+	assert(index < _children.size());
 	return _children.at(index);
 }
 
@@ -45,4 +47,10 @@ typename EvaluationTree::Iterator EvaluationTree::end()
 typename EvaluationTree::ConstIterator EvaluationTree::end() const
 {
 	return _children.end();
+}
+
+std::ostream& operator<<(std::ostream& os, const EvaluationTree& object)
+{
+	os << "(" << object.getNode() << Utils::join(" ", object._children.begin(), object._children.end()) << ")";
+	return os;
 }
