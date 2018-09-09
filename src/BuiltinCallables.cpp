@@ -87,12 +87,26 @@ Value BuiltinCallables::_defineFunction(const EvaluationTree& expression, Scope&
 {
 	if(expression.numberChildren() <= 3)
 		throw ScriptError("\"function\" needs at least two arguments: an identifier and the function body");
-	const auto identifierNode{expression.getChild(1)};
-	if(identifierNode.getNode().type() != typeid(Identifier))
-		throw ScriptError("First argument of \"function\" must be an identifier");
 
-	const Identifier identifier{boost::get<Identifier>(identifierNode.getNode())};
-	const Callable value{Function({std::make_shared<UserDefinedFunction>(expression, scope)})};
-	scope.setVariable(identifier, Value(value));
+	Identifier nameIdentifier;
+	std::vector<Identifier> parameters;
+	for(std::size_t i{1}; i < expression.numberChildren() - 1; ++i)
+	{
+		const auto identifierNode{expression.getChild(i)};
+		if(identifierNode.getNode().type() != typeid(Identifier))
+			throw ScriptError(std::to_string(i) + "th argument of \"function\" must be an identifier");
+		const Identifier identifier{boost::get<Identifier>(identifierNode.getNode())};
+		if(i > 1)
+			parameters.push_back(identifier);
+		else
+			nameIdentifier = identifier;
+	}
+
+	const auto bodyNode{expression.getChild(expression.numberChildren() - 1)};
+	if(bodyNode.getNode().type() != typeid(Call))
+		throw ScriptError("last argument of \"function\" must be a call");
+
+	const Callable value{Function({std::make_shared<UserDefinedFunction>(parameters, bodyNode, scope)})};
+	scope.setVariable(nameIdentifier, value);
 	return value;
 }
