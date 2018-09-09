@@ -10,7 +10,7 @@ Function::Function(const std::vector<std::shared_ptr<Overload>>& overloads):
 {
 }
 
-Value Function::operator()(const EvaluationTree& expression, Scope& scope)
+Value Function::operator()(const EvaluationTree& expression, Scope& scope) const
 {
 	const std::vector<Value> arguments(evaluateArguments(expression, scope));
 

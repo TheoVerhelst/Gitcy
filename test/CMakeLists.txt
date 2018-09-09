@@ -1,5 +1,5 @@
 # Find the unit test framework library
-find_package(Boost 1.57 COMPONENTS unit_test_framework REQUIRED)
+find_package(Boost 1.59 COMPONENTS unit_test_framework REQUIRED)
 
 # This define is needed by the Boost unit test framework
 add_definitions(-DBOOST_TEST_DYN_LINK)
@@ -24,6 +24,8 @@ set(TEST_SOURCES
 	ValueTest.cpp
 	ValueTypesTest.cpp
 )
+
+include_directories(${Boost_INCLUDE_DIR})
 
 set(TEST_EXECUTABLE_NAME "${EXECUTABLE_NAME}Test")
 

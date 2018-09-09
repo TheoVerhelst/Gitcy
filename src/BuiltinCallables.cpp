@@ -106,7 +106,7 @@ Value BuiltinCallables::_defineFunction(const EvaluationTree& expression, Scope&
 	if(bodyNode.getNode().type() != typeid(Call))
 		throw ScriptError("last argument of \"function\" must be a call");
 
-	const Callable value{Function({std::make_shared<UserDefinedFunction>(parameters, bodyNode, scope)})};
+	const Function value{{std::make_shared<UserDefinedFunction>(parameters, bodyNode, scope)}};
 	scope.setVariable(nameIdentifier, value);
 	return value;
 }
