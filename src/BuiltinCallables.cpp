@@ -18,9 +18,9 @@ Value BuiltinCallables::_evaluate(const EvaluationTree& expression, Scope& scope
 	if(node.type() == typeid(Call))
 	{
 		if(not expression.hasChildren())
-			throw ScriptError("Call expression without any macro/function to call");
+			throw ScriptError("Call expression without any function to call");
 
-		// Evaluate the first child, it is the function/macro to call
+		// Evaluate the first child, it is the function to call
 		const Value& callable{evaluate(expression.getChild(0), scope)};
 
 		// Check that the first child is a callable
@@ -106,7 +106,11 @@ Value BuiltinCallables::_defineFunction(const EvaluationTree& expression, Scope&
 	if(bodyNode.getNode().type() != typeid(Call))
 		throw ScriptError("last argument of \"function\" must be a call");
 
-	const Function value{{std::make_shared<UserDefinedFunction>(parameters, bodyNode, scope)}};
+	// We need to use Callable around Function because this is the only way to
+	// consistently carry the information that the value is a callable object.
+	// Storing just Function is possible, but then we won't know that it can
+	// actually be called.
+	const Callable value{Function({std::make_shared<UserDefinedFunction>(parameters, bodyNode, scope)})};
 	scope.setVariable(nameIdentifier, value);
 	return value;
 }

@@ -8,8 +8,6 @@ add_definitions(-DBOOST_TEST_DYN_LINK)
 set(TEST_SOURCES
 	BuiltinCallablesTest.cpp
 	BuiltinFunctionsOverloadsTest.cpp
-	BuiltinFunctionsTest.cpp
-	CallableTest.cpp
 	EvaluationTreeTest.cpp
 	FunctionTest.cpp
 	InterpreterTest.cpp

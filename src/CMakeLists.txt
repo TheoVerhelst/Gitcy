@@ -7,6 +7,7 @@ add_library(GITCY
 	Callable.cpp
 	EvaluationTree.cpp
 	Function.cpp
+	GitcyConsole.cpp
 	Interpreter.cpp
 	Null.cpp
 	Overload.cpp
